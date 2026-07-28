@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Calls — simple video calls for Windows</title>
+  <meta name="description" content="A simple, fast desktop app for video calls. Free, lightweight, and updates itself automatically." />
+  <link rel="icon" href="assets/favicon.ico" />
+  <link rel="stylesheet" href="assets/style.css" />
+</head>
+<body>
+  <div class="bg-glow bg-glow-1" aria-hidden="true"></div>
+  <div class="bg-glow bg-glow-2" aria-hidden="true"></div>
+
+  <header class="site-header">
+    <div class="container header-row">
+      <a class="brand" href="#top">
+        <img src="assets/logo.png" alt="" class="brand-logo" width="28" height="28" />
+        <span>Calls</span>
+      </a>
+      <a class="header-link" href="https://github.com/frontmany/CallsApp" target="_blank" rel="noopener">
+        <svg viewBox="0 0 16 16" width="18" height="18" fill="currentColor" aria-hidden="true">
+          <path d="M8 0C3.58 0 0 3.58 0 8a8 8 0 0 0 5.47 7.59c.4.07.55-.17.55-.38
+            0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13
+            -.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66
+            .07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15
+            -.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82a7.6 7.6 0 0 1 4 0c1.53-1.04
+            2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15
+            0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01
+            2.2 0 .21.15.46.55.38A8 8 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/>
+        </svg>
+        GitHub
+      </a>
+    </div>
+  </header>
+
+  <main id="top">
+    <section class="hero container">
+      <img src="assets/logo.png" alt="Calls" class="hero-logo" width="96" height="96" />
+      <h1>Video calls, without the hassle.</h1>
+      <p class="hero-sub">A simple, fast desktop app for video calls. Free, lightweight, and updates itself automatically.</p>
+
+      <div class="download-block">
+        <a id="download-btn" class="btn-primary" href="https://github.com/frontmany/CallsApp/releases/latest" target="_blank" rel="noopener">
+          <svg viewBox="0 0 16 16" width="18" height="18" fill="currentColor" aria-hidden="true">
+            <path d="M0 0h7.5v7.5H0zM8.5 0H16v7.5H8.5zM0 8.5h7.5V16H0zM8.5 8.5H16V16H8.5z"/>
+          </svg>
+          <span id="download-label">Download for Windows</span>
+        </a>
+        <p id="download-meta" class="download-meta">Checking latest release&hellip;</p>
+      </div>
+
+      <div class="os-row" role="group" aria-label="Available platforms">
+        <span class="os-pill os-pill--active">
+          <svg viewBox="0 0 16 16" width="14" height="14" fill="currentColor" aria-hidden="true"><path d="M0 0h7.5v7.5H0zM8.5 0H16v7.5H8.5zM0 8.5h7.5V16H0zM8.5 8.5H16V16H8.5z"/></svg>
+          Windows
+        </span>
+        <span class="os-pill" aria-disabled="true">
+           macOS <span class="soon-badge">Soon</span>
+        </span>
+        <span class="os-pill" aria-disabled="true">
+           Linux <span class="soon-badge">Soon</span>
+        </span>
+      </div>
+      <p class="requirements">Windows 10/11 · 64-bit</p>
+    </section>
+
+    <section class="features container">
+      <div class="feature-card">
+        <div class="feature-icon">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>
+        </div>
+        <h3>One-click install</h3>
+        <p>No admin rights needed. Download, run the installer, sign in — you're on a call in a minute.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-9-9c2.5 0 4.5 1 6 2.7M21 3v6h-6"/></svg>
+        </div>
+        <h3>Always up to date</h3>
+        <p>Calls updates itself in the background — new releases show up automatically, no reinstalling.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4.5 8-11V5l-8-3-8 3v6c0 6.5 8 11 8 11Z"/></svg>
+        </div>
+        <h3>Free to use</h3>
+        <p>No subscription, no paywalled features. Just a straightforward way to call people.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-row">
+      <span>© <span id="year"></span> Calls</span>
+      <a href="https://github.com/frontmany/CallsApp/releases" target="_blank" rel="noopener">All releases</a>
+    </div>
+  </footer>
+
+  <script src="assets/main.js"></script>
+</body>
+</html>
