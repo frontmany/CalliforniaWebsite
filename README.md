@@ -7,20 +7,23 @@ deployed to GitHub Pages by `.github/workflows/deploy.yml` on every push to
 
 ## How the download button works
 
-The **Download for Windows** button in [`index.html`](index.html) starts out
-pointing at [CallsApp's Releases page](https://github.com/frontmany/CallsApp/releases/latest)
-— that link always works, even with JavaScript or the GitHub API unavailable.
+The **Download for Windows** button in [`index.html`](index.html) links
+straight to the installer on Yandex Object Storage:
+`https://calls-download.storage.yandexcloud.net/stable/CallsSetup.exe` — a
+stable, versionless key that CallsApp's release workflow overwrites on every
+release (it also keeps an immutable `CallsSetup-<version>.exe` archive copy).
 
-[`assets/main.js`](assets/main.js) then progressively upgrades it: it calls
-the GitHub API for `frontmany/CallsApp`'s latest release, finds the
-`CallsSetup.exe` asset, and rewrites the button to link directly at that file
-plus show its version and size. The result is cached in `localStorage` for 10
-minutes to stay well under GitHub's unauthenticated API rate limit
-(60 req/hour/IP) under real traffic.
+[`assets/main.js`](assets/main.js) additionally fetches
+`stable/latest.json` (`{version, size, sha256}`, written by the same
+workflow) from that bucket to render the "vX.Y.Z · NN MB" line under the
+button. The bucket allows anonymous `GET`/`HEAD` from any origin (CORS), so
+the fetch works from the GitHub Pages origin. On fetch failure the line
+falls back to static placeholder text.
 
 This means **the site needs zero updates when CallsApp ships a new
-release** — publishing a GitHub Release there is all that's needed; the site
-picks it up automatically the next time someone loads the page.
+release** — publishing a GitHub Release there is all that's needed; the
+release workflow refreshes the bucket, and the site picks it up on the next
+page load.
 
 ## Windows-only for now
 

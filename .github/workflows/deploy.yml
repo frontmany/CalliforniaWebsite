@@ -1,9 +1,9 @@
 name: Deploy Pages
 
 # Static site, no build step -- just publish the repo root to GitHub Pages on
-# every push to main. The download button resolves the actual installer URL
-# client-side (GitHub API), so nothing here needs to know about CallsApp
-# releases.
+# every push to main. The download button links straight to the installer on
+# Yandex Object Storage (calls-download bucket, uploaded by CallsApp's release
+# workflow), so nothing here needs to know about CallsApp releases.
 
 on:
   push:
