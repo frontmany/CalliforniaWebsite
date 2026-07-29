@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Privacy — Calls</title>
+  <meta name="description" content="What data Calls collects, what it doesn't, and why." />
+  <link rel="icon" href="assets/favicon.ico" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/style.css" />
+  <script>
+    (function () {
+      try {
+        var t = localStorage.getItem("calls-theme");
+        if (t === "light") document.documentElement.setAttribute("data-theme", "light");
+      } catch (e) {}
+    })();
+  </script>
+</head>
+<body>
+  <div class="bg-glow bg-glow-1" aria-hidden="true"></div>
+
+  <header class="site-header">
+    <div class="container header-row">
+      <a class="brand" href="index.html">
+        <img src="assets/logo.png" alt="" class="brand-logo" width="28" height="28" />
+        <span>Calls</span>
+      </a>
+      <nav class="site-nav" aria-label="Site">
+        <a href="index.html#features">Features</a>
+        <a href="index.html#how">How it works</a>
+        <a href="index.html#faq">FAQ</a>
+        <a href="changelog.html">Changelog</a>
+      </nav>
+      <div class="header-actions">
+        <button id="theme-toggle" class="theme-toggle" type="button" aria-label="Switch theme">
+          <svg class="icon-moon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/></svg>
+          <svg class="icon-sun" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <div class="page container container--narrow prose">
+      <h1 class="page-title">Privacy</h1>
+      <p class="page-sub">Last updated July 29, 2026. The short version: Calls collects what it needs to connect your calls, and not much else.</p>
+
+      <h2>What we collect</h2>
+      <ul>
+        <li><strong>Account data</strong> — the display name and credentials you sign up with. This is what lets friends find and call you.</li>
+        <li><strong>Connection data</strong> — the technical signaling needed to establish a call between participants (who is joining which meeting, and the network details required to connect you).</li>
+        <li><strong>Version information</strong> — the app reports its version when talking to our servers so we can serve compatible updates.</li>
+      </ul>
+
+      <h2>What we don't collect</h2>
+      <ul>
+        <li><strong>Your calls are not recorded.</strong> Audio, video, and screen-share streams are encrypted in transit and are not stored on our servers.</li>
+        <li><strong>No advertising or tracking.</strong> The app contains no ad SDKs, no analytics trackers, and no third-party data sharing. We don't sell data — there's nothing to sell.</li>
+        <li><strong>No contact scraping.</strong> Calls never reads your address book, files, or anything else on your machine beyond its own settings.</li>
+      </ul>
+
+      <h2>Crash reports — opt-in only</h2>
+      <p>If the app crashes, it can save a technical report (a minidump with stack traces, the app version, OS version, and the tail of the app's own log) and send it to us so we can fix the bug. This is <strong>off by default</strong>. Reports are only sent if you explicitly enable crash reporting, and they are used solely for debugging.</p>
+
+      <h2>Updates</h2>
+      <p>The app periodically asks our update server whether a new version exists. That request carries the app's version and platform — enough to answer the question, nothing more. Updates themselves are cryptographically signed, and the app verifies the signature before applying anything.</p>
+
+      <h2>Data retention &amp; deletion</h2>
+      <p>Account data is kept while your account exists. If you want your account and its data deleted, contact us at the address below and we'll remove it.</p>
+
+      <h2>Changes to this policy</h2>
+      <p>If this policy changes in a way that matters, we'll note it in the <a href="changelog.html">changelog</a> and update the date at the top of this page.</p>
+
+      <h2>Contact</h2>
+      <p>Questions about privacy or your data: <a href="mailto:fmtab2014@gmail.com">fmtab2014@gmail.com</a>.</p>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-row">
+      <span>© <span id="year">2026</span> Calls</span>
+      <nav class="footer-links" aria-label="Footer">
+        <a href="changelog.html">Changelog</a>
+        <a href="privacy.html">Privacy</a>
+        <a href="mailto:fmtab2014@gmail.com">Contact</a>
+      </nav>
+    </div>
+  </footer>
+
+  <script src="assets/main.js"></script>
+</body>
+</html>

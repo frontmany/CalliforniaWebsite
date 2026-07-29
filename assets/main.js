@@ -1,79 +1,81 @@
-// Progressive enhancement: the Download button already points at the GitHub
-// Releases page in the HTML (always works, even with JS/network failures).
-// This upgrades it to the direct installer download + shows version/size,
-// once the GitHub API confirms where it actually is.
+// Shared script for all pages: theme toggle, scroll-reveal, and (on the home
+// page) the version/size line under the Download button.
+//
+// The installer itself is hosted on Yandex Object Storage at a stable,
+// versionless path (…/stable/CallsSetup.exe) — the Download button's href
+// points straight at it, so downloads work with no JS at all. Everything in
+// this file is enhancement.
 
 (function () {
   "use strict";
 
-  document.getElementById("year").textContent = new Date().getFullYear();
+  document.documentElement.classList.add("js");
 
-  const REPO = "frontmany/CallsApp";
-  const ASSET_NAME = "CallsSetup.exe";
-  const CACHE_KEY = "calls-latest-release-v1";
-  const CACHE_TTL_MS = 10 * 60 * 1000; // 10 min: keeps us well under the
-
-  // unauthenticated GitHub API rate limit (60 req/hr/IP) under real traffic.
-
-  const label = document.getElementById("download-label");
-  const meta = document.getElementById("download-meta");
-  const btn = document.getElementById("download-btn");
-
-  function formatSize(bytes) {
-    return (bytes / (1024 * 1024)).toFixed(0) + " MB";
+  // --- Theme toggle (mirrors the app's light/dark ThemeToggle) --------------
+  // The saved theme is applied by an inline <head> script before first paint;
+  // this just wires the button.
+  var toggle = document.getElementById("theme-toggle");
+  if (toggle) {
+    toggle.addEventListener("click", function () {
+      var root = document.documentElement;
+      var light = root.getAttribute("data-theme") === "light";
+      if (light) {
+        root.removeAttribute("data-theme");
+      } else {
+        root.setAttribute("data-theme", "light");
+      }
+      try {
+        localStorage.setItem("calls-theme", light ? "dark" : "light");
+      } catch (_e) {}
+    });
   }
 
-  function applyRelease(data) {
-    const asset = (data.assets || []).find((a) => a.name === ASSET_NAME);
-    if (!asset) {
-      meta.textContent = "Latest release available on GitHub";
-      return;
-    }
-    const version = (data.tag_name || "").replace(/^v/, "");
-    btn.href = asset.browser_download_url;
-    label.textContent = "Download for Windows";
-    meta.textContent = `v${version} · ${formatSize(asset.size)} · Windows 10/11 (64-bit)`;
+  // --- Scroll reveal --------------------------------------------------------
+  var revealed = document.querySelectorAll("[data-reveal]");
+  if ("IntersectionObserver" in window && revealed.length) {
+    var observer = new IntersectionObserver(
+      function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("revealed");
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { rootMargin: "0px 0px -10% 0px", threshold: 0.1 }
+    );
+    revealed.forEach(function (el) { observer.observe(el); });
+  } else {
+    revealed.forEach(function (el) { el.classList.add("revealed"); });
   }
 
-  function readCache() {
-    try {
-      const raw = localStorage.getItem(CACHE_KEY);
-      if (!raw) return null;
-      const cached = JSON.parse(raw);
-      if (Date.now() - cached.at > CACHE_TTL_MS) return null;
-      return cached.data;
-    } catch (_e) {
-      return null;
-    }
-  }
+  // --- Footer year ----------------------------------------------------------
+  var year = document.getElementById("year");
+  if (year) year.textContent = new Date().getFullYear();
 
-  function writeCache(data) {
-    try {
-      localStorage.setItem(CACHE_KEY, JSON.stringify({ at: Date.now(), data }));
-    } catch (_e) {
-      /* storage unavailable (private mode etc.) -- fine, just skip caching */
-    }
-  }
+  // --- Download meta (home page only) ---------------------------------------
+  // CI publishes latest.json next to the installer: { version, size, sha256 }.
+  // If the request fails (offline, CORS, storage down), the button still
+  // works and we keep the generic label.
+  var meta = document.getElementById("download-meta");
+  if (!meta) return;
 
-  const cached = readCache();
-  if (cached) {
-    applyRelease(cached);
-    return;
-  }
+  // NOTE: must match the bucket (or CDN domain) the release workflow uploads to.
+  var META_URL =
+    "https://calls-download.storage.yandexcloud.net/stable/latest.json";
 
-  fetch(`https://api.github.com/repos/${REPO}/releases/latest`, {
-    headers: { Accept: "application/vnd.github+json" },
-  })
-    .then((res) => {
-      if (!res.ok) throw new Error(`GitHub API returned ${res.status}`);
+  fetch(META_URL, { cache: "no-cache" })
+    .then(function (res) {
+      if (!res.ok) throw new Error("storage returned " + res.status);
       return res.json();
     })
-    .then((data) => {
-      applyRelease(data);
-      writeCache(data);
+    .then(function (data) {
+      var version = String(data.version || "").replace(/^v/, "");
+      if (!version) return;
+      var size = (data.size / (1024 * 1024)).toFixed(0) + " MB";
+      meta.textContent = "v" + version + " · " + size + " · Windows 10/11 (64-bit)";
     })
-    .catch(() => {
-      // Leave the safe fallback (Releases page link) in place.
-      meta.textContent = "Latest release available on GitHub";
+    .catch(function () {
+      meta.textContent = "Latest version ready to download";
     });
 })();
