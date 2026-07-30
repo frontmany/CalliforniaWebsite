@@ -56,7 +56,7 @@
       <div id="join-valid" hidden>
         <h1>Join the call</h1>
         <p class="hero-sub">
-          Call ID <code id="join-id" class="join-id"></code>
+          Click below to open this call in the Calls desktop app.
         </p>
 
         <div class="join-actions">
@@ -66,28 +66,6 @@
             </svg>
             Open in Calls
           </a>
-          <p id="join-status" class="download-meta">Opening Calls&hellip;</p>
-        </div>
-
-        <div class="join-fallback">
-          <p class="join-fallback-title">Don&rsquo;t have Calls yet?</p>
-          <div class="cta-desktop">
-            <div class="download-block">
-              <a class="btn-secondary-link" href="https://calls-download.storage.yandexcloud.net/stable/CallsSetup.exe" rel="noopener" download>
-                <svg viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                  <path d="M8 1.5v9M4 6.5 8 10.5 12 6.5M2.5 14h11"/>
-                </svg>
-                Download for Windows
-              </a>
-              <p id="download-meta" class="download-meta">Install it, then open this link again.</p>
-            </div>
-          </div>
-          <!-- .cta-desktop is hidden below 720px site-wide (the app is Windows
-               desktop only), so phones get this instead of an empty gap. -->
-          <div class="cta-mobile">
-            <span class="mobile-badge">Windows only for now</span>
-            <p class="mobile-text">Calls runs on Windows desktop. Open this link on a computer to join the call.</p>
-          </div>
         </div>
       </div>
 
@@ -122,8 +100,9 @@
 
       // Must match isPlausibleId() in CallsApp/src/core/session/meeting_link.cpp.
       // The id comes out of the URL, i.e. from whoever wrote the link, so it is
-      // validated before being used anywhere and only ever written to the page
-      // via textContent -- never innerHTML, and never interpolated into markup.
+      // validated before being used anywhere. It only ever ends up in the
+      // calls:// href below (via setAttribute) -- never innerHTML, never
+      // concatenated into markup.
       var ID_PATTERN = /^[a-z0-9-]{1,64}$/;
 
       function readMeetingId() {
@@ -151,21 +130,15 @@
       }
 
       var deepLink = "calls://join/" + meetingId;
-      document.getElementById("join-id").textContent = meetingId;
       document.getElementById("open-btn").setAttribute("href", deepLink);
       valid.hidden = false;
 
       // Try to hand off immediately. Browsers increasingly want a user gesture
       // for protocol handlers, and there is no reliable way to detect whether
-      // the handler exists -- hence the button above and the download block
-      // below, which stay visible either way.
-      var status = document.getElementById("join-status");
+      // the handler exists -- hence the button above, which stays visible
+      // (and is the only recovery path) either way.
       window.setTimeout(function () {
         window.location.href = deepLink;
-        window.setTimeout(function () {
-          status.textContent =
-            "Nothing happened? Use the button above, or install Calls below.";
-        }, 2500);
       }, 400);
     })();
   </script>
