@@ -25,6 +25,29 @@ release** — publishing a GitHub Release there is all that's needed; the
 release workflow refreshes the bucket, and the site picks it up on the next
 page load.
 
+## The join page (`join/`)
+
+[`join/index.html`](join/index.html) is where a shared invite link lands:
+`…/join/?id=<call-id>`. It bounces the visitor into the desktop app via the
+`calls://join/<id>` protocol link that CallsApp's installer registers, and
+offers the installer to anyone who doesn't have the app yet (the handoff
+can't be detected, so the download block is always shown).
+
+The **query form is deliberate**. GitHub Pages has no server-side routing, so
+`/join/?id=x` resolves to a real file and answers `200` — a `/join/<id>` path
+would 404, which also costs the link preview in chat clients. The page still
+accepts a path-style id in case the site ever gains rewrites.
+
+The id is validated against `^[a-z0-9-]{1,64}$` (same rule as
+`isPlausibleId()` in CallsApp) before being used, and is only ever written to
+the DOM via `textContent` — it arrives from whoever authored the link, so it
+is never interpolated into markup.
+
+CallsApp builds these links from `CLIENT_MEETING_LINK_BASE` (see its
+`CMakeLists.txt` and `release.yml`). **If this page ever moves — a custom
+domain, a rename — that constant has to move with it**, otherwise already
+shipped clients keep handing out links to the old URL.
+
 ## Windows-only for now
 
 macOS and Linux are shown as disabled "Soon" pills next to the Windows

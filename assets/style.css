@@ -980,3 +980,63 @@ main { position: relative; z-index: 1; flex: 1; }
   .cta-desktop { display: none; }
   .cta-mobile { display: flex; }
 }
+
+/* --- Join page (join/index.html) -------------------------------------------
+   The landing spot for a shared calls://join/<id> invite: hands off to the
+   desktop app, and offers the installer to anyone who does not have it yet. */
+.join-page { padding-bottom: 64px; }
+
+.join-id {
+  font-family: var(--mono);
+  font-size: 15px;
+  color: var(--text);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 3px 9px;
+  margin-left: 4px;
+  /* Ids are short, but a hand-written one should wrap rather than overflow. */
+  word-break: break-all;
+}
+
+.join-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.join-fallback {
+  margin-top: 40px;
+  padding-top: 28px;
+  border-top: 1px solid var(--border);
+}
+
+.join-fallback-title {
+  margin: 0 0 16px;
+  font-size: 15px;
+  color: var(--muted);
+}
+
+/* Quieter than .btn-primary on purpose: on this page the primary action is
+   opening the app, not installing it. */
+.btn-secondary-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--elevated);
+  color: var(--text);
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 15px;
+  padding: 11px 20px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  transition: border-color 0.15s ease, transform 0.15s ease;
+}
+.btn-secondary-link:hover {
+  border-color: var(--accent);
+  transform: translateY(-1px);
+}
+.btn-secondary-link:active { transform: translateY(0); }
