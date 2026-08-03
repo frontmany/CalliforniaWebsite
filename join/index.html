@@ -80,6 +80,15 @@
           <a class="btn-primary" href="../index.html">Go to the Calls home page</a>
         </div>
       </div>
+
+      <!-- Valid invite, but opened on a phone/tablet -->
+      <div id="join-mobile" hidden>
+        <h1>Desktop only</h1>
+        <p class="hero-sub">
+          Calls is a desktop app and doesn&rsquo;t run on phones or tablets.
+          Open this link on your computer to join.
+        </p>
+      </div>
     </section>
   </main>
 
@@ -120,12 +129,27 @@
         return ID_PATTERN.test(id) ? id : null;
       }
 
+      // Calls is desktop-only; phones/tablets can't run the handler at all,
+      // so don't offer the button there -- just explain and stop.
+      function isMobile() {
+        var ua = navigator.userAgent || "";
+        if (/iPad|iPhone|iPod|Android|Mobile|BlackBerry|IEMobile|Opera Mini/i.test(ua)) return true;
+        if (navigator.userAgentData && navigator.userAgentData.mobile) return true;
+        return false;
+      }
+
       var meetingId = readMeetingId();
       var valid = document.getElementById("join-valid");
       var invalid = document.getElementById("join-invalid");
+      var mobile = document.getElementById("join-mobile");
 
       if (!meetingId) {
         invalid.hidden = false;
+        return;
+      }
+
+      if (isMobile()) {
+        mobile.hidden = false;
         return;
       }
 
