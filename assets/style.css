@@ -277,7 +277,19 @@ main { position: relative; z-index: 1; flex: 1; }
   border-radius: var(--radius-md);
   border: 1px solid var(--border);
   color: var(--muted);
+  background: none;
+  font-family: inherit;
 }
+
+/* Windows/Linux pills are real <button>s so a visitor can override the
+   auto-detected platform; macOS stays a plain <span> (nothing to switch
+   to yet), so this only styles the interactive ones. */
+button.os-pill {
+  cursor: pointer;
+  transition: border-color 0.15s ease, color 0.15s ease, background 0.15s ease;
+}
+button.os-pill:hover { color: var(--text); border-color: var(--accent); }
+button.os-pill:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
 .os-pill--active {
   color: var(--text);
@@ -293,6 +305,61 @@ main { position: relative; z-index: 1; flex: 1; }
   color: var(--muted);
   padding: 2px 6px;
   border-radius: var(--radius-sm);
+}
+
+/* Same shape as .soon-badge but accent-colored: Linux is real and
+   downloadable, just newer than the Windows build. */
+.beta-badge {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  background: var(--accent-soft);
+  color: var(--accent);
+  padding: 2px 6px;
+  border-radius: var(--radius-sm);
+}
+
+/* Linux-only .deb/.rpm choice, shown under the download button. Toggled via
+   the `hidden` attribute (main.js), not a class -- but `display: flex` below
+   has the same specificity as the browser's default `[hidden] { display:
+   none }` rule, and author styles win ties, so the plain .pkg-row rule alone
+   would keep it visible even while hidden. The [hidden] rule needs the higher
+   specificity to actually win. */
+.pkg-row {
+  display: flex;
+  gap: 8px;
+}
+.pkg-row[hidden] {
+  display: none;
+}
+
+.pkg-pill {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1px;
+  font-size: 12px;
+  font-weight: 600;
+  font-family: inherit;
+  padding: 6px 16px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border);
+  color: var(--muted);
+  background: none;
+  cursor: pointer;
+  transition: border-color 0.15s ease, color 0.15s ease, background 0.15s ease;
+}
+.pkg-pill:hover { color: var(--text); border-color: var(--accent); }
+.pkg-pill:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.pkg-pill--active {
+  color: var(--text);
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+.pkg-pill-sub {
+  font-size: 10px;
+  font-weight: 400;
+  color: var(--muted);
 }
 
 /* Mobile fallback — no installer to offer, so hide the download UI

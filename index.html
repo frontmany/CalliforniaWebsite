@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Calls — simple video calls for Windows</title>
-  <meta name="description" content="A simple, fast desktop app for video calls. Free, lightweight, and updates itself automatically." />
+  <title>Calls — simple video calls for Windows &amp; Linux</title>
+  <meta name="description" content="A simple, fast desktop app for video calls. Free and lightweight, for Windows and Linux." />
   <link rel="icon" href="assets/favicon.ico" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -49,7 +49,7 @@
     <section class="hero container">
       <img src="assets/logo.png" alt="Calls" class="hero-logo" width="96" height="96" />
       <h1>Video calls, without the hassle.</h1>
-      <p class="hero-sub">A simple, fast desktop app for video calls. Free, lightweight, and updates itself automatically.</p>
+      <p class="hero-sub">A simple, fast desktop app for video calls. Free and lightweight, for Windows and Linux.</p>
 
       <div class="cta-desktop">
         <div class="download-block">
@@ -60,25 +60,41 @@
             <span id="download-label">Download for Windows</span>
           </a>
           <p id="download-meta" class="download-meta">Latest version ready to download</p>
+
+          <!-- Linux only: pick the package format. Hidden until JS picks Linux
+               as the active platform (detected or clicked); see main.js. -->
+          <div id="pkg-row" class="pkg-row" hidden>
+            <button type="button" class="pkg-pill pkg-pill--active" data-pkg="deb">
+              .deb
+              <span class="pkg-pill-sub">Debian / Ubuntu</span>
+            </button>
+            <button type="button" class="pkg-pill" data-pkg="rpm">
+              .rpm
+              <span class="pkg-pill-sub">Fedora / RHEL</span>
+            </button>
+          </div>
         </div>
 
+        <!-- Windows/Linux pills are real buttons the visitor can click to
+             override the auto-detected platform; macOS stays a plain
+             disabled pill since there is nothing to switch to yet. -->
         <div class="os-row" role="group" aria-label="Available platforms">
-          <span class="os-pill os-pill--active">
+          <button type="button" class="os-pill os-pill--active" data-os="windows">
             <svg viewBox="0 0 16 16" width="14" height="14" fill="currentColor" aria-hidden="true"><path d="M0 0h7.5v7.5H0zM8.5 0H16v7.5H8.5zM0 8.5h7.5V16H0zM8.5 8.5H16V16H8.5z"/></svg>
             Windows
-          </span>
+          </button>
+          <button type="button" class="os-pill" data-os="linux">
+            Linux <span class="beta-badge">Beta</span>
+          </button>
           <span class="os-pill" aria-disabled="true">
              macOS <span class="soon-badge">Soon</span>
-          </span>
-          <span class="os-pill" aria-disabled="true">
-             Linux <span class="soon-badge">Soon</span>
           </span>
         </div>
       </div>
 
       <div class="cta-mobile">
         <span class="mobile-badge">Coming soon for mobile</span>
-        <p class="mobile-text">Calls is currently available for Windows desktop. Open this page on a computer to download it.</p>
+        <p class="mobile-text">Calls is currently available for Windows and Linux desktop. Open this page on a computer to download it.</p>
       </div>
 
       <!-- In-call UI, drawn with the app's real palette and exact icon paths
@@ -173,8 +189,8 @@
 
       <div class="feature" data-reveal>
         <div class="feature-copy">
-          <h3>Updates itself, quietly</h3>
-          <p>New versions arrive in the background while you work. Only the files that changed are downloaded, every update is cryptographically signed, and applying one takes a single restart — you never reinstall anything.</p>
+          <h3>Updates, kept simple</h3>
+          <p>On Windows, new versions arrive in the background and apply with a single restart — you never reinstall anything. On Linux, the app tells you when one's ready and your package manager takes it from there. Either way, every update is cryptographically signed.</p>
         </div>
         <div class="feature-visual">
           <div class="panel" aria-hidden="true">
@@ -275,7 +291,7 @@
             <svg class="faq-chevron" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
           </summary>
           <div class="faq-answer">
-            <p>Windows 10 and 11 (64-bit) today. macOS and Linux builds are planned — the app's core is already cross-platform, so they're a matter of packaging, not a rewrite.</p>
+            <p>Windows 10 and 11 (64-bit), and Linux (.deb for Debian/Ubuntu, .rpm for Fedora/RHEL) — Linux support is new, so it's marked beta while it settles. macOS is planned — the app's core is already cross-platform, so it's a matter of packaging, not a rewrite.</p>
           </div>
         </details>
         <details class="faq-item">
@@ -303,7 +319,7 @@
             <svg class="faq-chevron" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
           </summary>
           <div class="faq-answer">
-            <p>The app checks for new versions in the background, downloads only the files that changed, and verifies a cryptographic signature on every update before applying it. When one is ready, you restart the app once — that's it. See what's changed in the <a href="changelog.html" style="color:var(--accent); text-decoration:none">changelog</a>.</p>
+            <p>On Windows, the app checks for new versions in the background, downloads only the files that changed, and verifies a cryptographic signature on every update before applying it — restart once and you're done. On Linux, updates ship through a signed APT/YUM repository instead: the app tells you one is available, and your package manager installs it (one click from inside the app if it can ask for your password, otherwise a regular <code>apt upgrade</code>/<code>dnf upgrade</code>). See what's changed in the <a href="changelog.html" style="color:var(--accent); text-decoration:none">changelog</a>.</p>
           </div>
         </details>
         <details class="faq-item">
@@ -322,11 +338,11 @@
       <h2>Ready when you are.</h2>
       <p class="section-sub">Download Calls and be on your first call in under a minute.</p>
       <div class="cta-desktop">
-        <a class="btn-primary" href="https://calls-download.storage.yandexcloud.net/stable/CallsSetup.exe" rel="noopener" download>
+        <a id="download-btn-2" class="btn-primary" href="https://calls-download.storage.yandexcloud.net/stable/CallsSetup.exe" rel="noopener" download>
           <svg viewBox="0 0 16 16" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <path d="M8 1.5v9M4 6.5 8 10.5 12 6.5M2.5 14h11"/>
           </svg>
-          Download for Windows
+          <span id="download-label-2">Download for Windows</span>
         </a>
       </div>
       <div class="cta-mobile">
