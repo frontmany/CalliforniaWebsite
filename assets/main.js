@@ -73,7 +73,7 @@
       var version = String(data.version || "").replace(/^v/, "");
       if (!version) return;
       var size = (data.size / (1024 * 1024)).toFixed(0) + " MB";
-      meta.textContent = "v" + version + " · " + size + " · Windows 10/11 (64-bit)";
+      meta.textContent = "v" + version + ", " + size + ", Windows 10/11 (64-bit)";
     })
     .catch(function () {
       meta.textContent = "Latest version ready to download";
