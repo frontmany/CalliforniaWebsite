@@ -11,9 +11,10 @@
 
   document.documentElement.classList.add("js");
 
-  // --- Theme toggle (mirrors the app's light/dark ThemeToggle) --------------
-  // The saved theme is applied by an inline <head> script before first paint;
-  // this just wires the button.
+  // --- Theme (mirrors the app's light/dark ThemeToggle) ---------------------
+  // The starting theme is applied by an inline <head> script before first
+  // paint (saved choice, else the OS setting); this wires the button and
+  // keeps following the OS while the page stays open.
   var toggle = document.getElementById("theme-toggle");
   if (toggle) {
     toggle.addEventListener("click", function () {
@@ -24,10 +25,36 @@
       } else {
         root.setAttribute("data-theme", "light");
       }
+      // Clicking is what turns a preference into an explicit choice: from
+      // here on this visitor stops following the OS, in either direction.
       try {
         localStorage.setItem("calls-theme", light ? "dark" : "light");
       } catch (_e) {}
     });
+  }
+
+  // Someone who flips their OS to light/dark with the page already open sees
+  // it follow, exactly as a fresh load would have — unless they have picked a
+  // theme here, which always wins.
+  if (window.matchMedia) {
+    var lightQuery = window.matchMedia("(prefers-color-scheme: light)");
+    var onSystemThemeChange = function (event) {
+      var saved = null;
+      try {
+        saved = localStorage.getItem("calls-theme");
+      } catch (_e) {}
+      if (saved) return;
+      if (event.matches) {
+        document.documentElement.setAttribute("data-theme", "light");
+      } else {
+        document.documentElement.removeAttribute("data-theme");
+      }
+    };
+    if (lightQuery.addEventListener) {
+      lightQuery.addEventListener("change", onSystemThemeChange);
+    } else if (lightQuery.addListener) {
+      lightQuery.addListener(onSystemThemeChange);  // Safari < 14
+    }
   }
 
   // --- Scroll reveal --------------------------------------------------------

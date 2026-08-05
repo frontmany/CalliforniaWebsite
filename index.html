@@ -11,11 +11,15 @@
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="assets/style.css" />
   <script>
-    // Apply the saved theme before first paint to avoid a flash.
+    // Runs before first paint to avoid a flash of the wrong theme. A choice
+    // made with the header toggle always wins; with none saved we follow the
+    // OS setting (main.js keeps following it while the page is open).
     (function () {
       try {
-        var t = localStorage.getItem("calls-theme");
-        if (t === "light") document.documentElement.setAttribute("data-theme", "light");
+        var saved = localStorage.getItem("calls-theme");
+        var light = saved === "light" || (!saved && window.matchMedia &&
+          window.matchMedia("(prefers-color-scheme: light)").matches);
+        if (light) document.documentElement.setAttribute("data-theme", "light");
       } catch (e) {}
     })();
   </script>
