@@ -2,7 +2,7 @@
 // page) the version/size line under the Download button.
 //
 // The installer itself is hosted on Yandex Object Storage at a stable,
-// versionless path (…/stable/CallsSetup.exe) — the Download button's href
+// versionless path (…/stable/CalliforniaSetup.exe) — the Download button's href
 // points straight at it, so downloads work with no JS at all. Everything in
 // this file is enhancement.
 
@@ -10,6 +10,14 @@
   "use strict";
 
   document.documentElement.classList.add("js");
+
+  // The few strings this file writes at runtime come from the dictionary in
+  // i18n.js. Should that file be missing, t() returns nothing and every write
+  // below is skipped, leaving the English the markup already carries.
+  var i18n = window.CalliforniaI18n;
+  function t(key, vars) {
+    return i18n ? i18n.t(key, vars) : null;
+  }
 
   // --- Theme (mirrors the app's light/dark ThemeToggle) ---------------------
   // The starting theme is applied by an inline <head> script before first
@@ -28,7 +36,7 @@
       // Clicking is what turns a preference into an explicit choice: from
       // here on this visitor stops following the OS, in either direction.
       try {
-        localStorage.setItem("calls-theme", light ? "dark" : "light");
+        localStorage.setItem("callifornia-theme", light ? "dark" : "light");
       } catch (_e) {}
     });
   }
@@ -41,7 +49,7 @@
     var onSystemThemeChange = function (event) {
       var saved = null;
       try {
-        saved = localStorage.getItem("calls-theme");
+        saved = localStorage.getItem("callifornia-theme");
       } catch (_e) {}
       if (saved) return;
       if (event.matches) {
@@ -93,12 +101,12 @@
   var meta = document.getElementById("download-meta");
   if (!meta) return;
 
-  var WIN_HREF = "https://calls-download.storage.yandexcloud.net/stable/CallsSetup.exe";
+  var WIN_HREF = "https://callifornia-download.storage.yandexcloud.net/stable/CalliforniaSetup.exe";
   // Fallback while latest.json hasn't loaded (or failed): always has both
   // packages attached, unlike the bucket paths which have no versionless alias.
-  var GITHUB_RELEASES_URL = "https://github.com/frontmany/CallsApp/releases/latest";
+  var GITHUB_RELEASES_URL = "https://github.com/frontmany/CalliforniaApp/releases/latest";
   // NOTE: must match the bucket (or CDN domain) the release workflow uploads to.
-  var META_URL = "https://calls-download.storage.yandexcloud.net/stable/latest.json";
+  var META_URL = "https://callifornia-download.storage.yandexcloud.net/stable/latest.json";
 
   var downloadBtns = [document.getElementById("download-btn"), document.getElementById("download-btn-2")];
   var downloadLabels = [document.getElementById("download-label"), document.getElementById("download-label-2")];
@@ -126,9 +134,9 @@
     pkg: null,
   };
   try {
-    var savedPlatform = localStorage.getItem("calls-platform");
+    var savedPlatform = localStorage.getItem("callifornia-platform");
     if (savedPlatform === "windows" || savedPlatform === "linux") state.platform = savedPlatform;
-    var savedPkg = localStorage.getItem("calls-pkg");
+    var savedPkg = localStorage.getItem("callifornia-pkg");
     if (savedPkg === "deb" || savedPkg === "rpm") state.pkg = savedPkg;
   } catch (_e) {}
   if (!state.platform) state.platform = detectPlatform() === "linux" ? "linux" : "windows";
@@ -150,11 +158,11 @@
 
     var linuxInfo = latestData && latestData.platforms && latestData.platforms["linux-x64"];
     var href = WIN_HREF;
-    var label = "Download for Windows";
-    var metaText = "Latest version ready to download";
+    var label = t("download.windows");
+    var metaText = t("meta.ready");
 
     if (isLinux) {
-      label = "Download for Linux (." + state.pkg + ")";
+      label = t("download.linux", { pkg: state.pkg });
       if (linuxInfo) {
         href = state.pkg === "rpm" ? linuxInfo.rpm : linuxInfo.deb;
         var linuxVersion = String(linuxInfo.version || "").replace(/^v/, "");
@@ -163,42 +171,50 @@
           // merge step measures the file it just built) -- .rpm still gets a
           // real, working link, just without a "NN MB" figure next to it.
           if (state.pkg === "deb" && linuxInfo.size) {
-            metaText = "v" + linuxVersion + ", " + (linuxInfo.size / (1024 * 1024)).toFixed(0) +
-              " MB, Debian/Ubuntu (.deb)";
+            metaText = t("meta.deb", {
+              version: linuxVersion,
+              size: (linuxInfo.size / (1024 * 1024)).toFixed(0)
+            });
           } else {
-            metaText = "v" + linuxVersion + ", Fedora/RHEL (.rpm)";
+            metaText = t("meta.rpm", { version: linuxVersion });
           }
         }
       } else {
         // No versionless "latest" alias exists for the packages the way
-        // stable/CallsSetup.exe does for Windows, so while latest.json is
+        // stable/CalliforniaSetup.exe does for Windows, so while latest.json is
         // still loading (or failed) there is no direct file URL to offer.
         // Point at the Releases page instead of leaving the label promising
         // "Linux" while the href silently downloads the Windows installer.
         href = GITHUB_RELEASES_URL;
-        metaText = fetchFailed ? "Latest version ready to download" : "Loading…";
+        metaText = fetchFailed ? t("meta.ready") : t("meta.loading");
       }
     } else if (latestData) {
       var winVersion = String(latestData.version || "").replace(/^v/, "");
       if (winVersion) {
-        var winSize = (latestData.size / (1024 * 1024)).toFixed(0) + " MB";
-        metaText = "v" + winVersion + ", " + winSize + ", Windows 10/11 (64-bit)";
+        metaText = t("meta.windows", {
+          version: winVersion,
+          size: (latestData.size / (1024 * 1024)).toFixed(0)
+        });
       }
     }
 
     downloadBtns.forEach(function (btn) { if (btn) btn.href = href; });
-    downloadLabels.forEach(function (el) { if (el) el.textContent = label; });
-    meta.textContent = metaText;
+    downloadLabels.forEach(function (el) { if (el && label) el.textContent = label; });
+    if (metaText) meta.textContent = metaText;
   }
+
+  // The button and the line under it are written here, not marked up, so they
+  // have to be redrawn when the header switch changes the language.
+  if (i18n) i18n.onChange(render);
 
   function setPlatform(platform) {
     state.platform = platform;
-    try { localStorage.setItem("calls-platform", platform); } catch (_e) {}
+    try { localStorage.setItem("callifornia-platform", platform); } catch (_e) {}
     render();
   }
   function setPkg(pkg) {
     state.pkg = pkg;
-    try { localStorage.setItem("calls-pkg", pkg); } catch (_e) {}
+    try { localStorage.setItem("callifornia-pkg", pkg); } catch (_e) {}
     render();
   }
 

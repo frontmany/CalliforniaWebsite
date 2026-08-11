@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Changelog — Calls</title>
-  <meta name="description" content="What's new in Calls — release notes for every version." />
+  <title data-i18n="page.changelog.title">Changelog, Callifornia</title>
+  <meta name="description" data-i18n-content="page.changelog.desc" content="What's new in Callifornia, release notes for every version." />
   <link rel="icon" href="assets/favicon.ico" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -16,7 +16,7 @@
     // OS setting (main.js keeps following it while the page is open).
     (function () {
       try {
-        var saved = localStorage.getItem("calls-theme");
+        var saved = localStorage.getItem("callifornia-theme");
         var light = saved === "light" || (!saved && window.matchMedia &&
           window.matchMedia("(prefers-color-scheme: light)").matches);
         if (light) document.documentElement.setAttribute("data-theme", "light");
@@ -31,44 +31,154 @@
     <div class="container header-row">
       <a class="brand" href="index.html">
         <img src="assets/logo.png" alt="" class="brand-logo" width="28" height="28" />
-        <span>Calls</span>
+        <span>Callifornia</span>
       </a>
-      <nav class="site-nav" aria-label="Site">
-        <a href="index.html#features">Features</a>
-        <a href="index.html#how">How it works</a>
-        <a href="index.html#faq">FAQ</a>
-        <a href="changelog.html" aria-current="page">Changelog</a>
+      <nav class="site-nav" data-i18n-aria-label="aria.site" aria-label="Site">
+        <a href="index.html#features" data-i18n="nav.features">Features</a>
+        <a href="index.html#how" data-i18n="nav.how">How it works</a>
+        <a href="index.html#faq" data-i18n="nav.faq">FAQ</a>
+        <a href="changelog.html" data-i18n="nav.changelog" aria-current="page">Changelog</a>
       </nav>
       <div class="header-actions">
-        <button id="theme-toggle" class="theme-toggle" type="button" aria-label="Switch theme">
+        <button id="theme-toggle" class="theme-toggle" type="button" data-i18n-aria-label="aria.theme" aria-label="Switch theme">
           <svg class="icon-moon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/></svg>
           <svg class="icon-sun" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
         </button>
+        <button data-lang-toggle class="lang-toggle" type="button" aria-label="Switch language">RU</button>
       </div>
     </div>
   </header>
 
   <main>
     <div class="page container container--narrow">
-      <h1 class="page-title">Changelog</h1>
-      <p class="page-sub">Every release, in order. The app applies these updates automatically — this page is here so you can see what changed and when.</p>
+      <h1 class="page-title" data-i18n="changelog.title">Changelog</h1>
+      <p class="page-sub" data-i18n="changelog.sub">The releases worth reading about, newest first. The app applies updates on its own, and this page is here so you can see what changed and when.</p>
+
+      <article class="release">
+        <div class="release-meta">
+          <p class="release-version">v0.1.0</p>
+          <p class="release-date" data-i18n="cl.010.date">9 August 2026</p>
+        </div>
+        <div class="release-body">
+          <h3 data-i18n="cl.010.title">Chat, presence and a space with every friend</h3>
+          <ul>
+            <li data-i18n="cl.010.li1">Chat inside a call, kept with the call, so it is still there the next time you open it</li>
+            <li data-i18n="cl.010.li2">Live presence for friends, including «waiting for you» when someone is sitting in a space you share</li>
+            <li data-i18n="cl.010.li3">A private space with every friend, opened from their row or from a pin on the home screen</li>
+            <li data-i18n="cl.010.li4">Friend requests and profile changes arrive without a refresh</li>
+            <li data-i18n="cl.010.li5">Settings became a screen of its own</li>
+          </ul>
+          <p class="release-note" data-i18n="cl.010.note">The way a call is joined changed, so installs older than 0.1.0 update themselves.</p>
+        </div>
+      </article>
+
+      <article class="release">
+        <div class="release-meta">
+          <p class="release-version">v0.0.15</p>
+          <p class="release-date" data-i18n="cl.0015.date">7 August 2026</p>
+        </div>
+        <div class="release-body">
+          <h3 data-i18n="cl.0015.title">An honest camera</h3>
+          <ul>
+            <li data-i18n="cl.0015.li1">Turning the camera on now succeeds only once a camera has actually opened, so a missing or busy one says so instead of lighting the button and sending nothing</li>
+            <li data-i18n="cl.0015.li2">The camera button dims when there is no camera, and the keyboard shortcut follows the same rule</li>
+          </ul>
+        </div>
+      </article>
+
+      <article class="release">
+        <div class="release-meta">
+          <p class="release-version">v0.0.14</p>
+          <p class="release-date" data-i18n="cl.0014.date">7 August 2026</p>
+        </div>
+        <div class="release-body">
+          <h3 data-i18n="cl.0014.title">Screen sharing on Wayland</h3>
+          <ul>
+            <li data-i18n="cl.0014.li1">Sharing on Wayland goes through your desktop's own chooser and PipeWire, instead of looking as though it worked while everyone else saw a black rectangle. It took four attempts, from 0.0.9 to 0.0.13, and this is the release where it holds.</li>
+            <li data-i18n="cl.0014.li2">The chooser appears every time you start sharing, so you can pick a different window than last time</li>
+            <li data-i18n="cl.0014.li3">A session that cannot be captured at all refuses with a message, before anything reaches the call</li>
+            <li data-i18n="cl.0014.li4">On Linux the update button no longer appears minutes before the package reaches the repository</li>
+          </ul>
+        </div>
+      </article>
+
+      <article class="release">
+        <div class="release-meta">
+          <p class="release-version">v0.0.8</p>
+          <p class="release-date" data-i18n="cl.008.date">5 August 2026</p>
+        </div>
+        <div class="release-body">
+          <h3 data-i18n="cl.008.title">Package updates that say what they are doing</h3>
+          <ul>
+            <li data-i18n="cl.008.li1">The Linux update started from inside the app shows progress, failure and the restart prompt, instead of looking as though nothing had happened for tens of seconds</li>
+            <li data-i18n="cl.008.li2">The relaunch waits for the old process to exit, so a stalled shutdown no longer leaves you without a window</li>
+            <li data-i18n="cl.008.li3">Both download buckets are pruned to the newest two versions</li>
+          </ul>
+        </div>
+      </article>
+
+      <article class="release">
+        <div class="release-meta">
+          <p class="release-version">v0.0.7</p>
+          <p class="release-date" data-i18n="cl.007.date">5 August 2026</p>
+        </div>
+        <div class="release-body">
+          <h3 data-i18n="cl.007.title">Linux window, icon and theme</h3>
+          <ul>
+            <li data-i18n="cl.007.li1">The window has a title bar on GNOME again. The Wayland decoration plugin was missing from the packages, so the window came up bare and could not be moved.</li>
+            <li data-i18n="cl.007.li2">The app icon shows up instead of a generic cog</li>
+            <li data-i18n="cl.007.li3">A dark desktop no longer starts Callifornia in light mode on a fresh install</li>
+            <li data-i18n="cl.007.li4">Tooltips wait longer before appearing</li>
+          </ul>
+        </div>
+      </article>
+
+      <article class="release">
+        <div class="release-meta">
+          <p class="release-version">v0.0.5</p>
+          <p class="release-date" data-i18n="cl.005.date">5 August 2026</p>
+        </div>
+        <div class="release-body">
+          <h3 data-i18n="cl.005.title">Callifornia on Linux</h3>
+          <ul>
+            <li data-i18n="cl.005.li1">Packages in .deb and .rpm, with a signed APT and YUM repository for updates</li>
+            <li data-i18n="cl.005.li2">Microphone through PulseAudio, camera through V4L2, screen sharing on X11</li>
+            <li data-i18n="cl.005.li3">Updates in one click through your package manager</li>
+            <li data-i18n="cl.005.li4">A redesigned home screen and navigation</li>
+            <li data-i18n="cl.005.li5">Wayland screen sharing came later, in 0.0.9</li>
+          </ul>
+        </div>
+      </article>
+
+      <article class="release">
+        <div class="release-meta">
+          <p class="release-version">v0.0.2</p>
+          <p class="release-date" data-i18n="cl.002.date">2 August 2026</p>
+        </div>
+        <div class="release-body">
+          <h3 data-i18n="cl.002.title">A clean uninstall</h3>
+          <ul>
+            <li data-i18n="cl.002.li1">Uninstalling removes the install directory, your data and the updater's leftover startup entry. New installs only.</li>
+          </ul>
+        </div>
+      </article>
 
       <article class="release">
         <div class="release-meta">
           <p class="release-version">v0.0.1</p>
-          <p class="release-date">July 2026</p>
-          <span class="release-tag">Initial release</span>
+          <p class="release-date" data-i18n="cl.001.date">2 August 2026</p>
+          <span class="release-tag" data-i18n="cl.001.tag">First release</span>
         </div>
         <div class="release-body">
-          <h3>Hello, world</h3>
+          <h3 data-i18n="cl.001.title">Hello, world</h3>
           <ul>
-            <li>Group video meetings with short, shareable meeting IDs</li>
-            <li>Friends list — add people once, call them with one click</li>
-            <li>In-app invites: see who invited you and join right from the app</li>
-            <li>Screen sharing with a window or full-screen picker</li>
-            <li>Light and dark themes</li>
-            <li>Background auto-updates: signed, differential, applied on one restart</li>
-            <li>Per-user installer for Windows 10/11 — no administrator rights required</li>
+            <li data-i18n="cl.001.li1">Group video meetings with short, shareable meeting IDs</li>
+            <li data-i18n="cl.001.li2">Friends list, add people once and call them with one click</li>
+            <li data-i18n="cl.001.li3">Invites inside the app, see who invited you and join right from there</li>
+            <li data-i18n="cl.001.li4">Screen sharing with a picker for a window or the whole screen</li>
+            <li data-i18n="cl.001.li5">Light and dark themes</li>
+            <li data-i18n="cl.001.li6">Updates in the background, signed, only the changed files, applied on one restart</li>
+            <li data-i18n="cl.001.li7">An installer for you alone on Windows 10/11, no administrator rights required</li>
           </ul>
         </div>
       </article>
@@ -77,15 +187,16 @@
 
   <footer class="site-footer">
     <div class="container footer-row">
-      <span>© <span id="year">2026</span> Calls</span>
-      <nav class="footer-links" aria-label="Footer">
-        <a href="changelog.html">Changelog</a>
-        <a href="privacy.html">Privacy</a>
-        <a href="mailto:fmtab2014@gmail.com">Contact</a>
+      <span>© <span id="year">2026</span> Callifornia</span>
+      <nav class="footer-links" data-i18n-aria-label="aria.footer" aria-label="Footer">
+        <a href="changelog.html" data-i18n="footer.changelog">Changelog</a>
+        <a href="privacy.html" data-i18n="footer.privacy">Privacy</a>
+        <a href="mailto:fmtab2014@gmail.com" data-i18n="footer.contact">Contact</a>
       </nav>
     </div>
   </footer>
 
+  <script src="assets/i18n.js"></script>
   <script src="assets/main.js"></script>
 </body>
 </html>
