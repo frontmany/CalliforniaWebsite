@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title data-i18n="page.changelog.title">Changelog — Calls</title>
-  <meta name="description" data-i18n-content="page.changelog.desc" content="What's new in Calls — release notes for every version." />
+  <title data-i18n="page.changelog.title">Changelog, Calls</title>
+  <meta name="description" data-i18n-content="page.changelog.desc" content="What's new in Calls, release notes for every version." />
   <link rel="icon" href="assets/favicon.ico" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -52,7 +52,7 @@
   <main>
     <div class="page container container--narrow">
       <h1 class="page-title" data-i18n="changelog.title">Changelog</h1>
-      <p class="page-sub" data-i18n="changelog.sub">Every release, in order. The app applies these updates automatically — this page is here so you can see what changed and when.</p>
+      <p class="page-sub" data-i18n="changelog.sub">The releases worth reading about, newest first. The app applies updates on its own, and this page is here so you can see what changed and when.</p>
 
       <article class="release">
         <div class="release-meta">
@@ -92,81 +92,12 @@
           <p class="release-date" data-i18n="cl.0014.date">7 August 2026</p>
         </div>
         <div class="release-body">
-          <h3 data-i18n="cl.0014.title">Wayland screen sharing stays alive</h3>
+          <h3 data-i18n="cl.0014.title">Screen sharing on Wayland</h3>
           <ul>
-            <li data-i18n="cl.0014.li1">The share reached streaming and died within milliseconds, because starting the capture tore down the very session it was about to read. It no longer does.</li>
-          </ul>
-        </div>
-      </article>
-
-      <article class="release">
-        <div class="release-meta">
-          <p class="release-version">v0.0.13</p>
-          <p class="release-date" data-i18n="cl.0013.date">7 August 2026</p>
-        </div>
-        <div class="release-body">
-          <h3 data-i18n="cl.0013.title">Wayland screen sharing, delivered</h3>
-          <ul>
-            <li data-i18n="cl.0013.li1">Carries the fix from 0.0.12, which never shipped because GitHub Actions was in a major outage</li>
-            <li data-i18n="cl.0013.li2">The chooser appears every time you start sharing, so you can pick a different window than last time</li>
-            <li data-i18n="cl.0013.li3">On Linux the update button no longer appears minutes before the package reaches the repository</li>
-          </ul>
-        </div>
-      </article>
-
-      <article class="release">
-        <div class="release-meta">
-          <p class="release-version">v0.0.12</p>
-          <p class="release-date" data-i18n="cl.0012.date">6 August 2026</p>
-        </div>
-        <div class="release-body">
-          <h3 data-i18n="cl.0012.title">The right order for Wayland</h3>
-          <ul>
-            <li data-i18n="cl.0012.li1">Sharing failed with «no target node available» because the PipeWire loop was started after the stream had already gone looking for its node. The loop now starts first.</li>
-          </ul>
-          <p class="release-note" data-i18n="cl.0012.note">This version never shipped. GitHub Actions was down while it was being built, so 0.0.13 carries the fix.</p>
-        </div>
-      </article>
-
-      <article class="release">
-        <div class="release-meta">
-          <p class="release-version">v0.0.11</p>
-          <p class="release-date" data-i18n="cl.0011.date">6 August 2026</p>
-        </div>
-        <div class="release-body">
-          <h3 data-i18n="cl.0011.title">The portal session outlives its handshake</h3>
-          <ul>
-            <li data-i18n="cl.0011.li1">The share died the instant it was granted, because the connection that opened the session closed as soon as the handshake finished. It now lives as long as the share does.</li>
-            <li data-i18n="cl.0011.li2">The chooser is asked every time instead of remembering a source, so a second share cannot silently show the first window again</li>
-          </ul>
-        </div>
-      </article>
-
-      <article class="release">
-        <div class="release-meta">
-          <p class="release-version">v0.0.10</p>
-          <p class="release-date" data-i18n="cl.0010.date">6 August 2026</p>
-        </div>
-        <div class="release-body">
-          <h3 data-i18n="cl.0010.title">Finding the node the portal granted</h3>
-          <ul>
-            <li data-i18n="cl.0010.li1">Sharing on Wayland asked for permission, got it, and then produced nothing. The node is now named the way current PipeWire actually reads it.</li>
-            <li data-i18n="cl.0010.li2">Frames the app cannot read are reported once instead of being dropped in silence</li>
-          </ul>
-        </div>
-      </article>
-
-      <article class="release">
-        <div class="release-meta">
-          <p class="release-version">v0.0.9</p>
-          <p class="release-date" data-i18n="cl.009.date">6 August 2026</p>
-        </div>
-        <div class="release-body">
-          <h3 data-i18n="cl.009.title">Screen sharing on Wayland</h3>
-          <ul>
-            <li data-i18n="cl.009.li1">Sharing on Wayland goes through your desktop's own chooser and PipeWire, instead of looking as though it worked while everyone else saw a black rectangle</li>
-            <li data-i18n="cl.009.li2">A session that cannot be captured at all now refuses with a message, before anything is published</li>
-            <li data-i18n="cl.009.li3">Linux package updates show the package manager's real output</li>
+            <li data-i18n="cl.0014.li1">Sharing on Wayland goes through your desktop's own chooser and PipeWire, instead of looking as though it worked while everyone else saw a black rectangle. It took four attempts, from 0.0.9 to 0.0.13, and this is the release where it holds.</li>
+            <li data-i18n="cl.0014.li2">The chooser appears every time you start sharing, so you can pick a different window than last time</li>
+            <li data-i18n="cl.0014.li3">A session that cannot be captured at all refuses with a message, before anything reaches the call</li>
+            <li data-i18n="cl.0014.li4">On Linux the update button no longer appears minutes before the package reaches the repository</li>
           </ul>
         </div>
       </article>
@@ -179,7 +110,7 @@
         <div class="release-body">
           <h3 data-i18n="cl.008.title">Package updates that say what they are doing</h3>
           <ul>
-            <li data-i18n="cl.008.li1">The Linux in-app update shows progress, failure and the restart prompt, instead of looking as though nothing had happened for tens of seconds</li>
+            <li data-i18n="cl.008.li1">The Linux update started from inside the app shows progress, failure and the restart prompt, instead of looking as though nothing had happened for tens of seconds</li>
             <li data-i18n="cl.008.li2">The relaunch waits for the old process to exit, so a stalled shutdown no longer leaves you without a window</li>
             <li data-i18n="cl.008.li3">Both download buckets are pruned to the newest two versions</li>
           </ul>
@@ -198,19 +129,6 @@
             <li data-i18n="cl.007.li2">The app icon shows up instead of a generic cog</li>
             <li data-i18n="cl.007.li3">A dark desktop no longer starts Calls in light mode on a fresh install</li>
             <li data-i18n="cl.007.li4">Tooltips wait longer before appearing</li>
-          </ul>
-        </div>
-      </article>
-
-      <article class="release">
-        <div class="release-meta">
-          <p class="release-version">v0.0.6</p>
-          <p class="release-date" data-i18n="cl.006.date">5 August 2026</p>
-        </div>
-        <div class="release-body">
-          <h3 data-i18n="cl.006.title">A re-cut of 0.0.5</h3>
-          <ul>
-            <li data-i18n="cl.006.li1">The same app as 0.0.5. Its Linux job failed while signing the repository, after the update manifest had already gone out.</li>
           </ul>
         </div>
       </article>
@@ -256,11 +174,11 @@
           <ul>
             <li data-i18n="cl.001.li1">Group video meetings with short, shareable meeting IDs</li>
             <li data-i18n="cl.001.li2">Friends list, add people once and call them with one click</li>
-            <li data-i18n="cl.001.li3">In-app invites, see who invited you and join right from the app</li>
-            <li data-i18n="cl.001.li4">Screen sharing with a window or full-screen picker</li>
+            <li data-i18n="cl.001.li3">Invites inside the app, see who invited you and join right from there</li>
+            <li data-i18n="cl.001.li4">Screen sharing with a picker for a window or the whole screen</li>
             <li data-i18n="cl.001.li5">Light and dark themes</li>
-            <li data-i18n="cl.001.li6">Background auto-updates, signed, differential, applied on one restart</li>
-            <li data-i18n="cl.001.li7">Per-user installer for Windows 10/11, no administrator rights required</li>
+            <li data-i18n="cl.001.li6">Updates in the background, signed, only the changed files, applied on one restart</li>
+            <li data-i18n="cl.001.li7">An installer for you alone on Windows 10/11, no administrator rights required</li>
           </ul>
         </div>
       </article>
