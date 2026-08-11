@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title data-i18n="page.changelog.title">Changelog, Calls</title>
-  <meta name="description" data-i18n-content="page.changelog.desc" content="What's new in Calls, release notes for every version." />
+  <title data-i18n="page.changelog.title">Changelog, Callifornia</title>
+  <meta name="description" data-i18n-content="page.changelog.desc" content="What's new in Callifornia, release notes for every version." />
   <link rel="icon" href="assets/favicon.ico" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -16,7 +16,7 @@
     // OS setting (main.js keeps following it while the page is open).
     (function () {
       try {
-        var saved = localStorage.getItem("calls-theme");
+        var saved = localStorage.getItem("callifornia-theme");
         var light = saved === "light" || (!saved && window.matchMedia &&
           window.matchMedia("(prefers-color-scheme: light)").matches);
         if (light) document.documentElement.setAttribute("data-theme", "light");
@@ -31,7 +31,7 @@
     <div class="container header-row">
       <a class="brand" href="index.html">
         <img src="assets/logo.png" alt="" class="brand-logo" width="28" height="28" />
-        <span>Calls</span>
+        <span>Callifornia</span>
       </a>
       <nav class="site-nav" data-i18n-aria-label="aria.site" aria-label="Site">
         <a href="index.html#features" data-i18n="nav.features">Features</a>
@@ -127,7 +127,7 @@
           <ul>
             <li data-i18n="cl.007.li1">The window has a title bar on GNOME again. The Wayland decoration plugin was missing from the packages, so the window came up bare and could not be moved.</li>
             <li data-i18n="cl.007.li2">The app icon shows up instead of a generic cog</li>
-            <li data-i18n="cl.007.li3">A dark desktop no longer starts Calls in light mode on a fresh install</li>
+            <li data-i18n="cl.007.li3">A dark desktop no longer starts Callifornia in light mode on a fresh install</li>
             <li data-i18n="cl.007.li4">Tooltips wait longer before appearing</li>
           </ul>
         </div>
@@ -139,7 +139,7 @@
           <p class="release-date" data-i18n="cl.005.date">5 August 2026</p>
         </div>
         <div class="release-body">
-          <h3 data-i18n="cl.005.title">Calls on Linux</h3>
+          <h3 data-i18n="cl.005.title">Callifornia on Linux</h3>
           <ul>
             <li data-i18n="cl.005.li1">Packages in .deb and .rpm, with a signed APT and YUM repository for updates</li>
             <li data-i18n="cl.005.li2">Microphone through PulseAudio, camera through V4L2, screen sharing on X11</li>
@@ -187,7 +187,7 @@
 
   <footer class="site-footer">
     <div class="container footer-row">
-      <span>© <span id="year">2026</span> Calls</span>
+      <span>© <span id="year">2026</span> Callifornia</span>
       <nav class="footer-links" data-i18n-aria-label="aria.footer" aria-label="Footer">
         <a href="changelog.html" data-i18n="footer.changelog">Changelog</a>
         <a href="privacy.html" data-i18n="footer.privacy">Privacy</a>

@@ -1,4 +1,4 @@
-/* Palette + metrics mirror the desktop app (CallsApp — resources/qml/Theme.qml):
+/* Palette + metrics mirror the desktop app (CalliforniaApp — resources/qml/Theme.qml):
    IBM Plex Sans, warm neutrals, tight 6–12px radii. Both app themes are
    available here too — dark is the default, [data-theme="light"] mirrors the
    app's light mode. */
@@ -429,7 +429,7 @@ button.os-pill:focus-visible { outline: 2px solid var(--accent); outline-offset:
 }
 
 /* The real app has no custom in-window chrome — just the OS titlebar with
-   the "Calls" title. This mirrors that: a plain brand strip, nothing invented. */
+   the "Callifornia" title. This mirrors that: a plain brand strip, nothing invented. */
 .app-titlebar {
   display: flex;
   align-items: center;
@@ -1073,11 +1073,11 @@ button.os-pill:focus-visible { outline: 2px solid var(--accent); outline-offset:
 }
 
 /* --- Join page (join/index.html) -------------------------------------------
-   The landing spot for a shared calls://join/<id> invite: hands off to the
+   The landing spot for a shared callifornia://join/<id> invite: hands off to the
    desktop app. No install fallback here on purpose -- the home page already
    owns that job, and duplicating it doubled the maintenance surface (the
    version/size line collided with main.js's home-page-only element id) for a
-   case (no Calls installed) that is rare for someone who was just sent a link. */
+   case (no Callifornia installed) that is rare for someone who was just sent a link. */
 .join-page { padding-bottom: 64px; }
 
 .join-actions {

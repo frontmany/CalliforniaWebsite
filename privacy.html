@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title data-i18n="page.privacy.title">Privacy, Calls</title>
-  <meta name="description" data-i18n-content="page.privacy.desc" content="What data Calls collects, what it doesn't, and why." />
+  <title data-i18n="page.privacy.title">Privacy, Callifornia</title>
+  <meta name="description" data-i18n-content="page.privacy.desc" content="What data Callifornia collects, what it doesn't, and why." />
   <link rel="icon" href="assets/favicon.ico" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -16,7 +16,7 @@
     // OS setting (main.js keeps following it while the page is open).
     (function () {
       try {
-        var saved = localStorage.getItem("calls-theme");
+        var saved = localStorage.getItem("callifornia-theme");
         var light = saved === "light" || (!saved && window.matchMedia &&
           window.matchMedia("(prefers-color-scheme: light)").matches);
         if (light) document.documentElement.setAttribute("data-theme", "light");
@@ -31,7 +31,7 @@
     <div class="container header-row">
       <a class="brand" href="index.html">
         <img src="assets/logo.png" alt="" class="brand-logo" width="28" height="28" />
-        <span>Calls</span>
+        <span>Callifornia</span>
       </a>
       <nav class="site-nav" data-i18n-aria-label="aria.site" aria-label="Site">
         <a href="index.html#features" data-i18n="nav.features">Features</a>
@@ -52,7 +52,7 @@
   <main>
     <div class="page container container--narrow prose">
       <h1 class="page-title" data-i18n="privacy.title">Privacy</h1>
-      <p class="page-sub" data-i18n="privacy.sub">Last updated July 29, 2026. In short, Calls collects what it needs to connect your calls, and not much else.</p>
+      <p class="page-sub" data-i18n="privacy.sub">Last updated July 29, 2026. In short, Callifornia collects what it needs to connect your calls, and not much else.</p>
 
       <h2 data-i18n="privacy.collect.h">What we collect</h2>
       <ul>
@@ -65,7 +65,7 @@
       <ul>
         <li data-i18n-html="privacy.never.1"><strong>Your calls are not recorded.</strong> Audio, video and screen sharing streams are encrypted in transit and are not stored on our servers.</li>
         <li data-i18n-html="privacy.never.2"><strong>No advertising or tracking.</strong> The app contains no ad SDKs, no analytics trackers, and no sharing of data with anybody else. We don't sell data, and there is nothing to sell.</li>
-        <li data-i18n-html="privacy.never.3"><strong>No contact scraping.</strong> Calls never reads your address book, files, or anything else on your machine beyond its own settings.</li>
+        <li data-i18n-html="privacy.never.3"><strong>No contact scraping.</strong> Callifornia never reads your address book, files, or anything else on your machine beyond its own settings.</li>
       </ul>
 
       <h2 data-i18n="privacy.crash.h">Crash reports, only if you ask</h2>
@@ -87,7 +87,7 @@
 
   <footer class="site-footer">
     <div class="container footer-row">
-      <span>© <span id="year">2026</span> Calls</span>
+      <span>© <span id="year">2026</span> Callifornia</span>
       <nav class="footer-links" data-i18n-aria-label="aria.footer" aria-label="Footer">
         <a href="changelog.html" data-i18n="footer.changelog">Changelog</a>
         <a href="privacy.html" data-i18n="footer.privacy">Privacy</a>

@@ -2,8 +2,13 @@ name: Deploy Pages
 
 # Static site, no build step -- just publish the repo root to GitHub Pages on
 # every push to main. The download button links straight to the installer on
-# Yandex Object Storage (calls-download bucket, uploaded by CallsApp's release
-# workflow), so nothing here needs to know about CallsApp releases.
+# Yandex Object Storage (callifornia-download bucket, uploaded by CalliforniaApp's release
+# workflow), so nothing here needs to know about CalliforniaApp releases.
+#
+# The repo root includes CNAME, which is what binds the deployment to the
+# custom domain callifornia.online. Publishing the root wholesale is what keeps
+# it there -- drop the file and the next deploy hands the site back to
+# frontmany.github.io.
 
 on:
   push:
