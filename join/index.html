@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Join a call — Calls</title>
-  <meta name="description" content="Open this call in the Calls desktop app." />
+  <title data-i18n="page.join.title">Join a call — Calls</title>
+  <meta name="description" data-i18n-content="page.join.desc" content="Open this call in the Calls desktop app." />
   <link rel="icon" href="../assets/favicon.ico" />
 
   <!-- Link previews: this page exists to be pasted into chats, so it should
@@ -44,10 +44,11 @@
         <span>Calls</span>
       </a>
       <div class="header-actions">
-        <button id="theme-toggle" class="theme-toggle" type="button" aria-label="Switch theme">
+        <button id="theme-toggle" class="theme-toggle" type="button" data-i18n-aria-label="aria.theme" aria-label="Switch theme">
           <svg class="icon-moon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/></svg>
           <svg class="icon-sun" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
         </button>
+        <button data-lang-toggle class="lang-toggle" type="button" aria-label="Switch language">RU</button>
       </div>
     </div>
   </header>
@@ -58,8 +59,8 @@
 
       <!-- Valid invite -->
       <div id="join-valid" hidden>
-        <h1>Join the call</h1>
-        <p class="hero-sub">
+        <h1 data-i18n="join.valid.title">Join the call</h1>
+        <p class="hero-sub" data-i18n="join.valid.sub">
           Click below to open this call in the Calls desktop app.
         </p>
 
@@ -68,27 +69,27 @@
             <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
               <path d="M10 5H6a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h4"/><path d="M15 16l5-4-5-4"/><path d="M9 12h11"/>
             </svg>
-            Open in Calls
+            <span data-i18n="join.valid.btn">Open in Calls</span>
           </a>
         </div>
       </div>
 
       <!-- No usable id in the URL -->
       <div id="join-invalid" hidden>
-        <h1>This link looks broken</h1>
-        <p class="hero-sub">
+        <h1 data-i18n="join.invalid.title">This link looks broken</h1>
+        <p class="hero-sub" data-i18n="join.invalid.sub">
           It doesn&rsquo;t contain a call ID. Ask whoever sent it for a new
           link, or open Calls and enter the call ID by hand.
         </p>
         <div class="cta-desktop">
-          <a class="btn-primary" href="../index.html">Go to the Calls home page</a>
+          <a class="btn-primary" href="../index.html" data-i18n="join.invalid.btn">Go to the Calls home page</a>
         </div>
       </div>
 
       <!-- Valid invite, but opened on a phone/tablet -->
       <div id="join-mobile" hidden>
-        <h1>Desktop only</h1>
-        <p class="hero-sub">
+        <h1 data-i18n="join.mobile.title">Desktop only</h1>
+        <p class="hero-sub" data-i18n="join.mobile.sub">
           Calls is a desktop app and doesn&rsquo;t run on phones or tablets.
           Open this link on your computer to join.
         </p>
@@ -99,10 +100,10 @@
   <footer class="site-footer">
     <div class="container footer-row">
       <span>&copy; <span id="year">2026</span> Calls</span>
-      <nav class="footer-links" aria-label="Footer">
-        <a href="../changelog.html">Changelog</a>
-        <a href="../privacy.html">Privacy</a>
-        <a href="mailto:fmtab2014@gmail.com">Contact</a>
+      <nav class="footer-links" data-i18n-aria-label="aria.footer" aria-label="Footer">
+        <a href="../changelog.html" data-i18n="footer.changelog">Changelog</a>
+        <a href="../privacy.html" data-i18n="footer.privacy">Privacy</a>
+        <a href="mailto:fmtab2014@gmail.com" data-i18n="footer.contact">Contact</a>
       </nav>
     </div>
   </footer>
@@ -170,6 +171,7 @@
       }, 400);
     })();
   </script>
+  <script src="../assets/i18n.js"></script>
   <script src="../assets/main.js"></script>
 </body>
 </html>

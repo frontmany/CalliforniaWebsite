@@ -186,6 +186,28 @@ body {
 :root[data-theme="light"] .theme-toggle .icon-sun { display: block; }
 :root[data-theme="light"] .theme-toggle .icon-moon { display: none; }
 
+/* Language switch — same shell as the theme toggle, wider for two letters.
+   It names the language it takes you to, so the label is always the other
+   one. Hidden without JavaScript, since nothing would happen on a click. */
+.lang-toggle {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  min-width: 40px;
+  height: 34px;
+  padding: 0 8px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--muted);
+  font: 500 12px/1 var(--font);
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  transition: color 0.15s ease, background 0.15s ease;
+}
+.js .lang-toggle { display: inline-flex; }
+.lang-toggle:hover { color: var(--text); background: var(--surface); }
+
 main { position: relative; z-index: 1; flex: 1; }
 
 /* ---------- Hero ---------- */
@@ -976,6 +998,15 @@ button.os-pill:focus-visible { outline: 2px solid var(--accent); outline-offset:
   font-size: 14px;
   color: var(--muted);
   line-height: 1.8;
+}
+
+/* A closing remark under a release: what it requires, or why it never shipped. */
+.release-note {
+  margin: 12px 0 0;
+  font-size: 13px;
+  line-height: 1.7;
+  color: var(--muted);
+  opacity: 0.85;
 }
 
 .prose h2 {

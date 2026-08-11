@@ -11,6 +11,14 @@
 
   document.documentElement.classList.add("js");
 
+  // The few strings this file writes at runtime come from the dictionary in
+  // i18n.js. Should that file be missing, t() returns nothing and every write
+  // below is skipped, leaving the English the markup already carries.
+  var i18n = window.CallsI18n;
+  function t(key, vars) {
+    return i18n ? i18n.t(key, vars) : null;
+  }
+
   // --- Theme (mirrors the app's light/dark ThemeToggle) ---------------------
   // The starting theme is applied by an inline <head> script before first
   // paint (saved choice, else the OS setting); this wires the button and
@@ -150,11 +158,11 @@
 
     var linuxInfo = latestData && latestData.platforms && latestData.platforms["linux-x64"];
     var href = WIN_HREF;
-    var label = "Download for Windows";
-    var metaText = "Latest version ready to download";
+    var label = t("download.windows");
+    var metaText = t("meta.ready");
 
     if (isLinux) {
-      label = "Download for Linux (." + state.pkg + ")";
+      label = t("download.linux", { pkg: state.pkg });
       if (linuxInfo) {
         href = state.pkg === "rpm" ? linuxInfo.rpm : linuxInfo.deb;
         var linuxVersion = String(linuxInfo.version || "").replace(/^v/, "");
@@ -163,10 +171,12 @@
           // merge step measures the file it just built) -- .rpm still gets a
           // real, working link, just without a "NN MB" figure next to it.
           if (state.pkg === "deb" && linuxInfo.size) {
-            metaText = "v" + linuxVersion + ", " + (linuxInfo.size / (1024 * 1024)).toFixed(0) +
-              " MB, Debian/Ubuntu (.deb)";
+            metaText = t("meta.deb", {
+              version: linuxVersion,
+              size: (linuxInfo.size / (1024 * 1024)).toFixed(0)
+            });
           } else {
-            metaText = "v" + linuxVersion + ", Fedora/RHEL (.rpm)";
+            metaText = t("meta.rpm", { version: linuxVersion });
           }
         }
       } else {
@@ -176,20 +186,26 @@
         // Point at the Releases page instead of leaving the label promising
         // "Linux" while the href silently downloads the Windows installer.
         href = GITHUB_RELEASES_URL;
-        metaText = fetchFailed ? "Latest version ready to download" : "Loading…";
+        metaText = fetchFailed ? t("meta.ready") : t("meta.loading");
       }
     } else if (latestData) {
       var winVersion = String(latestData.version || "").replace(/^v/, "");
       if (winVersion) {
-        var winSize = (latestData.size / (1024 * 1024)).toFixed(0) + " MB";
-        metaText = "v" + winVersion + ", " + winSize + ", Windows 10/11 (64-bit)";
+        metaText = t("meta.windows", {
+          version: winVersion,
+          size: (latestData.size / (1024 * 1024)).toFixed(0)
+        });
       }
     }
 
     downloadBtns.forEach(function (btn) { if (btn) btn.href = href; });
-    downloadLabels.forEach(function (el) { if (el) el.textContent = label; });
-    meta.textContent = metaText;
+    downloadLabels.forEach(function (el) { if (el && label) el.textContent = label; });
+    if (metaText) meta.textContent = metaText;
   }
+
+  // The button and the line under it are written here, not marked up, so they
+  // have to be redrawn when the header switch changes the language.
+  if (i18n) i18n.onChange(render);
 
   function setPlatform(platform) {
     state.platform = platform;

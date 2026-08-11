@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Calls — simple video calls for Windows &amp; Linux</title>
-  <meta name="description" content="A simple, fast desktop app for video calls. Free and lightweight, for Windows and Linux." />
+  <title data-i18n="page.index.title">Calls — simple video calls for Windows &amp; Linux</title>
+  <meta name="description" data-i18n-content="page.index.desc" content="A simple, fast desktop app for video calls. Free and lightweight, for Windows and Linux." />
   <link rel="icon" href="assets/favicon.ico" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -34,17 +34,18 @@
         <img src="assets/logo.png" alt="" class="brand-logo" width="28" height="28" />
         <span>Calls</span>
       </a>
-      <nav class="site-nav" aria-label="Site">
-        <a href="#features">Features</a>
-        <a href="#how">How it works</a>
-        <a href="#faq">FAQ</a>
-        <a href="changelog.html">Changelog</a>
+      <nav class="site-nav" data-i18n-aria-label="aria.site" aria-label="Site">
+        <a href="#features" data-i18n="nav.features">Features</a>
+        <a href="#how" data-i18n="nav.how">How it works</a>
+        <a href="#faq" data-i18n="nav.faq">FAQ</a>
+        <a href="changelog.html" data-i18n="nav.changelog">Changelog</a>
       </nav>
       <div class="header-actions">
-        <button id="theme-toggle" class="theme-toggle" type="button" aria-label="Switch theme">
+        <button id="theme-toggle" class="theme-toggle" type="button" data-i18n-aria-label="aria.theme" aria-label="Switch theme">
           <svg class="icon-moon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/></svg>
           <svg class="icon-sun" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
         </button>
+        <button data-lang-toggle class="lang-toggle" type="button" aria-label="Switch language">RU</button>
       </div>
     </div>
   </header>
@@ -52,8 +53,8 @@
   <main id="top">
     <section class="hero container">
       <img src="assets/logo.png" alt="Calls" class="hero-logo" width="96" height="96" />
-      <h1>Video calls, without the hassle.</h1>
-      <p class="hero-sub">A simple, fast desktop app for video calls. Free and lightweight, for Windows and Linux.</p>
+      <h1 data-i18n="hero.title">Video calls, without the hassle.</h1>
+      <p class="hero-sub" data-i18n="hero.sub">A simple, fast desktop app for video calls. Free and lightweight, for Windows and Linux.</p>
 
       <div class="cta-desktop">
         <div class="download-block">
@@ -82,23 +83,23 @@
         <!-- Windows/Linux pills are real buttons the visitor can click to
              override the auto-detected platform; macOS stays a plain
              disabled pill since there is nothing to switch to yet. -->
-        <div class="os-row" role="group" aria-label="Available platforms">
+        <div class="os-row" role="group" data-i18n-aria-label="aria.platforms" aria-label="Available platforms">
           <button type="button" class="os-pill os-pill--active" data-os="windows">
             <svg viewBox="0 0 16 16" width="14" height="14" fill="currentColor" aria-hidden="true"><path d="M0 0h7.5v7.5H0zM8.5 0H16v7.5H8.5zM0 8.5h7.5V16H0zM8.5 8.5H16V16H8.5z"/></svg>
             Windows
           </button>
           <button type="button" class="os-pill" data-os="linux">
-            Linux <span class="beta-badge">Beta</span>
+            Linux <span class="beta-badge" data-i18n="os.beta">Beta</span>
           </button>
           <span class="os-pill" aria-disabled="true">
-             macOS <span class="soon-badge">Soon</span>
+             macOS <span class="soon-badge" data-i18n="os.soon">Soon</span>
           </span>
         </div>
       </div>
 
       <div class="cta-mobile">
-        <span class="mobile-badge">Coming soon for mobile</span>
-        <p class="mobile-text">Calls is currently available for Windows and Linux desktop. Open this page on a computer to download it.</p>
+        <span class="mobile-badge" data-i18n="mobile.badge">Coming soon for mobile</span>
+        <p class="mobile-text" data-i18n="mobile.text">Calls is currently available for Windows and Linux desktop. Open this page on a computer to download it.</p>
       </div>
 
       <!-- In-call UI, drawn with the app's real palette and exact icon paths
@@ -114,10 +115,10 @@
         <div class="app-body">
           <div class="call-topbar">
             <span class="call-timer">12:47</span>
-            <span class="call-icon-btn" title="Settings">
+            <span class="call-icon-btn" data-i18n-title="mock.settings" title="Settings">
               <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
             </span>
-            <span class="call-icon-btn" title="Invite">
+            <span class="call-icon-btn" data-i18n-title="mock.invite" title="Invite">
               <svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.25"/><path d="M3.5 19a5.5 5.5 0 0 1 11 0"/><path d="M19 8v6M16 11h6"/></svg>
             </span>
           </div>
@@ -128,30 +129,30 @@
             </div>
             <div class="tile">
               <div class="tile-avatar">MR</div>
-              <span class="tile-name">Max R. <span class="muted-label">muted</span></span>
+              <span class="tile-name">Max R. <span class="muted-label" data-i18n="mock.muted">muted</span></span>
             </div>
             <div class="tile">
               <div class="tile-avatar">DL</div>
               <span class="tile-name">Dana L.</span>
             </div>
             <div class="tile">
-              <div class="tile-avatar">You</div>
-              <span class="tile-name">You</span>
+              <div class="tile-avatar" data-i18n="mock.you">You</div>
+              <span class="tile-name" data-i18n="mock.you">You</span>
             </div>
           </div>
           <div class="control-bar">
-            <span class="control-btn" title="Mute">
+            <span class="control-btn" data-i18n-title="mock.mute" title="Mute">
               <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a3 3 0 0 1 3 3v6a3 3 0 0 1-6 0V6a3 3 0 0 1 3-3z"/><path d="M5 12a7 7 0 0 0 14 0"/><path d="M12 19v3"/></svg>
             </span>
-            <span class="control-btn" title="Camera off">
+            <span class="control-btn" data-i18n-title="mock.camera" title="Camera off">
               <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M16 10l6-3v10l-6-3"/><path d="M2 7.5V17a2 2 0 0 0 2 2h9.5"/><path d="M9 7h5a2 2 0 0 1 2 2v.5"/><path d="M1 1l22 22"/></svg>
             </span>
-            <span class="control-btn" title="Share screen">
+            <span class="control-btn" data-i18n-title="mock.share" title="Share screen">
               <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8"/><path d="M12 16v4"/></svg>
             </span>
             <span class="control-btn control-btn--leave">
               <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M10 5H6a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h4"/><path d="M15 16l5-4-5-4"/><path d="M9 12h11"/></svg>
-              Leave
+              <span data-i18n="mock.leave">Leave</span>
             </span>
           </div>
         </div>
@@ -160,31 +161,31 @@
 
     <section id="features" class="section container">
       <div data-reveal>
-        <p class="eyebrow">Features</p>
-        <h2 class="section-title">Everything a call needs. Nothing it doesn't.</h2>
-        <p class="section-sub">Calls is built as a native desktop app around one idea: getting people talking should take seconds, not setup.</p>
+        <p class="eyebrow" data-i18n="features.eyebrow">Features</p>
+        <h2 class="section-title" data-i18n="features.title">Everything a call needs. Nothing it doesn't.</h2>
+        <p class="section-sub" data-i18n="features.sub">Calls is built as a native desktop app around one idea: getting people talking should take seconds, not setup.</p>
       </div>
 
       <div class="feature" data-reveal>
         <div class="feature-copy">
-          <h3>Join with a short meeting ID</h3>
-          <p>Every meeting gets a short ID. Share it in any chat, and anyone with the app is in the call seconds later — no links that expire, no "waiting for the host to admit you".</p>
+          <h3 data-i18n="f1.title">Join with a short meeting ID</h3>
+          <p data-i18n="f1.text">Every meeting gets a short ID. Share it in any chat, and anyone with the app is in the call seconds later — no links that expire, no "waiting for the host to admit you".</p>
         </div>
         <div class="feature-visual">
           <div class="join-mockup" aria-hidden="true">
-            <p class="join-title">Join a call</p>
-            <p class="join-sub">Enter the call ID you were given</p>
+            <p class="join-title" data-i18n="mock.join.title">Join a call</p>
+            <p class="join-sub" data-i18n="mock.join.sub">Enter the call ID you were given</p>
             <div class="panel">
               <span class="join-back">
                 <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
-                Back
+                <span data-i18n="mock.join.back">Back</span>
               </span>
               <div class="join-field-row">
                 <div class="join-field-col">
-                  <label class="join-field-label">Call ID</label>
+                  <label class="join-field-label" data-i18n="mock.join.label">Call ID</label>
                   <div class="join-field"><span>team-standup-42</span></div>
                 </div>
-                <span class="btn-mini">Join</span>
+                <span class="btn-mini" data-i18n="mock.join.btn">Join</span>
               </div>
             </div>
           </div>
@@ -193,8 +194,8 @@
 
       <div class="feature" data-reveal>
         <div class="feature-copy">
-          <h3>Updates, kept simple</h3>
-          <p>On Windows, new versions arrive in the background and apply with a single restart — you never reinstall anything. On Linux, the app tells you when one's ready and your package manager takes it from there. Either way, every update is cryptographically signed.</p>
+          <h3 data-i18n="f2.title">Updates, kept simple</h3>
+          <p data-i18n="f2.text">On Windows, new versions arrive in the background and apply with a single restart — you never reinstall anything. On Linux, the app tells you when one's ready and your package manager takes it from there. Either way, every update is cryptographically signed.</p>
         </div>
         <div class="feature-visual">
           <div class="panel" aria-hidden="true">
@@ -203,8 +204,8 @@
                 <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-9-9c2.5 0 4.5 1 6 2.7M21 3v6h-6"/></svg>
               </span>
               <div>
-                <p class="panel-title">Downloading update</p>
-                <p class="panel-note">Only the changed files</p>
+                <p class="panel-title" data-i18n="mock.update.title">Downloading update</p>
+                <p class="panel-note" data-i18n="mock.update.note">Only the changed files</p>
               </div>
             </div>
             <div class="progress" style="margin-top:14px"><div class="progress-fill"></div></div>
@@ -214,8 +215,8 @@
 
       <div class="feature" data-reveal>
         <div class="feature-copy">
-          <h3>Friends, one click away</h3>
-          <p>Add people once and call them any time — no digging through chats for the right link. Invites show up right in the app, and starting a call with a friend is a single click.</p>
+          <h3 data-i18n="f3.title">Friends, one click away</h3>
+          <p data-i18n="f3.text">Add people once and call them any time — no digging through chats for the right link. Invites show up right in the app, and starting a call with a friend is a single click.</p>
         </div>
         <div class="feature-visual">
           <div class="panel" aria-hidden="true">
@@ -225,7 +226,7 @@
                 <p class="panel-title">Anna K.</p>
                 <p class="panel-note" style="font-family:var(--mono)">@annak</p>
               </div>
-              <span class="btn-mini">Invite</span>
+              <span class="btn-mini" data-i18n="mock.friend.invite">Invite</span>
             </div>
             <div class="panel-row">
               <span class="friend-avatar">MR</span>
@@ -233,7 +234,7 @@
                 <p class="panel-title">Max R.</p>
                 <p class="panel-note" style="font-family:var(--mono)">@maxr</p>
               </div>
-              <span class="panel-note">In call</span>
+              <span class="panel-note" data-i18n="mock.friend.incall">In call</span>
             </div>
             <div class="panel-row">
               <span class="friend-avatar">DL</span>
@@ -241,7 +242,7 @@
                 <p class="panel-title">Dana L.</p>
                 <p class="panel-note" style="font-family:var(--mono)">@danal</p>
               </div>
-              <span class="btn-mini btn-mini--ghost">Cancel</span>
+              <span class="btn-mini btn-mini--ghost" data-i18n="mock.friend.cancel">Cancel</span>
             </div>
           </div>
         </div>
@@ -251,96 +252,96 @@
 
     <section id="how" class="section container">
       <div class="section-head--center" data-reveal>
-        <p class="eyebrow">How it works</p>
-        <h2 class="section-title">On a call in three steps</h2>
-        <p class="section-sub">No admin rights, no account maze, no browser plugins.</p>
+        <p class="eyebrow" data-i18n="how.eyebrow">How it works</p>
+        <h2 class="section-title" data-i18n="how.title">On a call in three steps</h2>
+        <p class="section-sub" data-i18n="how.sub">No admin rights, no account maze, no browser plugins.</p>
       </div>
       <div class="steps" data-reveal>
         <div class="step">
           <div class="step-num">1</div>
-          <h3>Download &amp; run</h3>
-          <p>Grab the installer and run it. It installs per-user — no administrator rights needed — and finishes in seconds.</p>
+          <h3 data-i18n="how.1.title">Download &amp; run</h3>
+          <p data-i18n="how.1.text">Grab the installer and run it. It installs per-user — no administrator rights needed — and finishes in seconds.</p>
         </div>
         <div class="step">
           <div class="step-num">2</div>
-          <h3>Sign in</h3>
-          <p>Create an account with a name and a password. That's the whole form — you're not filling out a profile.</p>
+          <h3 data-i18n="how.2.title">Sign in</h3>
+          <p data-i18n="how.2.text">Create an account with a name and a password. That's the whole form — you're not filling out a profile.</p>
         </div>
         <div class="step">
           <div class="step-num">3</div>
-          <h3>Start talking</h3>
-          <p>Start a meeting and share its short ID, or call a friend directly. Screen sharing is one click away.</p>
+          <h3 data-i18n="how.3.title">Start talking</h3>
+          <p data-i18n="how.3.text">Start a meeting and share its short ID, or call a friend directly. Screen sharing is one click away.</p>
         </div>
       </div>
     </section>
 
     <section id="faq" class="section container">
       <div class="section-head--center" data-reveal>
-        <p class="eyebrow">FAQ</p>
-        <h2 class="section-title">Questions, answered</h2>
+        <p class="eyebrow" data-i18n="faq.eyebrow">FAQ</p>
+        <h2 class="section-title" data-i18n="faq.title">Questions, answered</h2>
       </div>
       <div class="faq-list" data-reveal>
         <details class="faq-item">
           <summary>
-            Is Calls really free?
+            <span data-i18n="faq.free.q">Is Calls really free?</span>
             <svg class="faq-chevron" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
           </summary>
           <div class="faq-answer">
-            <p>Yes. There's no subscription, no trial timer, and no features locked behind a paywall. You download it, sign in, and call people.</p>
+            <p data-i18n="faq.free.a">Yes. There's no subscription, no trial timer, and no features locked behind a paywall. You download it, sign in, and call people.</p>
           </div>
         </details>
         <details class="faq-item">
           <summary>
-            Which platforms are supported?
+            <span data-i18n="faq.platforms.q">Which platforms are supported?</span>
             <svg class="faq-chevron" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
           </summary>
           <div class="faq-answer">
-            <p>Windows 10 and 11 (64-bit), and Linux (.deb for Debian/Ubuntu, .rpm for Fedora/RHEL) — Linux support is new, so it's marked beta while it settles. macOS is planned — the app's core is already cross-platform, so it's a matter of packaging, not a rewrite.</p>
+            <p data-i18n-html="faq.platforms.a">Windows 10 and 11 (64-bit), and Linux (.deb for Debian/Ubuntu, .rpm for Fedora/RHEL) — Linux support is new, so it's marked beta while it settles. macOS is planned — the app's core is already cross-platform, so it's a matter of packaging, not a rewrite.</p>
           </div>
         </details>
         <details class="faq-item">
           <summary>
-            Windows warned me about an unrecognized app. Why?
+            <span data-i18n="faq.smartscreen.q">Windows warned me about an unrecognized app. Why?</span>
             <svg class="faq-chevron" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
           </summary>
           <div class="faq-answer">
-            <p>That's Microsoft SmartScreen being cautious about new publishers. The installer isn't code-signed with a paid certificate yet, so Windows shows a generic warning for it. Click "More info" → "Run anyway" to proceed. Once code-signed, the warning disappears.</p>
-            <p>Code signing is on our roadmap; once in place, the warning disappears.</p>
+            <p data-i18n-html="faq.smartscreen.a1">That's Microsoft SmartScreen being cautious about new publishers. The installer isn't code-signed with a paid certificate yet, so Windows shows a generic warning for it. Click "More info" → "Run anyway" to proceed. Once code-signed, the warning disappears.</p>
+            <p data-i18n="faq.smartscreen.a2">Code signing is on our roadmap; once in place, the warning disappears.</p>
           </div>
         </details>
         <details class="faq-item">
           <summary>
-            Do I need an account?
+            <span data-i18n="faq.account.q">Do I need an account?</span>
             <svg class="faq-chevron" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
           </summary>
           <div class="faq-answer">
-            <p>Yes — a lightweight one. An account is what lets friends find you by name and call you directly instead of passing meeting IDs around every time.</p>
+            <p data-i18n="faq.account.a">Yes — a lightweight one. An account is what lets friends find you by name and call you directly instead of passing meeting IDs around every time.</p>
           </div>
         </details>
         <details class="faq-item">
           <summary>
-            How do updates work?
+            <span data-i18n="faq.updates.q">How do updates work?</span>
             <svg class="faq-chevron" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
           </summary>
           <div class="faq-answer">
-            <p>On Windows, the app checks for new versions in the background, downloads only the files that changed, and verifies a cryptographic signature on every update before applying it — restart once and you're done. On Linux, updates ship through a signed APT/YUM repository instead: the app tells you one is available, and your package manager installs it (one click from inside the app if it can ask for your password, otherwise a regular <code>apt upgrade</code>/<code>dnf upgrade</code>). See what's changed in the <a href="changelog.html" style="color:var(--accent); text-decoration:none">changelog</a>.</p>
+            <p data-i18n-html="faq.updates.a">On Windows, the app checks for new versions in the background, downloads only the files that changed, and verifies a cryptographic signature on every update before applying it — restart once and you're done. On Linux, updates ship through a signed APT/YUM repository instead: the app tells you one is available, and your package manager installs it (one click from inside the app if it can ask for your password, otherwise a regular <code>apt upgrade</code>/<code>dnf upgrade</code>). See what's changed in the <a href="changelog.html" style="color:var(--accent); text-decoration:none">changelog</a>.</p>
           </div>
         </details>
         <details class="faq-item">
           <summary>
-            What data does Calls collect?
+            <span data-i18n="faq.data.q">What data does Calls collect?</span>
             <svg class="faq-chevron" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
           </summary>
           <div class="faq-answer">
-            <p>As little as it can get away with: your account details and what's needed to connect calls. Calls are never recorded, and crash reports are strictly opt-in and off by default. The full details are in the <a href="privacy.html" style="color:var(--accent); text-decoration:none">privacy policy</a>.</p>
+            <p data-i18n-html="faq.data.a">As little as it can get away with: your account details and what's needed to connect calls. Calls are never recorded, and crash reports are strictly opt-in and off by default. The full details are in the <a href="privacy.html" style="color:var(--accent); text-decoration:none">privacy policy</a>.</p>
           </div>
         </details>
       </div>
     </section>
 
     <section class="cta-final container" data-reveal>
-      <h2>Ready when you are.</h2>
-      <p class="section-sub">Download Calls and be on your first call in under a minute.</p>
+      <h2 data-i18n="cta.title">Ready when you are.</h2>
+      <p class="section-sub" data-i18n="cta.sub">Download Calls and be on your first call in under a minute.</p>
       <div class="cta-desktop">
         <a id="download-btn-2" class="btn-primary" href="https://calls-download.storage.yandexcloud.net/stable/CallsSetup.exe" rel="noopener" download>
           <svg viewBox="0 0 16 16" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -350,7 +351,7 @@
         </a>
       </div>
       <div class="cta-mobile">
-        <span class="mobile-badge">Coming soon for mobile</span>
+        <span class="mobile-badge" data-i18n="mobile.badge">Coming soon for mobile</span>
       </div>
     </section>
   </main>
@@ -358,14 +359,15 @@
   <footer class="site-footer">
     <div class="container footer-row">
       <span>© <span id="year">2026</span> Calls</span>
-      <nav class="footer-links" aria-label="Footer">
-        <a href="changelog.html">Changelog</a>
-        <a href="privacy.html">Privacy</a>
-        <a href="mailto:fmtab2014@gmail.com">Contact</a>
+      <nav class="footer-links" data-i18n-aria-label="aria.footer" aria-label="Footer">
+        <a href="changelog.html" data-i18n="footer.changelog">Changelog</a>
+        <a href="privacy.html" data-i18n="footer.privacy">Privacy</a>
+        <a href="mailto:fmtab2014@gmail.com" data-i18n="footer.contact">Contact</a>
       </nav>
     </div>
   </footer>
 
+  <script src="assets/i18n.js"></script>
   <script src="assets/main.js"></script>
 </body>
 </html>
