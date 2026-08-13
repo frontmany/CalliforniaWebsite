@@ -25,26 +25,28 @@
   </script>
 </head>
 <body>
-  <div class="bg-glow bg-glow-1" aria-hidden="true"></div>
+  <div class="backdrop" aria-hidden="true"></div>
 
   <header class="site-header">
     <div class="container header-row">
       <a class="brand" href="index.html">
-        <img src="assets/logo.png" alt="" class="brand-logo" width="28" height="28" />
+        <img src="assets/logo-mark.webp" alt="" class="brand-logo" width="28" height="28" />
         <span>Callifornia</span>
       </a>
-      <nav class="site-nav" data-i18n-aria-label="aria.site" aria-label="Site">
-        <a href="index.html#features" data-i18n="nav.features">Features</a>
-        <a href="index.html#how" data-i18n="nav.how">How it works</a>
-        <a href="index.html#faq" data-i18n="nav.faq">FAQ</a>
-        <a href="changelog.html" data-i18n="nav.changelog">Changelog</a>
-      </nav>
-      <div class="header-actions">
-        <button id="theme-toggle" class="theme-toggle" type="button" data-i18n-aria-label="aria.theme" aria-label="Switch theme">
-          <svg class="icon-moon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/></svg>
-          <svg class="icon-sun" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
-        </button>
-        <button data-lang-toggle class="lang-toggle" type="button" aria-label="Switch language">RU</button>
+      <div class="header-right">
+        <nav class="site-nav" data-i18n-aria-label="aria.site" aria-label="Site">
+          <a href="index.html#features" data-i18n="nav.features">Features</a>
+          <a href="index.html#how" data-i18n="nav.how">How it works</a>
+          <a href="index.html#faq" data-i18n="nav.faq">FAQ</a>
+          <a href="changelog.html" data-i18n="nav.changelog">Changelog</a>
+        </nav>
+        <div class="header-actions">
+          <button id="theme-toggle" class="theme-toggle" type="button" data-i18n-aria-label="aria.theme" aria-label="Switch theme">
+            <svg class="icon-moon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 14.3A8.5 8.5 0 1 1 9.7 3 7 7 0 0 0 21 14.3z"/></svg>
+            <svg class="icon-sun" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+          </button>
+          <button data-lang-toggle class="lang-toggle" type="button" aria-label="Switch language">RU</button>
+        </div>
       </div>
     </div>
   </header>
@@ -52,21 +54,31 @@
   <main>
     <div class="page container container--narrow prose">
       <h1 class="page-title" data-i18n="privacy.title">Privacy</h1>
-      <p class="page-sub" data-i18n="privacy.sub">Last updated July 29, 2026. In short, Callifornia collects what it needs to connect your calls, and not much else.</p>
+      <p class="page-sub" data-i18n="privacy.sub">Last updated August 13, 2026. In short, Callifornia collects what it needs to connect your calls and carry your messages, and not much else.</p>
 
       <h2 data-i18n="privacy.collect.h">What we collect</h2>
       <ul>
-        <li data-i18n-html="privacy.collect.1"><strong>Account data</strong>, the display name and credentials you sign up with. This is what lets friends find and call you.</li>
-        <li data-i18n-html="privacy.collect.2"><strong>Connection data</strong>, the technical signaling needed to establish a call between participants (who is joining which meeting, and the network details required to connect you).</li>
+        <li data-i18n-html="privacy.collect.1"><strong>Account data</strong>, the username, display name and password you sign up with. This is what lets friends find and call you.</li>
+        <li data-i18n-html="privacy.collect.email"><strong>Your email address.</strong> It has one job: getting you back into your account if you forget your password, and confirming the address belongs to you in the first place. We don't send newsletters and there is nothing to subscribe to.</li>
+        <li data-i18n-html="privacy.collect.messages"><strong>Messages you send.</strong> Chat in a space is stored on our servers so it is there when you come back, and it stays until the space is deleted. Chat in a one-off call goes with the call.</li>
+        <li data-i18n-html="privacy.collect.pictures"><strong>Profile and space pictures</strong>, if you set one. These are currently served from a public address, so anyone who has the link can open the image without signing in.</li>
+        <li data-i18n-html="privacy.collect.social"><strong>Who you are connected to</strong>, your friends, your spaces and who else is in them, and whether you are online or in a call. Delivering a call or a message requires knowing where to send it.</li>
+        <li data-i18n-html="privacy.collect.2"><strong>Connection data</strong>, the technical signaling needed to establish a call between participants (who is joining which meeting, and the network details required to connect you), and the IP address your device connects from.</li>
         <li data-i18n-html="privacy.collect.3"><strong>Version information</strong>, the app reports its version when talking to our servers so we can serve compatible updates.</li>
       </ul>
 
       <h2 data-i18n="privacy.never.h">What we don't collect</h2>
       <ul>
-        <li data-i18n-html="privacy.never.1"><strong>Your calls are not recorded.</strong> Audio, video and screen sharing streams are encrypted in transit and are not stored on our servers.</li>
+        <li data-i18n-html="privacy.never.1"><strong>Your calls are not recorded.</strong> Audio, video and screen sharing are encrypted on the way to our server and on the way out of it, and nothing is written down.</li>
         <li data-i18n-html="privacy.never.2"><strong>No advertising or tracking.</strong> The app contains no ad SDKs, no analytics trackers, and no sharing of data with anybody else. We don't sell data, and there is nothing to sell.</li>
         <li data-i18n-html="privacy.never.3"><strong>No contact scraping.</strong> Callifornia never reads your address book, files, or anything else on your machine beyond its own settings.</li>
       </ul>
+
+      <h2 data-i18n="privacy.e2e.h">What "encrypted" does and does not mean here</h2>
+      <p data-i18n-html="privacy.e2e.p">Callifornia is not end-to-end encrypted, and we would rather say so plainly than let the word "encrypted" do work it hasn't earned. Traffic between your app and our servers is encrypted, and so is call media on both legs — but calls pass through our server to be routed, and messages are stored in our database in a form we can read. In practice that means an administrator with access to the servers could read stored messages, and the same is true of anybody who obtained that access without permission. If that matters for what you are about to say, say it somewhere else.</p>
+
+      <h2 data-i18n="privacy.processors.h">Who else touches this data</h2>
+      <p data-i18n-html="privacy.processors.p">Callifornia runs on Yandex Cloud, which hosts the servers, the database and the file storage. Confirmation and password-reset emails are sent through Yandex Cloud Postbox. We use no other third parties, and no analytics or advertising services of any kind.</p>
 
       <h2 data-i18n="privacy.crash.h">Crash reports, only if you ask</h2>
       <p data-i18n-html="privacy.crash.p">If the app crashes, it can save a technical report (a minidump with stack traces, the app version, OS version, and the tail of the app's own log) and send it to us so we can fix the bug. This is <strong>off by default</strong>. Reports are only sent if you explicitly enable crash reporting, and they are used solely for debugging.</p>
@@ -75,7 +87,7 @@
       <p data-i18n="privacy.updates.p">The app periodically asks our update server whether a new version exists. That request carries the app's version and platform, enough to answer that question and nothing more. Updates themselves are cryptographically signed, and the app verifies the signature before applying anything.</p>
 
       <h2 data-i18n="privacy.retention.h">Data retention &amp; deletion</h2>
-      <p data-i18n="privacy.retention.p">Account data is kept while your account exists. If you want your account and its data deleted, contact us at the address below and we'll remove it.</p>
+      <p data-i18n-html="privacy.retention.p">Account data is kept while your account exists. Messages in a space are kept until the space is deleted; a one-off call room and everything said in it are removed after 30 days of not being used. An account that never confirms its email address is deleted after a week, along with the username it was holding. If you want your account and its data deleted, contact us at the address below and we'll remove it.</p>
 
       <h2 data-i18n="privacy.changes.h">Changes to this policy</h2>
       <p data-i18n-html="privacy.changes.p">If this policy changes in a way that matters, we'll note it in the <a href="changelog.html">changelog</a> and update the date at the top of this page.</p>
@@ -87,7 +99,10 @@
 
   <footer class="site-footer">
     <div class="container footer-row">
-      <span>© <span id="year">2026</span> Callifornia</span>
+      <span class="footer-brand">
+        <img src="assets/logo-mark.webp" alt="" width="20" height="20" />
+        <span>© <span id="year">2026</span> Callifornia</span>
+      </span>
       <nav class="footer-links" data-i18n-aria-label="aria.footer" aria-label="Footer">
         <a href="changelog.html" data-i18n="footer.changelog">Changelog</a>
         <a href="privacy.html" data-i18n="footer.privacy">Privacy</a>
