@@ -25,26 +25,28 @@
   </script>
 </head>
 <body>
-  <div class="bg-glow bg-glow-1" aria-hidden="true"></div>
+  <div class="backdrop" aria-hidden="true"></div>
 
   <header class="site-header">
     <div class="container header-row">
       <a class="brand" href="index.html">
-        <img src="assets/logo.png" alt="" class="brand-logo" width="28" height="28" />
+        <img src="assets/logo-mark.webp" alt="" class="brand-logo" width="28" height="28" />
         <span>Callifornia</span>
       </a>
-      <nav class="site-nav" data-i18n-aria-label="aria.site" aria-label="Site">
-        <a href="index.html#features" data-i18n="nav.features">Features</a>
-        <a href="index.html#how" data-i18n="nav.how">How it works</a>
-        <a href="index.html#faq" data-i18n="nav.faq">FAQ</a>
-        <a href="changelog.html" data-i18n="nav.changelog" aria-current="page">Changelog</a>
-      </nav>
-      <div class="header-actions">
-        <button id="theme-toggle" class="theme-toggle" type="button" data-i18n-aria-label="aria.theme" aria-label="Switch theme">
-          <svg class="icon-moon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/></svg>
-          <svg class="icon-sun" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
-        </button>
-        <button data-lang-toggle class="lang-toggle" type="button" aria-label="Switch language">RU</button>
+      <div class="header-right">
+        <nav class="site-nav" data-i18n-aria-label="aria.site" aria-label="Site">
+          <a href="index.html#features" data-i18n="nav.features">Features</a>
+          <a href="index.html#how" data-i18n="nav.how">How it works</a>
+          <a href="index.html#faq" data-i18n="nav.faq">FAQ</a>
+          <a href="changelog.html" data-i18n="nav.changelog" aria-current="page">Changelog</a>
+        </nav>
+        <div class="header-actions">
+          <button id="theme-toggle" class="theme-toggle" type="button" data-i18n-aria-label="aria.theme" aria-label="Switch theme">
+            <svg class="icon-moon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 14.3A8.5 8.5 0 1 1 9.7 3 7 7 0 0 0 21 14.3z"/></svg>
+            <svg class="icon-sun" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+          </button>
+          <button data-lang-toggle class="lang-toggle" type="button" aria-label="Switch language">RU</button>
+        </div>
       </div>
     </div>
   </header>
@@ -187,7 +189,10 @@
 
   <footer class="site-footer">
     <div class="container footer-row">
-      <span>© <span id="year">2026</span> Callifornia</span>
+      <span class="footer-brand">
+        <img src="assets/logo-mark.webp" alt="" width="20" height="20" />
+        <span>© <span id="year">2026</span> Callifornia</span>
+      </span>
       <nav class="footer-links" data-i18n-aria-label="aria.footer" aria-label="Footer">
         <a href="changelog.html" data-i18n="footer.changelog">Changelog</a>
         <a href="privacy.html" data-i18n="footer.privacy">Privacy</a>

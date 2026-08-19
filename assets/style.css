@@ -1,7 +1,12 @@
-/* Palette + metrics mirror the desktop app (CalliforniaApp — resources/qml/Theme.qml):
-   IBM Plex Sans, warm neutrals, tight 6–12px radii. Both app themes are
-   available here too — dark is the default, [data-theme="light"] mirrors the
-   app's light mode. */
+/* Palette, metrics and backdrop mirror the desktop app (CalliforniaApp —
+   resources/qml/Theme.qml and components/ScreenBackdrop.qml): IBM Plex, warm
+   neutrals, a blue accent, tight 6-12px radii. Both app themes are available
+   here too — dark is the default, [data-theme="light"] mirrors the app's light
+   mode.
+
+   The *_rgb tokens exist because the two accent washes and the dot grain need
+   the same colour at a dozen different alphas; rgba(var(--x-rgb), a) does that
+   without a token per step. */
 :root {
   --canvas: #1C1B19;
   --surface: #2A2825;
@@ -10,22 +15,35 @@
   --text: #F5F4F1;
   --muted: #A8A49C;
   --accent: #2778F6;
+  --accent-rgb: 39, 120, 246;
   --accent-soft: rgba(39, 120, 246, 0.2);
-  --danger: #E22C2C;
-  --tile-bg: #2A2825;
-  --tile-border: rgba(255, 255, 255, 0.1);
-  --tile-avatar: #4A4640;
-  --control-bg: rgba(26, 25, 23, 0.72);
-  --control-border: rgba(255, 255, 255, 0.12);
+  --muted-rgb: 168, 164, 156;
+  /* Presence, straight from Theme.qml. Green is online, violet is in a call,
+     and the accent is somebody sitting in a space you share. */
+  --online: #3FB27F;
+  --incall: #8B5CF6;
+  --avatar: #4A4640;
+  --control-hover: rgba(255, 255, 255, 0.08);
   --header-bg: rgba(28, 27, 25, 0.72);
-  --glow-opacity: 0.45;
-  --glow-opacity-2: 0.22;
+  --glass: rgba(28, 27, 25, 0.7);
+  /* Peak opacity of ScreenBackdrop's two washes, and of its grain. */
+  --glow: 0.38;
+  --glow-2: 0.2;
+  --grain: 0.13;
   --shadow-btn: rgba(39, 120, 246, 0.3);
   --shadow-btn-hover: rgba(39, 120, 246, 0.4);
-  --shadow-window: rgba(0, 0, 0, 0.5);
+  --shadow-panel: 0 18px 44px -28px rgba(0, 0, 0, 0.9);
+  --art-shadow: rgba(0, 0, 0, 0.6);
   --radius-sm: 6px;
   --radius-md: 8px;
   --radius-xl: 12px;
+  /* The gutter between the page and the window. */
+  --pad: clamp(20px, 3vw, 32px);
+  /* The gutter, or whatever it takes to centre 1240px of content, whichever is
+     larger. Only for elements that are meant to span the page: on something
+     that already caps its own width this second term is added on top of the
+     cap and eats the content instead of the margin. */
+  --edge: max(var(--pad), calc((100% - 1240px) / 2));
   --font: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
   --mono: 'IBM Plex Mono', ui-monospace, 'Cascadia Code', 'Segoe UI Mono', monospace;
 }
@@ -38,18 +56,25 @@
   --text: #1A1917;
   --muted: #6B6860;
   --accent: #1577E8;
+  --accent-rgb: 21, 119, 232;
   --accent-soft: rgba(21, 119, 232, 0.12);
-  --tile-bg: #E8E6E1;
-  --tile-border: #D8D5CE;
-  --tile-avatar: #DDD9D2;
-  --control-bg: rgba(255, 255, 255, 0.92);
-  --control-border: #E0DED8;
+  --muted-rgb: 107, 104, 96;
+  --online: #2F9468;
+  --incall: #7A52D9;
+  --avatar: #DDD9D2;
+  --control-hover: rgba(26, 25, 23, 0.06);
   --header-bg: rgba(245, 244, 241, 0.78);
-  --glow-opacity: 0.18;
-  --glow-opacity-2: 0.08;
+  --glass: rgba(255, 255, 255, 0.72);
+  /* Light needs more alpha than the ratio between the two canvases suggests:
+     both washes are mostly off-screen, so what shows is the tail of a squared
+     falloff, and the app's own numbers are these. */
+  --glow: 0.26;
+  --glow-2: 0.12;
+  --grain: 0.14;
   --shadow-btn: rgba(21, 119, 232, 0.25);
   --shadow-btn-hover: rgba(21, 119, 232, 0.35);
-  --shadow-window: rgba(26, 25, 23, 0.16);
+  --shadow-panel: 0 18px 44px -30px rgba(26, 25, 23, 0.5);
+  --art-shadow: rgba(26, 25, 23, 0.3);
 }
 
 * { box-sizing: border-box; }
@@ -63,7 +88,10 @@ html, body {
   color: var(--text);
   font-family: var(--font);
   -webkit-font-smoothing: antialiased;
-  overflow-x: hidden;
+  /* `clip`, not `hidden`. Hidden on one axis computes to `auto` on the other,
+     which turns the body into a scroll container and leaves the sticky header
+     stuck to a box that never scrolls, i.e. scrolling away with the page. */
+  overflow-x: clip;
 }
 
 body {
@@ -73,44 +101,97 @@ body {
   transition: background 0.25s ease, color 0.25s ease;
 }
 
+/* One ring everywhere, in the accent, for anything reachable by keyboard. */
+a:focus-visible,
+button:focus-visible,
+summary:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+/* One column for the whole page, chrome included: the header, the hero and
+   every section share the same left and right edge, so nothing on the page
+   touches the window while the rest of it sits in a column. */
 .container {
   width: 100%;
-  max-width: 1040px;
+  max-width: none;
   margin: 0 auto;
-  padding: 0 24px;
+  padding: 0 var(--edge);
 }
 
-.container--narrow { max-width: 720px; }
+/* Pages that are one column of prose keep one, centred. Wider than a bare
+   reading measure because the column carries a meta rail beside the text; the
+   measure itself is capped further down, on the text. Its own gutter, not
+   --edge: the cap is what centres it, and --edge on top of a cap is padding
+   taken out of the text. */
+.container--narrow {
+  max-width: 900px;
+  margin-inline: auto;
+  padding-inline: var(--pad);
+}
 
-/* Soft blurred background glows — a light landing-page touch over the flat app canvas. */
-.bg-glow {
+/* ---------- Backdrop ----------
+   ScreenBackdrop.qml, ported: flat canvas, a wash of accent bleeding in from
+   above, a dimmer one from the bottom-right corner, and a faint dot grain over
+   both. Fixed rather than scrolled, so the page moves across the light the way
+   the app's content moves across it inside a window.
+
+   The washes carry the app's squared falloff (alpha ~ (1-r)^2) rather than a
+   two-stop ramp: a plain ramp is still a few percent opaque one pixel before
+   its edge, which on this canvas draws a visible rim around the disc. */
+.backdrop {
   position: fixed;
-  border-radius: 50%;
-  filter: blur(120px);
-  opacity: var(--glow-opacity);
+  inset: 0;
   z-index: 0;
   pointer-events: none;
-  transition: opacity 0.25s ease;
+  overflow: hidden;
+  /* The grain. 22px cell and a 0.9px dot, same as DotGrid.qml. */
+  background-image: radial-gradient(circle at 1px 1px,
+                    rgba(var(--muted-rgb), var(--grain)) 0.9px, transparent 0);
+  background-size: 22px 22px;
 }
-.bg-glow-1 {
-  width: 560px;
-  height: 560px;
-  top: -240px;
+
+.backdrop::before,
+.backdrop::after {
+  content: "";
+  position: absolute;
+  border-radius: 50%;
+  background: radial-gradient(closest-side,
+    rgba(var(--accent-rgb), 1) 0%,
+    rgba(var(--accent-rgb), 0.81) 10%,
+    rgba(var(--accent-rgb), 0.64) 20%,
+    rgba(var(--accent-rgb), 0.49) 30%,
+    rgba(var(--accent-rgb), 0.36) 40%,
+    rgba(var(--accent-rgb), 0.25) 50%,
+    rgba(var(--accent-rgb), 0.16) 60%,
+    rgba(var(--accent-rgb), 0.09) 70%,
+    rgba(var(--accent-rgb), 0.04) 80%,
+    rgba(var(--accent-rgb), 0.01) 90%,
+    rgba(var(--accent-rgb), 0) 100%);
+}
+
+/* Mostly off the top edge, like the app's — what shows is the lower half. */
+.backdrop::before {
+  width: 1100px;
+  height: 1100px;
+  top: -620px;
   left: 50%;
   transform: translateX(-50%);
-  background: radial-gradient(circle, var(--accent) 0%, transparent 70%);
+  opacity: var(--glow);
 }
-.bg-glow-2 {
-  width: 420px;
-  height: 420px;
-  bottom: -200px;
-  right: -140px;
-  background: radial-gradient(circle, var(--accent) 0%, transparent 70%);
-  opacity: var(--glow-opacity-2);
+
+.backdrop::after {
+  width: 760px;
+  height: 760px;
+  right: -260px;
+  bottom: -300px;
+  opacity: var(--glow-2);
 }
 
 /* ---------- Header ---------- */
 
+/* A plain sticky bar, the same on every page and from the first pixel. */
 .site-header {
   position: sticky;
   top: 0;
@@ -125,8 +206,15 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 60px;
+  height: 64px;
   gap: 20px;
+}
+
+/* Links and the two toggles, grouped at the right of the bar. */
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 26px;
 }
 
 .brand {
@@ -161,7 +249,7 @@ body {
 .header-actions {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
   flex-shrink: 0;
 }
 
@@ -178,9 +266,9 @@ body {
   color: var(--muted);
   cursor: pointer;
   padding: 0;
-  transition: color 0.15s ease, background 0.15s ease;
+  transition: color 0.15s ease, background 0.15s ease, border-color 0.15s ease;
 }
-.theme-toggle:hover { color: var(--text); background: var(--surface); }
+.theme-toggle:hover { color: var(--text); background: var(--control-hover); }
 .theme-toggle .icon-sun { display: none; }
 .theme-toggle .icon-moon { display: block; }
 :root[data-theme="light"] .theme-toggle .icon-sun { display: block; }
@@ -203,76 +291,134 @@ body {
   font: 500 12px/1 var(--font);
   letter-spacing: 0.04em;
   cursor: pointer;
-  transition: color 0.15s ease, background 0.15s ease;
+  transition: color 0.15s ease, background 0.15s ease, border-color 0.15s ease;
 }
 .js .lang-toggle { display: inline-flex; }
-.lang-toggle:hover { color: var(--text); background: var(--surface); }
+.lang-toggle:hover { color: var(--text); background: var(--control-hover); }
 
 main { position: relative; z-index: 1; flex: 1; }
 
-/* ---------- Hero ---------- */
+/* ---------- Hero ----------
+   HomeScreen.qml, corner bleed: the copy sits at the window's own left inset
+   rather than in the centred column the rest of the page uses, and the art is
+   anchored to the bottom-right corner and cropped by it. Nothing else on the
+   first screen, the way nothing else is on the app's. */
 
 .hero {
-  padding: 88px 24px 64px;
-  text-align: center;
+  position: relative;
+  /* Not `overflow: hidden`. The crop the corner bleed needs belongs to the art
+     alone (see .hero-art below); putting it on the section would take the
+     download menu with it. */
+  /* Tall enough to be a screen, capped so a large monitor gets the same
+     composition rather than the same composition adrift in empty canvas. */
+  min-height: min(78vh, 680px);
   display: flex;
-  flex-direction: column;
   align-items: center;
+  padding: 72px 0 56px;
 }
 
-.hero-logo {
-  border-radius: var(--radius-xl);
-  margin-bottom: 26px;
-  filter: drop-shadow(0 10px 34px rgba(39, 120, 246, 0.32));
+.hero-copy {
+  position: relative;
+  z-index: 1;
+  width: min(680px, 100%);
+  /* The app's `inset`, a percentage of the window rather than a constant: on a
+     wide screen the copy comes in off the edge instead of just growing. The
+     second term is the content column's own left edge, and the larger wins:
+     inside a window the app's rule is the whole story, but on a page that
+     scrolls, a headline sitting 50px left of every section under it reads as a
+     mistake rather than as a wider hero. */
+  margin-left: var(--edge);
+  margin-right: 24px;
 }
 
 .hero h1 {
-  font-size: 48px;
+  /* Sized so the longer of the two lines fits the column in both languages
+     (the Russian first line is the long one). The break is designed, and a
+     headline that wraps a designed line is worse than a smaller one. */
+  font-size: clamp(34px, 4.2vw, 52px);
   font-weight: 700;
-  letter-spacing: -1.4px;
-  line-height: 1.12;
-  margin: 0 0 16px;
-  max-width: 680px;
+  /* The app derives tracking from the size (-0.036em) rather than fixing it,
+     so a headline keeps its shape as it scales. */
+  letter-spacing: -0.036em;
+  line-height: 1.11;
+  margin: 0 0 18px;
 }
 
 .hero-sub {
   font-size: 18px;
   color: var(--muted);
-  max-width: 500px;
-  line-height: 1.55;
-  margin: 0 0 38px;
+  max-width: 460px;
+  line-height: 1.5;
+  margin: 0 0 34px;
+}
+
+/* The character, in the corner it sits in inside the app. Two caps and
+   whichever binds first wins, which is the rule HeroArt.qml uses so one line
+   can fit a wide piece and an upright one. No wash of its own here, the
+   backdrop's corner glow is already behind it, and no contact shadow, since
+   the piece stands on the section's own bottom edge. */
+/* Spans the hero and clips what leaves it, so the piece is cropped by the
+   section's corner while the section itself stays free to let a menu hang
+   past its bottom edge. */
+.hero-art {
+  --art-w: clamp(240px, 34%, 480px);
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.hero-art img {
+  position: absolute;
+  right: calc(var(--edge) - 20px);
+  bottom: 28px;
+  display: block;
+  width: var(--art-w);
+  height: auto;
+  /* The pieces are modelled with a flat base, which inside the app is hidden
+     by the window edge cutting them off. In a column there is no such edge, so
+     the piece needs a shadow or it reads as floating. This is the app's own
+     treatment (MultiEffect over HomeScreen's art), and being a filter it
+     follows the silhouette and needs no positioning of its own, which a
+     separate ellipse did need, twice over, and still sat on top of the feet. */
+  filter: drop-shadow(0 16px 20px var(--art-shadow));
+}
+
+
+/* A short window governs the piece by its height instead, so a laptop screen
+   does not end up with a dog and no room for the headline. */
+@media (max-height: 780px) {
+  .hero-art { --art-w: clamp(210px, 28%, 380px); }
 }
 
 .download-block {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
   gap: 14px;
-  margin-bottom: 26px;
+  margin-bottom: 22px;
 }
 
-/* Primary button, mirrors the app's PrimaryButton (accent, 8px radius,
-   brightness hover) — scaled up a touch for a hero call-to-action. */
+/* Primary button, mirrors the app's PrimaryButton: accent, 8px radius, and
+   brightness on hover. No coloured glow under it — the app draws a flat
+   rectangle, and a halo is what makes a download button read as a toy. */
 .btn-primary {
   display: inline-flex;
   align-items: center;
   gap: 10px;
   background: var(--accent);
   color: #fff;
+  border: none;
   text-decoration: none;
+  font-family: inherit;
   font-weight: 600;
   font-size: 16px;
   padding: 14px 26px;
   border-radius: var(--radius-md);
-  box-shadow: 0 10px 28px var(--shadow-btn);
-  transition: transform 0.15s ease, box-shadow 0.15s ease, filter 0.15s ease;
+  cursor: pointer;
+  transition: filter 0.15s ease;
 }
-.btn-primary:hover {
-  filter: brightness(1.05);
-  transform: translateY(-1px);
-  box-shadow: 0 12px 32px var(--shadow-btn-hover);
-}
-.btn-primary:active { transform: translateY(0); }
+/* 1.16, the app's number. 1.05 is invisible against a lit canvas. */
+.btn-primary:hover { filter: brightness(1.16); }
 
 .download-meta {
   margin: 0;
@@ -282,55 +428,81 @@ main { position: relative; z-index: 1; flex: 1; }
   min-height: 18px;
 }
 
-.os-row {
-  display: flex;
-  gap: 10px;
-  margin-bottom: 14px;
-  flex-wrap: wrap;
-  justify-content: center;
+/* ---------- Download, one split button ----------
+   The detected platform is the button, the rest sit behind the caret. A
+   <details>, so it opens without JavaScript and every row inside stays a real
+   link. */
+
+.split {
+  position: relative;
+  display: inline-flex;
+  align-items: stretch;
+  border-radius: var(--radius-md);
 }
 
-.os-pill {
+.split .btn-primary {
+  border-radius: var(--radius-md) 0 0 var(--radius-md);
+}
+
+.split-menu { display: flex; }
+
+.split-caret {
   display: inline-flex;
   align-items: center;
-  gap: 7px;
-  font-size: 13px;
-  padding: 7px 13px;
-  border-radius: var(--radius-md);
-  border: 1px solid var(--border);
-  color: var(--muted);
-  background: none;
-  font-family: inherit;
-}
-
-/* Windows/Linux pills are real <button>s so a visitor can override the
-   auto-detected platform; macOS stays a plain <span> (nothing to switch
-   to yet), so this only styles the interactive ones. */
-button.os-pill {
+  justify-content: center;
+  width: 44px;
+  background: var(--accent);
+  color: #fff;
   cursor: pointer;
-  transition: border-color 0.15s ease, color 0.15s ease, background 0.15s ease;
+  border-radius: 0 var(--radius-md) var(--radius-md) 0;
+  /* A hairline of white rather than a gap: the two halves are one control, and
+     a gap between them makes the caret read as a separate small button. */
+  border-left: 1px solid rgba(255, 255, 255, 0.28);
+  list-style: none;
+  transition: filter 0.15s ease;
 }
-button.os-pill:hover { color: var(--text); border-color: var(--accent); }
-button.os-pill:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.split-caret::-webkit-details-marker { display: none; }
+/* Whichever half is hovered, the whole control lights, because a click on
+   either half acts on the same thing. */
+.split:hover .split-caret,
+.split:hover .btn-primary { filter: brightness(1.16); }
+.split-caret svg { transition: transform 0.2s ease; }
+.split-menu[open] .split-caret svg { transform: rotate(180deg); }
 
-.os-pill--active {
-  color: var(--text);
-  border-color: var(--accent);
-  background: var(--accent-soft);
+.dl-menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  z-index: 5;
+  width: min(340px, calc(100vw - 48px));
+  padding: 6px;
+  background: var(--elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-panel);
 }
 
-.soon-badge {
-  font-size: 10px;
-  text-transform: uppercase;
-  letter-spacing: 0.4px;
-  background: var(--surface);
-  color: var(--muted);
-  padding: 2px 6px;
+.menu-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 10px;
   border-radius: var(--radius-sm);
+  font-size: 14px;
+  color: var(--text);
+  text-decoration: none;
 }
+a.menu-row:hover { background: var(--control-hover); }
+.menu-row .grow { flex: 1; min-width: 0; }
+.menu-row .sub { display: block; font-size: 12px; color: var(--muted); margin-top: 2px; }
+.menu-row .size { font-family: var(--mono); font-size: 12px; color: var(--muted); flex-shrink: 0; }
+.menu-row--on { background: var(--accent-soft); }
+.menu-row--off { color: var(--muted); }
+.menu-sep { height: 1px; background: var(--border); margin: 6px 4px; }
 
-/* Same shape as .soon-badge but accent-colored: Linux is real and
-   downloadable, just newer than the Windows build. */
+/* Linux is real and downloadable, just newer than the Windows build. macOS
+   needs no badge of its own: its row says "Soon" where the others say a size,
+   which is the same column answering the same question. */
 .beta-badge {
   font-size: 10px;
   text-transform: uppercase;
@@ -341,55 +513,12 @@ button.os-pill:focus-visible { outline: 2px solid var(--accent); outline-offset:
   border-radius: var(--radius-sm);
 }
 
-/* Linux-only .deb/.rpm choice, shown under the download button. Toggled via
-   the `hidden` attribute (main.js), not a class -- but `display: flex` below
-   has the same specificity as the browser's default `[hidden] { display:
-   none }` rule, and author styles win ties, so the plain .pkg-row rule alone
-   would keep it visible even while hidden. The [hidden] rule needs the higher
-   specificity to actually win. */
-.pkg-row {
-  display: flex;
-  gap: 8px;
-}
-.pkg-row[hidden] {
-  display: none;
-}
-
-.pkg-pill {
-  display: inline-flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1px;
-  font-size: 12px;
-  font-weight: 600;
-  font-family: inherit;
-  padding: 6px 16px;
-  border-radius: var(--radius-md);
-  border: 1px solid var(--border);
-  color: var(--muted);
-  background: none;
-  cursor: pointer;
-  transition: border-color 0.15s ease, color 0.15s ease, background 0.15s ease;
-}
-.pkg-pill:hover { color: var(--text); border-color: var(--accent); }
-.pkg-pill:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-.pkg-pill--active {
-  color: var(--text);
-  border-color: var(--accent);
-  background: var(--accent-soft);
-}
-.pkg-pill-sub {
-  font-size: 10px;
-  font-weight: 400;
-  color: var(--muted);
-}
-
 /* Mobile fallback — no installer to offer, so hide the download UI
    entirely and show a plain "coming soon" notice instead. */
 .cta-mobile {
   display: none;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
   gap: 12px;
 }
 
@@ -409,181 +538,14 @@ button.os-pill:focus-visible { outline: 2px solid var(--accent); outline-offset:
   margin: 0;
   font-size: 14px;
   color: var(--muted);
-  max-width: 320px;
+  max-width: 360px;
   line-height: 1.55;
-}
-
-/* ---------- App window mockup ---------- */
-
-.app-window {
-  width: 100%;
-  max-width: 780px;
-  margin: 48px auto 0;
-  background: var(--canvas);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-xl);
-  box-shadow: 0 32px 80px -24px var(--shadow-window);
-  overflow: hidden;
-  text-align: left;
-  transition: background 0.25s ease, border-color 0.25s ease;
-}
-
-/* The real app has no custom in-window chrome — just the OS titlebar with
-   the "Callifornia" title. This mirrors that: a plain brand strip, nothing invented. */
-.app-titlebar {
-  display: flex;
-  align-items: center;
-  height: 42px;
-  padding: 0 14px;
-  border-bottom: 1px solid var(--border);
-  background: var(--surface);
-}
-
-.app-titlebar-brand {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 13px;
-  font-weight: 600;
-}
-.app-titlebar-brand img { border-radius: 4px; }
-
-.app-body {
-  position: relative;
-  /* Bottom padding reserves room for the absolutely-positioned .control-bar
-     (56px tall + 14px offset from the bottom edge + a breathing margin) so it
-     never overlaps the last row of tiles. */
-  padding: 14px 14px 86px;
-}
-
-/* Top-right overlay: call timer + settings + invite — matches the real
-   MeetingScreen header row exactly (top-right, muted mono timer, two icon buttons). */
-.call-topbar {
-  position: absolute;
-  top: 12px;
-  right: 12px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  z-index: 2;
-}
-
-.call-timer {
-  font-family: var(--mono);
-  font-size: 12px;
-  color: var(--muted);
-}
-
-.call-icon-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 26px;
-  height: 26px;
-  color: var(--muted);
-}
-
-.tile-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 10px;
-  /* Clears .call-topbar (top:12px + ~26px tall) so it never sits over the
-     first row of tiles. */
-  margin-top: 36px;
-}
-
-.tile {
-  position: relative;
-  aspect-ratio: 16 / 10;
-  background: var(--tile-bg);
-  border: 1px solid var(--tile-border);
-  border-radius: var(--radius-md);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-}
-
-/* Only a screen-sharer's tile gets an accent border in the real app — there is
-   no "speaking" indicator. Everyone else gets the same subtle tile border. */
-.tile--sharing { border-color: var(--accent); border-width: 2px; }
-
-.tile-avatar {
-  width: 56px;
-  height: 56px;
-  border-radius: 50%;
-  background: var(--tile-avatar);
-  color: var(--text);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 600;
-  font-size: 18px;
-}
-
-/* Plain text over the tile, no background chip — matches ParticipantTile.qml,
-   which draws the name directly with no pill behind it. A muted participant
-   gets a "muted" text label next to their name, not a crossed-mic icon. */
-.tile-name {
-  position: absolute;
-  left: 8px;
-  bottom: 8px;
-  display: inline-flex;
-  align-items: baseline;
-  gap: 6px;
-  font-size: 12px;
-  font-weight: 500;
-  color: #F5F4F1;
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
-}
-.tile-name .muted-label {
-  font-size: 10px;
-  font-weight: 400;
-  color: #E89B9B;
-  text-shadow: none;
-}
-
-.control-bar {
-  position: absolute;
-  left: 50%;
-  bottom: 14px;
-  transform: translateX(-50%);
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 8px;
-  background: var(--control-bg);
-  border: 1px solid var(--control-border);
-  border-radius: 14px;
-  backdrop-filter: blur(10px);
-}
-
-.control-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 38px;
-  height: 38px;
-  border-radius: var(--radius-md);
-  color: var(--text);
-  background: transparent;
-}
-.control-btn--leave {
-  width: auto;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 0 14px 0 12px;
-  font-size: 13px;
-  font-weight: 500;
-  background: var(--danger);
-  color: #fff;
 }
 
 /* ---------- Sections ---------- */
 
 .section {
-  padding: 96px 24px;
+  padding: 96px var(--edge);
 }
 
 .section + .section { padding-top: 0; }
@@ -592,18 +554,18 @@ button.os-pill:focus-visible { outline: 2px solid var(--accent); outline-offset:
   font-family: var(--mono);
   font-size: 12px;
   font-weight: 500;
-  letter-spacing: 0.6px;
+  letter-spacing: 1.1px;
   text-transform: uppercase;
   color: var(--accent);
-  margin: 0 0 10px;
+  margin: 0 0 12px;
 }
 
 .section-title {
-  font-size: 32px;
+  font-size: clamp(26px, 3.4vw, 34px);
   font-weight: 700;
-  letter-spacing: -0.8px;
-  line-height: 1.2;
-  margin: 0 0 12px;
+  letter-spacing: -0.036em;
+  line-height: 1.15;
+  margin: 0 0 14px;
 }
 
 .section-sub {
@@ -611,7 +573,7 @@ button.os-pill:focus-visible { outline: 2px solid var(--accent); outline-offset:
   color: var(--muted);
   line-height: 1.55;
   margin: 0 0 56px;
-  max-width: 520px;
+  max-width: 540px;
 }
 
 .section-head--center { text-align: center; }
@@ -622,18 +584,21 @@ button.os-pill:focus-visible { outline: 2px solid var(--accent); outline-offset:
 .feature {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 64px;
+  gap: clamp(48px, 5vw, 96px);
   align-items: center;
-  padding: 44px 0;
+  padding: 52px 0;
 }
 .feature + .feature { border-top: 1px solid var(--border); }
 .feature:nth-child(even) .feature-visual { order: -1; }
 
+/* The row is as wide as the page; a line of body text is not. */
+.feature-copy { max-width: 560px; }
+
 .feature-copy h3 {
-  font-size: 22px;
+  font-size: 23px;
   font-weight: 600;
   letter-spacing: -0.4px;
-  margin: 0 0 10px;
+  margin: 0 0 12px;
 }
 
 .feature-copy p {
@@ -643,16 +608,22 @@ button.os-pill:focus-visible { outline: 2px solid var(--accent); outline-offset:
   margin: 0;
 }
 
-.feature-visual { display: flex; justify-content: center; }
+.feature-visual { display: flex; justify-content: flex-end; }
+.feature:nth-child(even) .feature-visual { justify-content: flex-start; }
 
-/* Mini-mockup panels inside feature rows. */
+/* ---------- Mini mockups ----------
+   Small pieces of the real app, drawn with its palette, radii and glyphs.
+   Everything here is a still picture: nothing is interactive, so nothing
+   pretends to be. */
+
 .panel {
   width: 100%;
-  max-width: 360px;
+  max-width: 520px;
   background: var(--elevated);
   border: 1px solid var(--border);
   border-radius: var(--radius-xl);
   padding: 18px;
+  box-shadow: var(--shadow-panel);
   transition: background 0.25s ease, border-color 0.25s ease;
 }
 
@@ -661,7 +632,7 @@ button.os-pill:focus-visible { outline: 2px solid var(--accent); outline-offset:
   align-items: center;
   gap: 12px;
 }
-.panel-row + .panel-row { margin-top: 12px; }
+.panel-row + .panel-row { margin-top: 14px; }
 
 .panel-icon {
   flex: 0 0 36px;
@@ -682,7 +653,7 @@ button.os-pill:focus-visible { outline: 2px solid var(--accent); outline-offset:
   border-radius: 999px;
   background: var(--surface);
   overflow: hidden;
-  margin-top: 14px;
+  margin-top: 16px;
 }
 .progress-fill {
   height: 100%;
@@ -691,112 +662,175 @@ button.os-pill:focus-visible { outline: 2px solid var(--accent); outline-offset:
   background: var(--accent);
 }
 
-/* "Join a call" mockup — matches HomeScreen.qml's join step exactly:
-   centered title/subtitle above the card, a Back row, then a Call ID
-   field + Join button pinned to the same baseline. */
+.panel-foot {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 14px 0 0;
+  font-size: 12px;
+  color: var(--muted);
+}
+.panel-foot svg { color: var(--online); flex-shrink: 0; }
+
+/* The join step, as HomeScreen.qml draws it today: one glass panel holding a
+   link glyph, the field and a square action button. */
 .join-mockup {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 18px;
+  gap: 14px;
   width: 100%;
-  max-width: 360px;
-  text-align: center;
+  max-width: 440px;
 }
+
+/* The eyebrow carries a section's bottom margin by default; inside the mockup
+   the flex gap is what spaces it. */
+.join-mockup .eyebrow { margin: 0; }
 
 .join-title {
   margin: 0;
-  font-size: 19px;
+  font-size: 20px;
   font-weight: 600;
   letter-spacing: -0.4px;
-  color: var(--text);
-}
-
-.join-sub {
-  margin: -10px 0 0;
-  font-size: 13px;
-  color: var(--muted);
-}
-
-.join-mockup .panel {
-  max-width: none;
-  text-align: left;
-}
-
-.join-back {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 13px;
-  color: var(--muted);
-  margin-bottom: 18px;
-}
-
-.join-field-row {
-  display: flex;
-  align-items: flex-end;
-  gap: 10px;
-}
-
-.join-field-col {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  min-width: 0;
-}
-
-.join-field-label {
-  font-size: 13px;
-  font-weight: 500;
-  color: var(--text);
 }
 
 .join-field {
-  border: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 8px 8px 14px;
   background: var(--elevated);
-  border-radius: var(--radius-sm);
-  padding: 10px 12px;
+  border: 1px solid var(--accent);
+  border-radius: 14px;
+  box-shadow: var(--shadow-panel);
 }
-.join-field span {
+.join-field .join-glyph { color: var(--muted); display: flex; flex-shrink: 0; }
+.join-field .join-value {
+  flex: 1;
+  min-width: 0;
   font-family: var(--mono);
-  font-size: 14px;
+  font-size: 15px;
+  color: var(--text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* The 44px square PrimaryButton at the end of the row. */
+.join-go {
+  flex: 0 0 44px;
+  height: 44px;
+  border-radius: var(--radius-md);
+  background: var(--accent);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.join-hint {
+  margin: 0;
+  font-size: 12px;
   color: var(--muted);
 }
 
-.join-field-row .btn-mini {
-  height: 39px;
-  padding: 0 18px;
-}
+/* Roster rows, the way a space or the friends list draws them. */
+/* Narrower than the panels that hold a progress bar or a field: with no
+   action at the end of a row, the width was all empty. */
+.panel--people { max-width: 360px; }
 
-.panel .btn-mini {
-  display: inline-flex;
+.person-row {
+  display: flex;
   align-items: center;
-  justify-content: center;
-  font-size: 13px;
-  font-weight: 500;
-  color: #fff;
-  background: var(--accent);
-  border-radius: var(--radius-md);
-  padding: 8px 14px;
+  gap: 12px;
 }
-.panel .btn-mini--ghost {
-  color: var(--text);
-  background: var(--surface);
-  border: 1px solid var(--border);
-}
+.person-row + .person-row { margin-top: 16px; }
 
-.friend-avatar {
-  flex: 0 0 34px;
-  height: 34px;
+.avatar {
+  position: relative;
+  flex: 0 0 36px;
+  height: 36px;
   border-radius: 50%;
-  background: var(--tile-avatar);
+  background: var(--avatar);
   color: var(--text);
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 13px;
   font-weight: 600;
+}
+
+/* The presence dot rides the avatar, ringed in the surface colour so the
+   glyph underneath is cut away rather than showing through. */
+.dot {
+  position: absolute;
+  right: -1px;
+  bottom: -1px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 2px solid var(--elevated);
+}
+.dot--online { background: var(--online); }
+.dot--incall { background: var(--incall); }
+.dot--waiting { background: var(--accent); }
+
+.person-name { font-size: 14px; font-weight: 600; margin: 0; }
+.person-meta { font-size: 12px; margin: 2px 0 0; color: var(--muted); }
+.person-meta--online { color: var(--online); }
+.person-meta--incall { color: var(--incall); }
+.person-meta--waiting { color: var(--accent); }
+
+.person-grow { flex: 1; min-width: 0; }
+
+/* ---------- Small features grid ---------- */
+
+/* A section head with no subtitle carries its own gap, since .section-sub is
+   normally what holds the head off the content under it. */
+.tiles {
+  margin-top: 46px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+}
+
+/* The hairlines are the grid's own gaps showing through, so a tile only has
+   to paint its background — no per-tile border arithmetic at the edges. */
+.tile {
+  background: var(--canvas);
+  padding: 26px 24px 28px;
+  transition: background 0.2s ease;
+}
+.tile:hover { background: var(--surface); }
+
+.tile-glyph {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: var(--radius-md);
+  background: var(--accent-soft);
+  color: var(--accent);
+  margin-bottom: 16px;
+}
+
+.tile h3 {
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: -0.2px;
+  margin: 0 0 7px;
+}
+
+.tile p {
+  max-width: 480px;
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.6;
+  margin: 0;
 }
 
 /* ---------- Steps ---------- */
@@ -804,8 +838,10 @@ button.os-pill:focus-visible { outline: 2px solid var(--accent); outline-offset:
 .steps {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 48px;
+  gap: 44px;
 }
+
+.step { border-top: 1px solid var(--border); padding-top: 22px; }
 
 .step-num {
   font-family: var(--mono);
@@ -823,6 +859,7 @@ button.os-pill:focus-visible { outline: 2px solid var(--accent); outline-offset:
 }
 
 .step h3 {
+  max-width: 480px;
   font-size: 16px;
   font-weight: 600;
   margin: 0 0 8px;
@@ -830,6 +867,7 @@ button.os-pill:focus-visible { outline: 2px solid var(--accent); outline-offset:
 }
 
 .step p {
+  max-width: 480px;
   font-size: 14px;
   color: var(--muted);
   line-height: 1.6;
@@ -839,8 +877,9 @@ button.os-pill:focus-visible { outline: 2px solid var(--accent); outline-offset:
 /* ---------- FAQ ---------- */
 
 .faq-list {
-  max-width: 720px;
-  margin: 0 auto;
+  max-width: 900px;
+  /* Same reason as .tiles above: this head has no subtitle to space it. */
+  margin: 46px auto 0;
 }
 
 .faq-item {
@@ -855,11 +894,15 @@ button.os-pill:focus-visible { outline: 2px solid var(--accent); outline-offset:
   align-items: center;
   justify-content: space-between;
   gap: 20px;
-  padding: 20px 4px;
+  padding: 20px 14px;
+  margin: 0 -14px;
+  border-radius: var(--radius-md);
   font-size: 16px;
   font-weight: 500;
+  transition: background 0.15s ease;
 }
 .faq-item summary::-webkit-details-marker { display: none; }
+.faq-item summary:hover { background: var(--control-hover); }
 
 .faq-chevron {
   flex-shrink: 0;
@@ -869,33 +912,80 @@ button.os-pill:focus-visible { outline: 2px solid var(--accent); outline-offset:
 .faq-item[open] .faq-chevron { transform: rotate(180deg); }
 
 .faq-answer {
-  padding: 0 4px 22px;
+  padding: 0 0 24px;
   font-size: 14px;
   color: var(--muted);
-  line-height: 1.65;
-  max-width: 620px;
+  line-height: 1.7;
+  max-width: 640px;
 }
 .faq-answer p { margin: 0 0 10px; }
 .faq-answer p:last-child { margin-bottom: 0; }
-
-/* ---------- Bottom CTA ---------- */
-
-.cta-final {
-  text-align: center;
-  padding: 104px 24px 120px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+.faq-answer a { color: var(--accent); text-decoration: none; }
+.faq-answer a:hover { text-decoration: underline; }
+.faq-answer code {
+  font-family: var(--mono);
+  font-size: 13px;
+  color: var(--text);
 }
 
-.cta-final h2 {
-  font-size: 36px;
+/* ---------- Bottom call to action ---------- */
+
+.cta-final {
+  padding: 64px var(--edge) 112px;
+}
+
+.cta-card {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 340px);
+  align-items: center;
+  gap: 32px;
+  padding: 52px 48px 52px 56px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  background: var(--glass);
+  backdrop-filter: blur(10px);
+  box-shadow: var(--shadow-panel);
+  overflow: hidden;
+}
+
+.cta-card h2 {
+  max-width: 640px;
+  font-size: clamp(28px, 3.6vw, 38px);
   font-weight: 700;
-  letter-spacing: -1px;
+  letter-spacing: -0.036em;
+  line-height: 1.14;
   margin: 0 0 12px;
 }
 
-.cta-final .section-sub { margin-bottom: 36px; }
+.cta-card .section-sub { margin-bottom: 30px; }
+
+/* Cropped by the card, the way Home's art is cropped by the window. */
+.cta-art {
+  position: relative;
+  justify-self: end;
+  align-self: end;
+  width: 100%;
+  max-width: 360px;
+  /* Matches the card's bottom padding, so the piece stands on the card's edge
+     and is cropped by it. */
+  margin-bottom: -52px;
+}
+.cta-art img { display: block; width: 100%; height: auto; position: relative; z-index: 1; }
+.cta-art::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 130%;
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: radial-gradient(closest-side,
+    rgba(var(--accent-rgb), 0.26) 0%,
+    rgba(var(--accent-rgb), 0.1) 50%,
+    rgba(var(--accent-rgb), 0) 100%);
+}
 
 /* ---------- Footer ---------- */
 
@@ -911,9 +1001,15 @@ button.os-pill:focus-visible { outline: 2px solid var(--accent); outline-offset:
   justify-content: space-between;
   flex-wrap: wrap;
   gap: 12px;
-  padding: 22px 24px;
+  padding: 24px var(--edge);
   font-size: 13px;
   color: var(--muted);
+}
+
+.footer-brand {
+  display: flex;
+  align-items: center;
+  gap: 9px;
 }
 
 .footer-links {
@@ -931,14 +1027,14 @@ button.os-pill:focus-visible { outline: 2px solid var(--accent); outline-offset:
 /* ---------- Subpages (changelog / privacy) ---------- */
 
 .page {
-  padding: 72px 24px 104px;
+  padding: 76px var(--pad) 112px;
 }
 
 .page-title {
-  font-size: 36px;
+  font-size: clamp(30px, 4vw, 38px);
   font-weight: 700;
-  letter-spacing: -1px;
-  margin: 0 0 10px;
+  letter-spacing: -0.036em;
+  margin: 0 0 12px;
 }
 
 .page-sub {
@@ -946,17 +1042,18 @@ button.os-pill:focus-visible { outline: 2px solid var(--accent); outline-offset:
   color: var(--muted);
   margin: 0 0 56px;
   line-height: 1.6;
+  max-width: 620px;
 }
 
 .release {
   display: grid;
-  grid-template-columns: 150px 1fr;
-  gap: 32px;
+  grid-template-columns: 160px minmax(0, 1fr);
+  gap: 36px;
   padding: 36px 0;
   border-top: 1px solid var(--border);
 }
 
-.release-meta { position: sticky; top: 90px; align-self: start; }
+.release-meta { position: sticky; top: 92px; align-self: start; }
 
 .release-version {
   font-family: var(--mono);
@@ -984,6 +1081,8 @@ button.os-pill:focus-visible { outline: 2px solid var(--accent); outline-offset:
   padding: 3px 8px;
   margin-top: 10px;
 }
+
+.release-body { max-width: 760px; }
 
 .release-body h3 {
   font-size: 17px;
@@ -1017,6 +1116,7 @@ button.os-pill:focus-visible { outline: 2px solid var(--accent); outline-offset:
 }
 
 .prose p, .prose li {
+  max-width: 760px;
   font-size: 15px;
   color: var(--muted);
   line-height: 1.7;
@@ -1048,28 +1148,81 @@ button.os-pill:focus-visible { outline: 2px solid var(--accent); outline-offset:
 
 /* ---------- Responsive ---------- */
 
+@media (max-width: 980px) {
+  /* The corner still holds at this width, which is the case the app itself is
+     tuned for: 880px is the narrowest window it will open at. */
+  .hero {
+    min-height: 0;
+    display: block;
+    padding: 64px 0 150px;
+  }
+  .hero-copy {
+    width: auto;
+    /* The lane the art keeps for itself, the way HomeScreen sizes its copy
+       column against artLane. Without it the two start overlapping around
+       700px, where the piece is still in the corner. */
+    max-width: min(520px, calc(100% - 320px));
+    margin-left: 24px;
+    margin-right: 24px;
+  }
+  /* right: -14px here used to push the piece past the hero, where
+     .hero-art’s own clipping cut it off. */
+  .hero-art { --art-w: min(46%, 260px); }
+  .hero-art img { right: calc(var(--edge) - 14px); }
+
+  .tiles { grid-template-columns: repeat(2, 1fr); }
+
+  /* Stacked, the art is at the top and the button is last, so the card needs
+     its bottom padding back: zero was for the wide layout, where the bottom
+     edge was the thing cropping the art. */
+  .cta-card {
+    grid-template-columns: 1fr;
+    justify-items: center;
+    text-align: center;
+    padding: 44px 28px 48px;
+    gap: 8px;
+  }
+  .cta-card .section-sub { margin-left: auto; margin-right: auto; }
+  .cta-art { order: -1; justify-self: center; max-width: 200px; margin-bottom: 0; }
+}
+
 @media (max-width: 860px) {
   .feature {
     grid-template-columns: 1fr;
     gap: 28px;
   }
   .feature:nth-child(even) .feature-visual { order: 0; }
-  .steps { grid-template-columns: 1fr; gap: 36px; }
+  .steps { grid-template-columns: 1fr; gap: 32px; }
   .release { grid-template-columns: 1fr; gap: 12px; }
   .release-meta { position: static; }
 }
 
 @media (max-width: 720px) {
-  .hero { padding: 56px 20px 48px; }
-  .hero h1 { font-size: 34px; letter-spacing: -1px; }
-  .hero-sub { font-size: 16px; }
-  .section { padding: 72px 20px; }
-  .section-title { font-size: 26px; }
-  .cta-final h2 { font-size: 28px; }
+  .container { padding: 0 var(--edge); }
+  .section { padding: 72px var(--edge); }
+  .cta-final { padding: 80px var(--edge) 96px; }
+  .page { padding: 56px var(--pad) 88px; }
   .site-nav { display: none; }
+  .tiles { grid-template-columns: 1fr; }
+  .faq-item summary { font-size: 15px; padding: 18px 12px; margin: 0 -12px; }
 
   .cta-desktop { display: none; }
   .cta-mobile { display: flex; }
+}
+
+@media (max-width: 620px) {
+  /* Too narrow for a corner: a piece small enough to leave the copy its width
+     is too small to read as anything. It comes out of the corner and stands
+     under the text instead. */
+  .hero { padding: 56px 0 40px; }
+  .hero-copy { margin: 0 auto; padding: 0 var(--pad); max-width: 520px; }
+  .hero-art { position: static; overflow: visible; }
+  .hero-art img {
+    position: static;
+    width: 220px;
+    margin: 28px auto 0;
+    right: auto;
+  }
 }
 
 /* --- Join page (join/index.html) -------------------------------------------
@@ -1077,14 +1230,70 @@ button.os-pill:focus-visible { outline: 2px solid var(--accent); outline-offset:
    desktop app. No install fallback here on purpose -- the home page already
    owns that job, and duplicating it doubled the maintenance surface (the
    version/size line collided with main.js's home-page-only element id) for a
-   case (no Callifornia installed) that is rare for someone who was just sent a link. */
-.join-page { padding-bottom: 64px; }
+   case (no Callifornia installed) that is rare for someone who was just sent a
+   link.
+
+   Each state brings its own pose of the character, so the page says which of
+   the three it is before a word of it is read. */
+.join-main {
+  display: flex;
+  align-items: center;
+}
+
+.join-page {
+  padding: 64px var(--pad) 88px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.join-art {
+  position: relative;
+  width: 100%;
+  max-width: 210px;
+  margin-bottom: 26px;
+}
+.join-art img {
+  display: block;
+  width: 100%;
+  height: auto;
+  position: relative;
+  z-index: 1;
+  filter: drop-shadow(0 14px 18px var(--art-shadow));
+}
+.join-art::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 130%;
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: radial-gradient(closest-side,
+    rgba(var(--accent-rgb), 0.3) 0%,
+    rgba(var(--accent-rgb), 0.12) 50%,
+    rgba(var(--accent-rgb), 0) 100%);
+}
+
+.join-page h1 {
+  font-size: clamp(28px, 4.4vw, 40px);
+  font-weight: 700;
+  letter-spacing: -0.036em;
+  line-height: 1.14;
+  margin: 0 0 14px;
+}
+
+.join-page .hero-sub {
+  margin: 0 auto 32px;
+  font-size: 17px;
+  max-width: 480px;
+}
 
 .join-actions {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 12px;
-  /* No margin-top: .hero-sub above already carries the standard 38px section
-     gap (same rhythm as .download-block on the home page). */
 }

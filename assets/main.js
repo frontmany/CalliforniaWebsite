@@ -110,9 +110,11 @@
 
   var downloadBtns = [document.getElementById("download-btn"), document.getElementById("download-btn-2")];
   var downloadLabels = [document.getElementById("download-label"), document.getElementById("download-label-2")];
-  var pkgRow = document.getElementById("pkg-row");
-  var osButtons = document.querySelectorAll(".os-pill[data-os]");
-  var pkgButtons = document.querySelectorAll(".pkg-pill[data-pkg]");
+  // The split button's menu. Its rows ship with working hrefs (Windows on the
+  // installer, Linux on the releases page), so the control is useful before
+  // this file runs and if latest.json never answers.
+  var details = document.getElementById("download-details");
+  var menuRows = document.querySelectorAll(".menu-row[data-target]");
 
   // Browsers don't expose enough to tell Debian/Ubuntu from Fedora/RHEL, so
   // .deb is just the plurality guess — the pill row next to it is how anyone
@@ -145,18 +147,44 @@
   var latestData = null;
   var fetchFailed = false;
 
+  /// Which menu row the button currently stands for.
+  function currentTarget() {
+    return state.platform === "linux" ? state.pkg : "windows";
+  }
+
+  function megabytes(bytes) {
+    return t("size.mb", { size: (bytes / (1024 * 1024)).toFixed(0) }) || "";
+  }
+
+  function renderMenu(linuxInfo) {
+    var target = currentTarget();
+    menuRows.forEach(function (row) {
+      var key = row.getAttribute("data-target");
+      row.classList.toggle("menu-row--on", key === target);
+
+      if (key === "windows") {
+        row.href = WIN_HREF;
+      } else if (linuxInfo) {
+        row.href = key === "rpm" ? linuxInfo.rpm : linuxInfo.deb;
+      }
+
+      var size = row.querySelector(".size");
+      if (!size) return;
+      if (key === "windows" && latestData && latestData.size) {
+        size.textContent = megabytes(latestData.size);
+      } else if (key === "deb" && linuxInfo && linuxInfo.size) {
+        // Only the .deb is measured in latest.json (the merge step weighs the
+        // file it just built), so the .rpm row stays without a figure rather
+        // than borrowing one that was never checked.
+        size.textContent = megabytes(linuxInfo.size);
+      }
+    });
+  }
+
   function render() {
     var isLinux = state.platform === "linux";
-
-    osButtons.forEach(function (btn) {
-      btn.classList.toggle("os-pill--active", btn.getAttribute("data-os") === state.platform);
-    });
-    if (pkgRow) pkgRow.hidden = !isLinux;
-    pkgButtons.forEach(function (btn) {
-      btn.classList.toggle("pkg-pill--active", btn.getAttribute("data-pkg") === state.pkg);
-    });
-
     var linuxInfo = latestData && latestData.platforms && latestData.platforms["linux-x64"];
+    renderMenu(linuxInfo);
     var href = WIN_HREF;
     var label = t("download.windows");
     var metaText = t("meta.ready");
@@ -218,12 +246,36 @@
     render();
   }
 
-  osButtons.forEach(function (btn) {
-    btn.addEventListener("click", function () { setPlatform(btn.getAttribute("data-os")); });
+  // Picking a row downloads that file (the row is a link, and the click is
+  // left to do its job) and makes it the button, so the next visit starts
+  // where this one ended.
+  menuRows.forEach(function (row) {
+    row.addEventListener("click", function () {
+      var key = row.getAttribute("data-target");
+      if (key === "windows") {
+        setPlatform("windows");
+      } else {
+        setPkg(key);
+        setPlatform("linux");
+      }
+      if (details) details.open = false;
+    });
   });
-  pkgButtons.forEach(function (btn) {
-    btn.addEventListener("click", function () { setPkg(btn.getAttribute("data-pkg")); });
-  });
+
+  // A <details> closes on its own summary, and that is all it knows. The two
+  // things anybody expects of an open menu are these.
+  if (details) {
+    document.addEventListener("click", function (event) {
+      if (details.open && !details.contains(event.target)) details.open = false;
+    });
+    document.addEventListener("keydown", function (event) {
+      if (event.key === "Escape" && details.open) {
+        details.open = false;
+        var summary = details.querySelector("summary");
+        if (summary) summary.focus();
+      }
+    });
+  }
 
   render();
 

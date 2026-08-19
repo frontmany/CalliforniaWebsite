@@ -40,7 +40,7 @@
     "page.index.desc":
       "Простое и быстрое настольное приложение для видеозвонков. Бесплатное и лёгкое, для Windows и Linux.",
     "hero.eyebrow": "Видеозвонки для компьютера",
-    "hero.title": "Видеозвонки без лишних хлопот.",
+    "hero.title": "Общайся, играй, работай.<br />Без утечек данных.",
     "hero.sub":
       "Простое и быстрое настольное приложение для видеозвонков. Бесплатное и лёгкое, для Windows и Linux.",
 
@@ -87,8 +87,6 @@
     "mock.presence.waiting": "Ждёт вас",
     "mock.presence.incall": "В звонке",
     "mock.presence.online": "В сети",
-    "mock.people.call": "Позвонить",
-    "mock.people.open": "Открыть",
     "mock.people.space": "Клуб по четвергам",
     "mock.people.members": "4 человека",
 
