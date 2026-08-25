@@ -381,17 +381,18 @@ main { position: relative; z-index: 1; flex: 1; }
 }
 
 .hero h1 {
-  /* Sized so the second line fits this column at its full 680px. The break is
-     designed, and a headline that wraps a designed line is worse than a
-     smaller one.
+  /* The slogan is three lines, so what has to fit this 680px column is one
+     sentence rather than the pair of them. That is a far cheaper thing to ask,
+     and it buys back the size a two line rule had been spending: 42px instead
+     of 27, which is the difference between a headline and a caption.
 
-     One size for both languages was right while their long lines were within a
-     few percent of each other. They are not any more: "Бескомпромиссная
-     безопасность." runs a third longer than "Uncompromising safety.", so a
-     shared size would have to be the Russian one and English would give up
-     four points for a fit it never needed. Each language takes the largest
-     size its own longest line allows, measured rather than guessed. */
-  font-size: clamp(26px, 2.8vw, 34px);
+     42 and not more because at 44 the Russian "Бескомпромиссная
+     безопасность." reaches 680 and breaks inside itself, which would make it
+     four lines. English has room to spare at that size and takes it, so one
+     size serves both again. Measured off the spans in the page, never off a
+     canvas: they are inline-block, each rounds up to a whole pixel, and
+     neither shapes across the space between them. */
+  font-size: clamp(28px, 3.3vw, 42px);
   font-weight: 700;
   /* The app derives tracking from the size (-0.036em) rather than fixing it,
      so a headline keeps its shape as it scales. */
@@ -400,21 +401,15 @@ main { position: relative; z-index: 1; flex: 1; }
   margin: 0 0 18px;
 }
 
-/* The second line is two sentences, and each is a box, so a column too narrow
-   for the pair breaks between them rather than mid sentence. Below the width
-   where the pair still fits, they are stacked outright (see the media query
-   further down) instead of being left to a wrap that lands where it lands. */
+/* The second line is two sentences, and each is a box, so the break lands
+   between them rather than inside one. At this size the pair never fits the
+   column, so that break is what makes the slogan three lines. Narrower still,
+   they are stacked outright (see the media query further down) rather than
+   left to a wrap that depends on the width. */
 .hero h1 span { display: inline-block; }
 
-/* 27px, which is where the Russian second line lands at 660px against a 680px
-   column. Measured off the two spans in the page rather than off a canvas:
-   they are inline-block, so each rounds up to a whole pixel and neither shapes
-   across the word space between them, and the canvas reading was 70px short
-   because of it. 28px is 684 and breaks.
-
-   Switching language already replaces every word on the page; the headline
-   changing size with them is not the thing anybody notices. */
-:root[lang="ru"] .hero h1 { font-size: clamp(24px, 2.18vw, 27px); }
+/* No per language size any more. It existed only to keep the pair of sentences
+   on one line, and they no longer have to be. */
 
 .hero-sub {
   font-size: 18px;
