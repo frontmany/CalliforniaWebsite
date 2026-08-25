@@ -47,7 +47,7 @@
       <div class="header-right">
         <nav class="site-nav" data-i18n-aria-label="aria.site" aria-label="Site">
           <a href="#features" data-i18n="nav.features">Features</a>
-          <a href="#how" data-i18n="nav.how">How it works</a>
+          <a href="download.html" data-i18n="nav.download">Download</a>
           <a href="#faq" data-i18n="nav.faq">FAQ</a>
           <a href="changelog.html" data-i18n="nav.changelog">Changelog</a>
         </nav>
@@ -75,11 +75,11 @@
         <p class="hero-sub" data-i18n="hero.sub">A simple, fast desktop app for video calls. Free, lightweight and encrypted end to end, for Windows and Linux.</p>
 
         <!-- One button, and it downloads nothing. The picker, the version
-             line and the box that has to be ticked all live together at the
-             bottom of the page, so this carries you there rather than growing
-             a second copy of them up here. -->
+             line and the box that has to be ticked live on a page of their
+             own, so both of this page's buttons are the same short link to it
+             rather than two copies of the same apparatus. -->
         <div class="cta-desktop">
-          <a id="download-jump" class="btn-primary" href="#get">
+          <a class="btn-primary" href="download.html">
             <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v11"/><path d="M7.5 10.5 12 15l4.5-4.5"/><path d="M4.5 20h15"/></svg>
             <span data-i18n="download.jump">Download Callifornia</span>
           </a>
@@ -400,75 +400,6 @@
       </div>
     </section>
 
-    <section class="cta-final container" id="get" data-reveal>
-      <div class="cta-card">
-        <div>
-          <h2 data-i18n="cta.title">Ready when you are.</h2>
-          <p class="section-sub" data-i18n="cta.sub">Download Callifornia and be on your first call in under a minute.</p>
-          <div class="cta-desktop">
-            <div class="download-block">
-              <!-- One control instead of a button and two rows of pills. The
-                   platform JS detected is the button; the rest live behind the
-                   caret, sizes included. A <details> rather than a scripted
-                   popover, so it opens with no JavaScript and every row inside
-                   stays a real link (main.js fills in the hrefs and sizes it
-                   learns from latest.json, and remembers what was picked). -->
-              <div class="split" id="download-split">
-                <a id="download-btn" class="btn-primary" href="https://callifornia-download.storage.yandexcloud.net/stable/CalliforniaSetup.exe" rel="noopener" download>
-                  <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v11"/><path d="M7.5 10.5 12 15l4.5-4.5"/><path d="M4.5 20h15"/></svg>
-                  <span id="download-label">Download for Windows</span>
-                </a>
-                <details class="split-menu" id="download-details">
-                  <summary class="split-caret" data-i18n-aria-label="aria.other" aria-label="Other platforms">
-                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
-                  </summary>
-                  <div class="dl-menu">
-                    <a class="menu-row" data-target="windows" href="https://callifornia-download.storage.yandexcloud.net/stable/CalliforniaSetup.exe" rel="noopener" download>
-                      <span class="grow">Windows<span class="sub" data-i18n="menu.win.sub">10 and 11, 64 bit</span></span>
-                      <span class="size" data-size="windows"></span>
-                    </a>
-                    <a class="menu-row" data-target="deb" href="https://github.com/frontmany/CalliforniaApp/releases/latest" rel="noopener">
-                      <span class="grow">Linux, .deb <span class="beta-badge" data-i18n="os.beta">Beta</span><span class="sub" data-i18n="menu.deb.sub">Debian and Ubuntu</span></span>
-                      <span class="size" data-size="deb"></span>
-                    </a>
-                    <a class="menu-row" data-target="rpm" href="https://github.com/frontmany/CalliforniaApp/releases/latest" rel="noopener">
-                      <span class="grow">Linux, .rpm <span class="beta-badge" data-i18n="os.beta">Beta</span><span class="sub" data-i18n="menu.rpm.sub">Fedora and RHEL</span></span>
-                      <span class="size" data-size="rpm"></span>
-                    </a>
-                    <div class="menu-sep"></div>
-                    <span class="menu-row menu-row--off" aria-disabled="true">
-                      <span class="grow">macOS<span class="sub" data-i18n="menu.mac.sub">Packaging, not a rewrite</span></span>
-                      <span class="size" data-i18n="os.soon">Soon</span>
-                    </span>
-                  </div>
-                </details>
-              </div>
-              <!-- Both lines are captions on the button, so they group under it
-                   rather than standing as two more items in its column. -->
-              <div class="download-note">
-                <p id="download-meta" class="download-meta">Latest version ready to download</p>
-                <!-- Clickwrap. The box is what puts acceptance on the record; it
-                     cannot be what prevents a download, since the installer sits
-                     on public object storage and always did. See the README. -->
-                <div class="consent">
-                  <input class="consent-box" type="checkbox" id="accept" data-accept />
-                  <label for="accept" data-i18n-html="consent.label">I have read and accept the <a href="terms.html">terms of use</a> and the <a href="privacy.html">privacy policy</a>.</label>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="cta-mobile">
-            <span class="mobile-badge" data-i18n="mobile.badge">Made for computers</span>
-          </div>
-        </div>
-        <!-- The calm pose, not the star-eyed one. This card is the last thing
-             the page says and it is asking for a download, so the character
-             sits next to it rather than cheering at it. -->
-        <div class="cta-art" aria-hidden="true">
-          <img src="assets/mascot-sit.webp" alt="" width="512" height="560" loading="lazy" />
-        </div>
-      </div>
-    </section>
   </main>
 
   <footer class="site-footer">

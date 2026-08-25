@@ -1,5 +1,6 @@
-// Shared script for all pages: scroll-reveal, and (on the home page) the
-// version/size line under the Download button. The theme is not here: it is
+// Shared script for all pages: scroll-reveal, and (on the download page) the
+// platform picker, its version line, and the box that has to be ticked before
+// any of it is a live link. The theme is not here: it is
 // whatever the operating system asks for, which the stylesheet answers on its
 // own (see the top of style.css).
 //
@@ -66,7 +67,8 @@
   // everybody again instead of carrying them silently into a new document.
   var POLICY_VERSION = "2026-08-25";
   var ACCEPT_KEY = "callifornia-accepted";
-  var consentBoxes = document.querySelectorAll("[data-accept]");
+  var panel = document.querySelector("[data-accept-panel]");
+  var box = document.querySelector("[data-accept]");
   var accepted = false;
   try {
     accepted = localStorage.getItem(ACCEPT_KEY) === POLICY_VERSION;
@@ -97,21 +99,17 @@
         el.setAttribute("aria-disabled", "true");
       }
     });
-    Array.prototype.forEach.call(consentBoxes, function (box) {
-      box.checked = accepted;
-    });
+    if (panel) panel.classList.toggle("accept--on", accepted);
+    if (box) box.checked = accepted;
   }
 
   // A click on a control with no href does nothing at all, which reads as a
   // broken page. Say what is missing instead, and put the cursor on it.
-  function nudge(from) {
-    var block = from.closest(".cta-desktop") || document;
-    var row = block.querySelector(".consent");
-    var box = block.querySelector("[data-accept]") || consentBoxes[0];
-    if (row) {
-      row.classList.remove("consent--nudge");
-      void row.offsetWidth;               // restart the animation
-      row.classList.add("consent--nudge");
+  function nudge() {
+    if (panel) {
+      panel.classList.remove("accept--nudge");
+      void panel.offsetWidth;             // restart the animation
+      panel.classList.add("accept--nudge");
     }
     if (box) box.focus();
   }
@@ -128,7 +126,7 @@
     });
   applyGate();
 
-  Array.prototype.forEach.call(consentBoxes, function (box) {
+  if (box) {
     box.addEventListener("change", function () {
       accepted = box.checked;
       try {
@@ -140,40 +138,25 @@
       } catch (_e) {}
       applyGate();
     });
-  });
+  }
+
+  // The panel is the hit target, not only the 20px box inside it, so a click
+  // anywhere that is not already a link or the label toggles the checkbox.
+  if (panel && box) {
+    panel.addEventListener("click", function (event) {
+      if (event.target.closest("a, label, input")) return;
+      box.checked = !box.checked;
+      box.dispatchEvent(new Event("change", { bubbles: true }));
+    });
+  }
 
   document.addEventListener("click", function (event) {
     var el = event.target.closest && event.target.closest("[data-href]");
     if (el && !accepted) {
       event.preventDefault();
-      nudge(el);
+      nudge();
     }
   });
-
-  // The hero's button is an anchor, so the browser does the travelling. What it
-  // will not do is say where you arrived, and a page that scrolls under you and
-  // then waits is worse than one that hands you the next thing. Focus lands on
-  // whatever is actually in the way: the box if it still needs ticking, the
-  // download itself if it does not.
-  var jump = document.getElementById("download-jump");
-  if (jump) {
-    jump.addEventListener("click", function () {
-      var landed = false;
-      function land() {
-        if (landed) return;
-        landed = true;
-        var box = consentBoxes[0];
-        var target = box && !box.checked ? box : document.getElementById("download-btn");
-        // preventScroll, or focusing would jerk the page to its own idea of
-        // where the element should sit and undo the smooth scroll.
-        if (target) target.focus({ preventScroll: true });
-      }
-      if ("onscrollend" in window) {
-        window.addEventListener("scrollend", land, { once: true });
-      }
-      window.setTimeout(land, 900);
-    });
-  }
 
   var meta = document.getElementById("download-meta");
   if (!meta) return;
@@ -185,11 +168,9 @@
   // NOTE: must match the bucket (or CDN domain) the release workflow uploads to.
   var META_URL = "https://callifornia-download.storage.yandexcloud.net/stable/latest.json";
 
-  // One button downloads, and it is the one in the card at the bottom. The
-  // hero's is a link to that card and says so in the markup: naming a platform
-  // up there promised a file that button does not hand over, and it named the
-  // wrong one for anybody whose browser the detection reads differently from
-  // the machine they are on.
+  // One button, on this page. The home page's two calls to action are plain
+  // links here and carry no platform in their label, because they hand over no
+  // file and the detection they would have quoted is a guess.
   var downloadBtns = [document.getElementById("download-btn")];
   var downloadLabels = [document.getElementById("download-label")];
   // The split button's menu. Its rows ship with working hrefs (Windows on the

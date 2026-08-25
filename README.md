@@ -76,21 +76,17 @@ top that is the version people are agreeing to.
 note the service-side facts are checked against, and it points here. When one
 changes, check the other.
 
-**There is one download control on the page, and it is at the bottom.** The
-hero's button downloads nothing; it is a link to `#get`, the card at the end,
-where the platform picker, the version line and the acceptance box stand
-together. The hero used to carry its own copy of all three, which meant a
-checkbox hanging off the first thing anybody sees and two places to keep in
-step. Clicking the hero button scrolls, and once the scroll settles focus lands
-on whatever is actually in the way: the box if it still needs ticking, the
-download itself if it does not.
+**Downloading is [`download.html`](download.html) and nowhere else.** The home
+page's hero button is a plain link to it, `Download` sits in the header bar of
+every page in the accent, and the closing card that used to carry a second copy
+of the whole apparatus is gone. One control, one acceptance, one place to keep
+in step.
 
-Two things had to move for the picker to live inside that card. Its
-`overflow: hidden` is gone, because it swallowed the platform menu whole, and
-the art's glow is trimmed to fit instead (it had already faded to nothing where
-the card ended). And `.cta-final` carries a `z-index`, because `backdrop-filter`
-on the card makes it a stacking context and traps every `z-index` inside it, so
-the menu could not outrank the footer from in there.
+The picker on that page is the split button unchanged, because it was not the
+thing that needed changing. What did was the acceptance: it had been a 17px box
+and a line of grey type hanging off the bottom of the button, shaped like small
+print and read as small print. It is a step now, above the button, in a panel
+of its own at reading size, and the whole panel is the hit target.
 
 **The box before the download is a record, not a lock.** It writes the policy
 date into `localStorage` under `callifornia-accepted`, and until it is ticked
@@ -151,7 +147,8 @@ for what that page is saying:
 | File | Pose | Where |
 |------|------|-------|
 | `mascot-wave.webp` | winking, one paw up | home hero |
-| `mascot-cheer.webp` | star eyes, both paws up | bottom call to action |
+| `mascot-sit.webp` | sitting, holding a bone | nothing, currently |
+| `mascot-cheer.webp` | star eyes, both paws up | nothing, currently |
 | `mascot-hi.webp` | paws up, delighted | join page, valid link |
 | `mascot-oops.webp` | gasp, paws on cheeks | join page, broken link and mobile |
 

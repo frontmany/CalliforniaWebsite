@@ -465,14 +465,6 @@ main { position: relative; z-index: 1; flex: 1; }
   margin-bottom: 22px;
 }
 
-/* The version line and the acceptance line, closer to each other than either
-   is to the button. Two captions on one control, not three stacked things. */
-.download-note {
-  display: flex;
-  flex-direction: column;
-  gap: 9px;
-}
-
 /* Had no rule at all, so in the bottom card the button and the acceptance row
    touched. The hero's copy of this wraps a .download-block that already spaces
    itself, so the gap here only ever shows where it was missing. */
@@ -514,76 +506,88 @@ main { position: relative; z-index: 1; flex: 1; }
 }
 
 /* ---------- Accepting the terms ----------
-   Sits under the button rather than over it: the button is what the page is
-   for, and somebody who reaches for it and finds it will not move is looking
-   at exactly the line that says why.
+   This was a 17px box and a line of grey type hanging off the bottom of the
+   button, which read as small print because it was shaped like it. It is a
+   step now, above the button rather than under it, at reading size, with a
+   second line saying why bothering is not a waste of two minutes.
 
-   The row is one thing, so it lights as one thing. Hovering anywhere in it
-   brings the box up, which is also the hint that the words are the hit target
-   and not just the 17px square. */
-.consent {
+   The whole panel is the hit target and it lights as one thing, so the words
+   are as clickable as the box. A link inside the label still follows the link
+   rather than ticking the box: a label does not forward a click that landed on
+   interactive content, which is the browser's own rule and not a workaround. */
+.accept {
+  align-self: stretch;
   display: flex;
   align-items: flex-start;
-  gap: 10px;
-  max-width: 400px;
-  font-size: 13px;
-  line-height: 1.55;
-  color: var(--muted);
-  text-align: left;
+  gap: 14px;
+  padding: 18px 20px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
   cursor: pointer;
+  transition: background 0.18s ease, border-color 0.18s ease;
 }
-.consent label { cursor: inherit; }
-.consent a { color: var(--accent); text-decoration: none; }
-.consent a:hover { text-decoration: underline; }
-.consent:hover { color: var(--text); }
+.accept:hover { border-color: rgba(var(--accent-rgb), 0.45); }
+.accept--on {
+  background: var(--elevated);
+  border-color: rgba(var(--accent-rgb), 0.5);
+}
 
-.consent-box {
+.accept-box {
   appearance: none;
   -webkit-appearance: none;
-  flex: 0 0 17px;
-  width: 17px;
-  height: 17px;
-  /* Optically on the first line of the label rather than on the top of its
-     box: (13px * 1.55 - 17px) / 2, rounded. */
-  margin: 2px 0 0;
+  flex: 0 0 20px;
+  width: 20px;
+  height: 20px;
+  /* Optically on the first line of the label, (15px * 1.5 - 20px) / 2. */
+  margin: 1px 0 0;
   display: grid;
   place-content: center;
-  /* --border against --elevated is eleven values of difference, which on this
-     canvas is a smudge. The outline is the muted text colour held back, so it
-     reads as an empty box at a glance and still sits quietly. */
   border: 1.5px solid rgba(var(--muted-rgb), 0.5);
-  border-radius: 5px;
-  background: transparent;
+  border-radius: 6px;
+  background: var(--canvas);
   cursor: pointer;
   transition: background 0.15s ease, border-color 0.15s ease;
 }
-.consent:hover .consent-box { border-color: var(--accent); }
-.consent-box:checked,
-.consent:hover .consent-box:checked { background: var(--accent); border-color: var(--accent); }
+.accept:hover .accept-box { border-color: var(--accent); }
+.accept-box:checked,
+.accept:hover .accept-box:checked { background: var(--accent); border-color: var(--accent); }
 
 /* The tick is Icons.qml's, masked rather than drawn, so it keeps the round
    caps the rest of the set has. */
-.consent-box::before {
+.accept-box::before {
   content: "";
-  width: 12px;
-  height: 12px;
+  width: 13px;
+  height: 13px;
   background: #fff;
   transform: scale(0);
   transition: transform 0.13s cubic-bezier(0.33, 0, 0.2, 1);
   -webkit-mask: var(--tick) center / contain no-repeat;
   mask: var(--tick) center / contain no-repeat;
 }
-.consent-box:checked::before { transform: scale(1); }
+.accept-box:checked::before { transform: scale(1); }
 
+.accept-label {
+  flex: 1;
+  min-width: 0;
+  display: block;
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 1.5;
+  color: var(--text);
+  cursor: inherit;
+}
+.accept-label a { color: var(--accent); text-decoration: none; }
+.accept-label a:hover { text-decoration: underline; }
 /* Nothing happened when the button was pressed, which reads as a broken page
    unless the reason moves. */
-@keyframes consent-nudge {
+@keyframes accept-nudge {
   0%, 100% { transform: translateX(0); }
-  16%, 48%, 80% { transform: translateX(-4px); }
-  32%, 64%, 96% { transform: translateX(4px); }
+  16%, 48%, 80% { transform: translateX(-5px); }
+  32%, 64%, 96% { transform: translateX(5px); }
 }
-.consent--nudge { animation: consent-nudge 0.42s ease; }
-.consent--nudge .consent-box { border-color: var(--accent); }
+.accept--nudge { animation: accept-nudge 0.42s ease; }
+.accept--nudge .accept-box { border-color: var(--accent); }
 
 /* A download that is not available yet says so, rather than being a live
    button that silently declines. */
@@ -667,6 +671,18 @@ a.menu-row:hover { background: var(--control-hover); }
 .menu-row--on { background: var(--accent-soft); }
 .menu-row--off { color: var(--muted); }
 .menu-sep { height: 1px; background: var(--border); margin: 6px 4px; }
+
+/* ---------- Download page ----------
+   The picker itself is unchanged and stays unchanged: it is one control for
+   the one choice this site asks about. What this section is, is everything
+   around it. */
+
+.dl-head { margin-bottom: 38px; }
+.dl-head .page-sub { margin-bottom: 0; }
+
+/* The acceptance and the button are one step after another, so the gap between
+   them is larger than the one inside either. */
+.page .cta-desktop { gap: 26px; }
 
 /* Linux is real and downloadable, just newer than the Windows build. macOS
    needs no badge of its own: its row says "Soon" where the others say a size,
@@ -1184,71 +1200,6 @@ a.menu-row:hover { background: var(--control-hover); }
 
 /* ---------- Bottom call to action ---------- */
 
-.cta-final {
-  padding: 64px var(--edge) 112px;
-  /* The platform menu opens downward, past this section and over the footer,
-     which sets a z-index of its own. Lifting the section is what lets the menu
-     win, since the footer is its sibling rather than its ancestor. */
-  position: relative;
-  z-index: 2;
-  scroll-margin-top: 24px;
-}
-
-/* No panel. This was a bordered, blurred, shadowed slab with a background of
-   its own, which is a lot of chrome for what is only the page ending with the
-   thing it has been asking for. It is a layout now, on the same canvas as
-   every section above it, holding the same left edge they hold. Two problems
-   went with the slab: `overflow: hidden` had been swallowing the platform
-   menu, and `backdrop-filter` made a stacking context that trapped the menu's
-   z-index under the footer's. */
-.cta-card {
-  position: relative;
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 340px);
-  align-items: center;
-  gap: 32px;
-}
-
-.cta-card h2 {
-  max-width: 640px;
-  font-size: clamp(28px, 3.6vw, 38px);
-  font-weight: 700;
-  letter-spacing: -0.036em;
-  line-height: 1.14;
-  margin: 0 0 12px;
-}
-
-.cta-card .section-sub { margin-bottom: 30px; }
-
-/* Cropped by the card, the way Home's art is cropped by the window. */
-.cta-art {
-  position: relative;
-  justify-self: end;
-  align-self: end;
-  width: 100%;
-  max-width: 360px;
-  /* There is no card edge left to stand on, so the piece stands on the row's
-     own baseline instead of hanging 52px below it into a border that is gone. */
-}
-.cta-art img { display: block; width: 100%; height: auto; position: relative; z-index: 1; }
-.cta-art::before {
-  content: "";
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  /* Back to its full spread now that there is no card edge to respect. It
-     fades to nothing at its own rim, so on the open canvas it reads as the
-     light the piece is standing in rather than as a shape. */
-  width: 130%;
-  aspect-ratio: 1;
-  transform: translate(-50%, -50%);
-  border-radius: 50%;
-  background: radial-gradient(closest-side,
-    rgba(var(--accent-rgb), 0.26) 0%,
-    rgba(var(--accent-rgb), 0.1) 50%,
-    rgba(var(--accent-rgb), 0) 100%);
-}
-
 /* ---------- Footer ---------- */
 
 .site-footer {
@@ -1485,7 +1436,7 @@ a.menu-row:hover { background: var(--control-hover); }
   /* The thumb still moves, it just stops sliding there. */
   .seg::before { transition: background 0.25s ease, border-color 0.25s ease; }
   /* The nudge has nothing to fall back on, so it becomes a still highlight. */
-  .consent--nudge { animation: none; }
+  .accept--nudge { animation: none; }
 }
 
 /* ---------- Responsive ---------- */
@@ -1518,24 +1469,6 @@ a.menu-row:hover { background: var(--control-hover); }
   .hero-art img { right: calc(var(--edge) - 14px); }
 
   .tiles { grid-template-columns: repeat(2, 1fr); }
-
-  /* Stacked, the art is at the top and the button is last, so the card needs
-     its bottom padding back: zero was for the wide layout, where the bottom
-     edge was the thing cropping the art. */
-  .cta-card {
-    grid-template-columns: 1fr;
-    justify-items: center;
-    text-align: center;
-    gap: 8px;
-  }
-  .cta-card .section-sub { margin-left: auto; margin-right: auto; }
-  /* The card centres its copy at this width, and the download apparatus has to
-     come with it. Both levels, or the block centres while the button stays
-     pinned to the left of it, which is where the acceptance line ends up
-     setting the block's width. */
-  .cta-card .cta-desktop,
-  .cta-card .download-block { align-items: center; }
-  .cta-art { order: -1; justify-self: center; max-width: 200px; margin-bottom: 0; }
 }
 
 @media (max-width: 860px) {
@@ -1552,10 +1485,11 @@ a.menu-row:hover { background: var(--control-hover); }
 @media (max-width: 720px) {
   .container { padding: 0 var(--edge); }
   .section { padding: 72px var(--edge); }
-  .cta-final { padding: 80px var(--edge) 96px; }
   .page { padding: 56px var(--pad) 88px; }
   .site-nav { display: none; }
   .tiles { grid-template-columns: 1fr; }
+  .dl-head { margin-bottom: 30px; }
+  .accept { padding: 16px; }
   /* With the nav gone the control is the whole right side of the bar, and it
      tightens rather than push the wordmark off the left of it. */
   .header-right { gap: 14px; }
