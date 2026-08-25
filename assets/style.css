@@ -1,8 +1,10 @@
 /* Palette, metrics and backdrop mirror the desktop app (CalliforniaApp —
    resources/qml/Theme.qml and components/ScreenBackdrop.qml): IBM Plex, warm
-   neutrals, a blue accent, tight 6-12px radii. Both app themes are available
-   here too — dark is the default, [data-theme="light"] mirrors the app's light
-   mode.
+   neutrals, a blue accent, tight 6-12px radii. Both app themes are here too,
+   and which one a visitor gets is the operating system's answer and nothing
+   else: dark is the default, and the light block below takes over when the
+   system asks for light. There is no switch, so there is no stored choice, no
+   attribute on <html>, and no script deciding any of it before first paint.
 
    The *_rgb tokens exist because the two accent washes and the dot grain need
    the same colour at a dozen different alphas; rgba(var(--x-rgb), a) does that
@@ -19,13 +21,18 @@
   --accent-soft: rgba(39, 120, 246, 0.2);
   --muted-rgb: 168, 164, 156;
   /* Presence, straight from Theme.qml. Green is online, violet is in a call,
-     and the accent is somebody sitting in a space you share. */
+     and offline is simply the muted colour, as the app draws it. */
   --online: #3FB27F;
   --incall: #8B5CF6;
   --avatar: #4A4640;
   --control-hover: rgba(255, 255, 255, 0.08);
+  /* SegmentedToggle.qml's own numbers. Light reads gaps larger than dark, so
+     the track holds its thumb one pixel tighter there and drops the ring
+     around it, which in light would only read as a second border. */
+  --seg-inset: 3px;
+  --seg-thumb-radius: 6px;
+  --seg-thumb-border: var(--border);
   --header-bg: rgba(28, 27, 25, 0.72);
-  --glass: rgba(28, 27, 25, 0.7);
   /* Peak opacity of ScreenBackdrop's two washes, and of its grain. */
   --glow: 0.38;
   --glow-2: 0.2;
@@ -44,37 +51,42 @@
      that already caps its own width this second term is added on top of the
      cap and eats the content instead of the margin. */
   --edge: max(var(--pad), calc((100% - 1240px) / 2));
+  --tick: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m5 12.5 4.5 4.5L19 7'/%3E%3C/svg%3E");
   --font: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
   --mono: 'IBM Plex Mono', ui-monospace, 'Cascadia Code', 'Segoe UI Mono', monospace;
 }
 
-:root[data-theme="light"] {
-  --canvas: #F5F4F1;
-  --surface: #EDECE8;
-  --elevated: #FFFFFF;
-  --border: #E0DED8;
-  --text: #1A1917;
-  --muted: #6B6860;
-  --accent: #1577E8;
-  --accent-rgb: 21, 119, 232;
-  --accent-soft: rgba(21, 119, 232, 0.12);
-  --muted-rgb: 107, 104, 96;
-  --online: #2F9468;
-  --incall: #7A52D9;
-  --avatar: #DDD9D2;
-  --control-hover: rgba(26, 25, 23, 0.06);
-  --header-bg: rgba(245, 244, 241, 0.78);
-  --glass: rgba(255, 255, 255, 0.72);
-  /* Light needs more alpha than the ratio between the two canvases suggests:
-     both washes are mostly off-screen, so what shows is the tail of a squared
-     falloff, and the app's own numbers are these. */
-  --glow: 0.26;
-  --glow-2: 0.12;
-  --grain: 0.14;
-  --shadow-btn: rgba(21, 119, 232, 0.25);
-  --shadow-btn-hover: rgba(21, 119, 232, 0.35);
-  --shadow-panel: 0 18px 44px -30px rgba(26, 25, 23, 0.5);
-  --art-shadow: rgba(26, 25, 23, 0.3);
+@media (prefers-color-scheme: light) {
+  :root {
+    --canvas: #F5F4F1;
+    --surface: #EDECE8;
+    --elevated: #FFFFFF;
+    --border: #E0DED8;
+    --text: #1A1917;
+    --muted: #6B6860;
+    --accent: #1577E8;
+    --accent-rgb: 21, 119, 232;
+    --accent-soft: rgba(21, 119, 232, 0.12);
+    --muted-rgb: 107, 104, 96;
+    --online: #2F9468;
+    --incall: #7A52D9;
+    --avatar: #DDD9D2;
+    --control-hover: rgba(26, 25, 23, 0.06);
+    --seg-inset: 2px;
+    --seg-thumb-radius: 5px;
+    --seg-thumb-border: transparent;
+    --header-bg: rgba(245, 244, 241, 0.78);
+    /* Light needs more alpha than the ratio between the two canvases suggests:
+       both washes are mostly off-screen, so what shows is the tail of a squared
+       falloff, and the app's own numbers are these. */
+    --glow: 0.26;
+    --glow-2: 0.12;
+    --grain: 0.14;
+    --shadow-btn: rgba(21, 119, 232, 0.25);
+    --shadow-btn-hover: rgba(21, 119, 232, 0.35);
+    --shadow-panel: 0 18px 44px -30px rgba(26, 25, 23, 0.5);
+    --art-shadow: rgba(26, 25, 23, 0.3);
+  }
 }
 
 * { box-sizing: border-box; }
@@ -253,48 +265,85 @@ summary:focus-visible {
   flex-shrink: 0;
 }
 
-/* Theme toggle — same idea as the app's ThemeToggle. */
-.theme-toggle {
+/* ---------- Segmented toggle ----------
+   `components/SegmentedToggle.qml`, the control the app uses for the settings
+   it lets you pick between: one track, cells of one width, and a thumb that
+   slides to the chosen one. Two bordered boxes of different shapes used to
+   stand here instead, and neither was anything the app draws. Language is the
+   only setting a visitor has, so it is the only one here, but the shape is
+   the general one and the numbers are the app's, down to the 160ms slide.
+
+   The app writes its two options "English" and "Русский", each in its own
+   language. A header has no room for either, so the short forms stand in and
+   the tooltip carries the sentence.
+
+   It does nothing without JavaScript and is not shown without it. `html.js`
+   is set by the inline head script rather than by main.js, so the control is
+   absent from the first paint instead of appearing a moment into it. */
+.seg {
+  position: relative;
+  display: none;
+  padding: var(--seg-inset);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  transition: background 0.25s ease, border-color 0.25s ease;
+}
+.js .seg { display: flex; }
+
+/* The thumb is exactly one cell wide, so its offset is a whole number of its
+   own widths and nothing has to be measured. --i comes from an attribute on
+   <html> that the head script writes before first paint, which is also why it
+   never animates in from the wrong cell on load. */
+.seg::before {
+  content: "";
+  box-sizing: border-box;
+  position: absolute;
+  top: var(--seg-inset);
+  bottom: var(--seg-inset);
+  left: var(--seg-inset);
+  width: calc((100% - var(--seg-inset) * 2) / var(--cells));
+  transform: translateX(calc(100% * var(--i, 0)));
+  border: 1px solid var(--seg-thumb-border);
+  border-radius: var(--seg-thumb-radius);
+  background: var(--elevated);
+  transition: transform 0.16s cubic-bezier(0.33, 0, 0.2, 1),
+              background 0.25s ease, border-color 0.25s ease;
+}
+
+.seg > button {
+  position: relative;
+  z-index: 1;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 34px;
-  height: 34px;
-  border-radius: var(--radius-md);
-  border: 1px solid var(--border);
-  background: transparent;
-  color: var(--muted);
-  cursor: pointer;
+  height: 28px;
   padding: 0;
-  transition: color 0.15s ease, background 0.15s ease, border-color 0.15s ease;
-}
-.theme-toggle:hover { color: var(--text); background: var(--control-hover); }
-.theme-toggle .icon-sun { display: none; }
-.theme-toggle .icon-moon { display: block; }
-:root[data-theme="light"] .theme-toggle .icon-sun { display: block; }
-:root[data-theme="light"] .theme-toggle .icon-moon { display: none; }
-
-/* Language switch — same shell as the theme toggle, wider for two letters.
-   It names the language it takes you to, so the label is always the other
-   one. Hidden without JavaScript, since nothing would happen on a click. */
-.lang-toggle {
-  display: none;
-  align-items: center;
-  justify-content: center;
-  min-width: 40px;
-  height: 34px;
-  padding: 0 8px;
-  border-radius: var(--radius-md);
-  border: 1px solid var(--border);
+  border: 0;
+  border-radius: var(--seg-thumb-radius);
   background: transparent;
   color: var(--muted);
-  font: 500 12px/1 var(--font);
-  letter-spacing: 0.04em;
+  font: 400 13px/1 var(--font);
   cursor: pointer;
-  transition: color 0.15s ease, background 0.15s ease, border-color 0.15s ease;
+  transition: color 0.15s ease;
 }
-.js .lang-toggle { display: inline-flex; }
-.lang-toggle:hover { color: var(--text); background: var(--control-hover); }
+.seg > button:hover { color: var(--text); }
+/* The focus ring belongs to the cell, not to the track around it. */
+.seg > button:focus-visible { outline-offset: -1px; }
+
+.seg--lang { --cells: 2; }
+.seg--lang > button { width: 38px; letter-spacing: 0.03em; }
+
+/* Which cell is lit, and where the thumb sits, both read straight off the
+   `lang` attribute i18n.js already maintains on <html>. No class to keep in
+   step, and no flash while a script decides. */
+:root[lang="en"] .seg--lang { --i: 0; }
+:root[lang="ru"] .seg--lang { --i: 1; }
+:root[lang="en"] .seg--lang [data-lang="en"],
+:root[lang="ru"] .seg--lang [data-lang="ru"] {
+  color: var(--text);
+  font-weight: 500;
+}
 
 main { position: relative; z-index: 1; flex: 1; }
 
@@ -332,10 +381,13 @@ main { position: relative; z-index: 1; flex: 1; }
 }
 
 .hero h1 {
-  /* Sized so the longer of the two lines fits the column in both languages
-     (the Russian first line is the long one). The break is designed, and a
-     headline that wraps a designed line is worse than a smaller one. */
-  font-size: clamp(34px, 4.2vw, 52px);
+  /* Sized so the longer of the two lines fits the column in both languages.
+     34px is what the second line allows, measured against this column at its
+     full 680px, and the Russian line is the one that decides it: it runs a
+     quarter longer than the English and there is no shorter way to say
+     "Непробиваемо" that still means it. The break is designed, and a headline
+     that wraps a designed line is worse than a smaller one. */
+  font-size: clamp(26px, 2.8vw, 34px);
   font-weight: 700;
   /* The app derives tracking from the size (-0.036em) rather than fixing it,
      so a headline keeps its shape as it scales. */
@@ -343,6 +395,12 @@ main { position: relative; z-index: 1; flex: 1; }
   line-height: 1.11;
   margin: 0 0 18px;
 }
+
+/* The second line is two sentences, and each is a box, so a column too narrow
+   for the pair breaks between them rather than mid sentence. Below the width
+   where the pair still fits, they are stacked outright (see the media query
+   further down) instead of being left to a wrap that lands where it lands. */
+.hero h1 span { display: inline-block; }
 
 .hero-sub {
   font-size: 18px;
@@ -394,8 +452,26 @@ main { position: relative; z-index: 1; flex: 1; }
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 14px;
+  gap: 16px;
   margin-bottom: 22px;
+}
+
+/* The version line and the acceptance line, closer to each other than either
+   is to the button. Two captions on one control, not three stacked things. */
+.download-note {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+}
+
+/* Had no rule at all, so in the bottom card the button and the acceptance row
+   touched. The hero's copy of this wraps a .download-block that already spaces
+   itself, so the gap here only ever shows where it was missing. */
+.cta-desktop {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 18px;
 }
 
 /* Primary button, mirrors the app's PrimaryButton: accent, 8px radius, and
@@ -427,6 +503,89 @@ main { position: relative; z-index: 1; flex: 1; }
   color: var(--muted);
   min-height: 18px;
 }
+
+/* ---------- Accepting the terms ----------
+   Sits under the button rather than over it: the button is what the page is
+   for, and somebody who reaches for it and finds it will not move is looking
+   at exactly the line that says why.
+
+   The row is one thing, so it lights as one thing. Hovering anywhere in it
+   brings the box up, which is also the hint that the words are the hit target
+   and not just the 17px square. */
+.consent {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  max-width: 400px;
+  font-size: 13px;
+  line-height: 1.55;
+  color: var(--muted);
+  text-align: left;
+  cursor: pointer;
+}
+.consent label { cursor: inherit; }
+.consent a { color: var(--accent); text-decoration: none; }
+.consent a:hover { text-decoration: underline; }
+.consent:hover { color: var(--text); }
+
+.consent-box {
+  appearance: none;
+  -webkit-appearance: none;
+  flex: 0 0 17px;
+  width: 17px;
+  height: 17px;
+  /* Optically on the first line of the label rather than on the top of its
+     box: (13px * 1.55 - 17px) / 2, rounded. */
+  margin: 2px 0 0;
+  display: grid;
+  place-content: center;
+  /* --border against --elevated is eleven values of difference, which on this
+     canvas is a smudge. The outline is the muted text colour held back, so it
+     reads as an empty box at a glance and still sits quietly. */
+  border: 1.5px solid rgba(var(--muted-rgb), 0.5);
+  border-radius: 5px;
+  background: transparent;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+.consent:hover .consent-box { border-color: var(--accent); }
+.consent-box:checked,
+.consent:hover .consent-box:checked { background: var(--accent); border-color: var(--accent); }
+
+/* The tick is Icons.qml's, masked rather than drawn, so it keeps the round
+   caps the rest of the set has. */
+.consent-box::before {
+  content: "";
+  width: 12px;
+  height: 12px;
+  background: #fff;
+  transform: scale(0);
+  transition: transform 0.13s cubic-bezier(0.33, 0, 0.2, 1);
+  -webkit-mask: var(--tick) center / contain no-repeat;
+  mask: var(--tick) center / contain no-repeat;
+}
+.consent-box:checked::before { transform: scale(1); }
+
+/* Nothing happened when the button was pressed, which reads as a broken page
+   unless the reason moves. */
+@keyframes consent-nudge {
+  0%, 100% { transform: translateX(0); }
+  16%, 48%, 80% { transform: translateX(-4px); }
+  32%, 64%, 96% { transform: translateX(4px); }
+}
+.consent--nudge { animation: consent-nudge 0.42s ease; }
+.consent--nudge .consent-box { border-color: var(--accent); }
+
+/* A download that is not available yet says so, rather than being a live
+   button that silently declines. */
+.btn-primary[aria-disabled="true"] {
+  opacity: 0.5;
+  box-shadow: none;
+  cursor: not-allowed;
+}
+.btn-primary[aria-disabled="true"]:hover { filter: none; }
+a.menu-row[aria-disabled="true"] { opacity: 0.5; cursor: not-allowed; }
+a.menu-row[aria-disabled="true"]:hover { background: transparent; }
 
 /* ---------- Download, one split button ----------
    The detected platform is the button, the rest sit behind the caret. A
@@ -583,7 +742,7 @@ a.menu-row:hover { background: var(--control-hover); }
 
 .feature {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   gap: clamp(48px, 5vw, 96px);
   align-items: center;
   padding: 52px 0;
@@ -608,7 +767,7 @@ a.menu-row:hover { background: var(--control-hover); }
   margin: 0;
 }
 
-.feature-visual { display: flex; justify-content: flex-end; }
+.feature-visual { display: flex; justify-content: flex-end; min-width: 0; }
 .feature:nth-child(even) .feature-visual { justify-content: flex-start; }
 
 /* ---------- Mini mockups ----------
@@ -679,7 +838,7 @@ a.menu-row:hover { background: var(--control-hover); }
   flex-direction: column;
   gap: 14px;
   width: 100%;
-  max-width: 440px;
+  max-width: 460px;
 }
 
 /* The eyebrow carries a section's bottom margin by default; inside the mockup
@@ -694,6 +853,7 @@ a.menu-row:hover { background: var(--control-hover); }
 }
 
 .join-field {
+  min-width: 0;
   display: flex;
   align-items: center;
   gap: 10px;
@@ -708,7 +868,7 @@ a.menu-row:hover { background: var(--control-hover); }
   flex: 1;
   min-width: 0;
   font-family: var(--mono);
-  font-size: 15px;
+  font-size: 13px;
   color: var(--text);
   overflow: hidden;
   text-overflow: ellipsis;
@@ -727,16 +887,18 @@ a.menu-row:hover { background: var(--control-hover); }
   justify-content: center;
 }
 
-.join-hint {
+/* The muted line under a mockup. Shared by the join field and the safety
+   number card, which is why it is not named after either. */
+.mock-hint {
   margin: 0;
   font-size: 12px;
   color: var(--muted);
 }
 
-/* Roster rows, the way a space or the friends list draws them. */
+/* Roster rows, the way PeopleScreen.qml draws the friends list. */
 /* Narrower than the panels that hold a progress bar or a field: with no
    action at the end of a row, the width was all empty. */
-.panel--people { max-width: 360px; }
+.panel--people { max-width: 380px; }
 
 .person-row {
   display: flex;
@@ -772,15 +934,98 @@ a.menu-row:hover { background: var(--control-hover); }
 }
 .dot--online { background: var(--online); }
 .dot--incall { background: var(--incall); }
-.dot--waiting { background: var(--accent); }
+.dot--offline { background: var(--muted); }
+
+/* Offline dims the whole row in the app, avatar included, rather than
+   greying the status line on its own. */
+.person-row--offline .avatar { opacity: 0.55; }
+.person-row--offline .person-name { color: var(--muted); }
 
 .person-name { font-size: 14px; font-weight: 600; margin: 0; }
-.person-meta { font-size: 12px; margin: 2px 0 0; color: var(--muted); }
-.person-meta--online { color: var(--online); }
-.person-meta--incall { color: var(--incall); }
-.person-meta--waiting { color: var(--accent); }
+
+/* One line under the name carrying the handle, the status and, when there is
+   one, the key notice. They are told apart by typeface and colour, so there
+   is no separator between them. */
+.person-meta {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  font-size: 12px;
+  margin: 3px 0 0;
+  color: var(--muted);
+}
+.handle { font-family: var(--mono); }
+/* Offline is stated rather than inherited, because that is what the app does
+   with it: green, violet, and otherwise the muted colour. */
+.status { color: var(--muted); }
+.status--online { color: var(--online); }
+.status--incall { color: var(--incall); }
+
+/* The key notice, in the accent: a new key is an offer to check, not a
+   warning, and it wears no checkmark because nothing has been checked yet. */
+.key-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  color: var(--accent);
+}
+.key-chip svg { flex-shrink: 0; }
 
 .person-grow { flex: 1; min-width: 0; }
+
+/* The safety number card, as SafetyNumberDialog.qml draws it: one number in
+   two halves, split by a rule rather than by two cards, because it is one
+   number. The half you read aloud is findable without reading the label over
+   it, which is what the accent bar down its left edge is for. */
+.safety-card {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  width: 100%;
+  max-width: 440px;
+}
+.safety-card .eyebrow { margin: 0; }
+
+.safety-panel {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+}
+
+.safety-half {
+  position: relative;
+  padding: 14px 16px;
+}
+.safety-half + .safety-half { border-top: 1px solid var(--border); }
+.safety-half--ours::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: var(--accent);
+}
+
+.safety-label {
+  margin: 0 0 5px;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.7px;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.safety-half--ours .safety-label { color: var(--accent); }
+
+.safety-digits {
+  margin: 0;
+  font-family: var(--mono);
+  font-size: 15px;
+  letter-spacing: 1.2px;
+  color: var(--text);
+}
 
 /* ---------- Small features grid ---------- */
 
@@ -932,21 +1177,27 @@ a.menu-row:hover { background: var(--control-hover); }
 
 .cta-final {
   padding: 64px var(--edge) 112px;
+  /* The platform menu opens downward, past this section and over the footer,
+     which sets a z-index of its own. Lifting the section is what lets the menu
+     win, since the footer is its sibling rather than its ancestor. */
+  position: relative;
+  z-index: 2;
+  scroll-margin-top: 24px;
 }
 
+/* No panel. This was a bordered, blurred, shadowed slab with a background of
+   its own, which is a lot of chrome for what is only the page ending with the
+   thing it has been asking for. It is a layout now, on the same canvas as
+   every section above it, holding the same left edge they hold. Two problems
+   went with the slab: `overflow: hidden` had been swallowing the platform
+   menu, and `backdrop-filter` made a stacking context that trapped the menu's
+   z-index under the footer's. */
 .cta-card {
   position: relative;
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 340px);
   align-items: center;
   gap: 32px;
-  padding: 52px 48px 52px 56px;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-xl);
-  background: var(--glass);
-  backdrop-filter: blur(10px);
-  box-shadow: var(--shadow-panel);
-  overflow: hidden;
 }
 
 .cta-card h2 {
@@ -967,9 +1218,8 @@ a.menu-row:hover { background: var(--control-hover); }
   align-self: end;
   width: 100%;
   max-width: 360px;
-  /* Matches the card's bottom padding, so the piece stands on the card's edge
-     and is cropped by it. */
-  margin-bottom: -52px;
+  /* There is no card edge left to stand on, so the piece stands on the row's
+     own baseline instead of hanging 52px below it into a border that is gone. */
 }
 .cta-art img { display: block; width: 100%; height: auto; position: relative; z-index: 1; }
 .cta-art::before {
@@ -977,6 +1227,9 @@ a.menu-row:hover { background: var(--control-hover); }
   position: absolute;
   left: 50%;
   top: 50%;
+  /* Back to its full spread now that there is no card edge to respect. It
+     fades to nothing at its own rim, so on the open canvas it reads as the
+     light the piece is standing in rather than as a shape. */
   width: 130%;
   aspect-ratio: 1;
   transform: translate(-50%, -50%);
@@ -1114,6 +1367,49 @@ a.menu-row:hover { background: var(--control-hover); }
   letter-spacing: -0.3px;
   margin: 40px 0 12px;
 }
+/* A heading reached from the contents has to clear the sticky bar, or the
+   first thing the link does is hide what it jumped to. */
+.prose h2[id] { scroll-margin-top: 88px; }
+
+/* When a document came into force, in the eyebrow's voice: this is the line
+   that decides which version somebody is reading, so it is not muted body
+   text three paragraphs down. */
+.doc-meta {
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 1.1px;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin: -6px 0 18px;
+}
+
+/* Contents. A policy is only readable if you can get to the clause you came
+   for, and sixteen headings is past the point where scrolling for it is
+   reasonable. */
+.toc {
+  margin: 30px 0 10px;
+  padding: 18px 22px 20px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  background: var(--surface);
+  transition: background 0.25s ease, border-color 0.25s ease;
+}
+.toc ol {
+  margin: 0;
+  padding-left: 20px;
+  columns: 2;
+  column-gap: 34px;
+}
+.toc li {
+  font-size: 14px;
+  line-height: 1.85;
+  color: var(--muted);
+  break-inside: avoid;
+  max-width: none;
+}
+.toc a { color: var(--muted); text-decoration: none; }
+.toc a:hover { color: var(--text); text-decoration: underline; }
 
 .prose p, .prose li {
   max-width: 760px;
@@ -1128,6 +1424,39 @@ a.menu-row:hover { background: var(--control-hover); }
 
 .prose a { color: var(--accent); text-decoration: none; }
 .prose a:hover { text-decoration: underline; }
+
+/* The tables on the two documents, and the only prose wide enough to need its
+   own scroller: the page body must never scroll sideways, so a table does it
+   instead. */
+.table-scroll {
+  margin: 20px 0 8px;
+  overflow-x: auto;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+}
+
+.doc-table {
+  width: 100%;
+  min-width: 520px;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+.doc-table th,
+.doc-table td {
+  text-align: left;
+  padding: 12px 16px;
+  color: var(--muted);
+  line-height: 1.6;
+  vertical-align: top;
+}
+.doc-table th {
+  color: var(--text);
+  font-weight: 600;
+  background: var(--surface);
+  white-space: nowrap;
+}
+.doc-table tbody tr + tr td { border-top: 1px solid var(--border); }
+.doc-table td strong { color: var(--text); }
 
 /* ---------- Scroll reveal ---------- */
 
@@ -1144,6 +1473,10 @@ a.menu-row:hover { background: var(--control-hover); }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   .js [data-reveal] { opacity: 1; transform: none; transition: none; }
+  /* The thumb still moves, it just stops sliding there. */
+  .seg::before { transition: background 0.25s ease, border-color 0.25s ease; }
+  /* The nudge has nothing to fall back on, so it becomes a still highlight. */
+  .consent--nudge { animation: none; }
 }
 
 /* ---------- Responsive ---------- */
@@ -1165,6 +1498,11 @@ a.menu-row:hover { background: var(--control-hover); }
     margin-left: 24px;
     margin-right: 24px;
   }
+  /* Below this the copy column is 520px rather than 680, which is narrower
+     than the headline's second line, so its two sentences take a line each
+     and the slogan reads as three. */
+  .hero h1 span { display: block; }
+
   /* right: -14px here used to push the piece past the hero, where
      .hero-art’s own clipping cut it off. */
   .hero-art { --art-w: min(46%, 260px); }
@@ -1179,16 +1517,21 @@ a.menu-row:hover { background: var(--control-hover); }
     grid-template-columns: 1fr;
     justify-items: center;
     text-align: center;
-    padding: 44px 28px 48px;
     gap: 8px;
   }
   .cta-card .section-sub { margin-left: auto; margin-right: auto; }
+  /* The card centres its copy at this width, and the download apparatus has to
+     come with it. Both levels, or the block centres while the button stays
+     pinned to the left of it, which is where the acceptance line ends up
+     setting the block's width. */
+  .cta-card .cta-desktop,
+  .cta-card .download-block { align-items: center; }
   .cta-art { order: -1; justify-self: center; max-width: 200px; margin-bottom: 0; }
 }
 
 @media (max-width: 860px) {
   .feature {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
     gap: 28px;
   }
   .feature:nth-child(even) .feature-visual { order: 0; }
@@ -1204,6 +1547,11 @@ a.menu-row:hover { background: var(--control-hover); }
   .page { padding: 56px var(--pad) 88px; }
   .site-nav { display: none; }
   .tiles { grid-template-columns: 1fr; }
+  /* With the nav gone the control is the whole right side of the bar, and it
+     tightens rather than push the wordmark off the left of it. */
+  .header-right { gap: 14px; }
+  .seg--lang > button { width: 34px; }
+  .toc ol { columns: 1; }
   .faq-item summary { font-size: 15px; padding: 18px 12px; margin: 0 -12px; }
 
   .cta-desktop { display: none; }

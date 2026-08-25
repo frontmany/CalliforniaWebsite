@@ -1,5 +1,7 @@
-// Shared script for all pages: theme toggle, scroll-reveal, and (on the home
-// page) the version/size line under the Download button.
+// Shared script for all pages: scroll-reveal, and (on the home page) the
+// version/size line under the Download button. The theme is not here: it is
+// whatever the operating system asks for, which the stylesheet answers on its
+// own (see the top of style.css).
 //
 // The installer itself is hosted on Yandex Object Storage at a stable,
 // versionless path (…/stable/CalliforniaSetup.exe) — the Download button's href
@@ -9,7 +11,8 @@
 (function () {
   "use strict";
 
-  document.documentElement.classList.add("js");
+  // `html.js` is set by the inline head script on every page, early enough
+  // that the language control is never absent from a painted frame.
 
   // The few strings this file writes at runtime come from the dictionary in
   // i18n.js. Should that file be missing, t() returns nothing and every write
@@ -17,52 +20,6 @@
   var i18n = window.CalliforniaI18n;
   function t(key, vars) {
     return i18n ? i18n.t(key, vars) : null;
-  }
-
-  // --- Theme (mirrors the app's light/dark ThemeToggle) ---------------------
-  // The starting theme is applied by an inline <head> script before first
-  // paint (saved choice, else the OS setting); this wires the button and
-  // keeps following the OS while the page stays open.
-  var toggle = document.getElementById("theme-toggle");
-  if (toggle) {
-    toggle.addEventListener("click", function () {
-      var root = document.documentElement;
-      var light = root.getAttribute("data-theme") === "light";
-      if (light) {
-        root.removeAttribute("data-theme");
-      } else {
-        root.setAttribute("data-theme", "light");
-      }
-      // Clicking is what turns a preference into an explicit choice: from
-      // here on this visitor stops following the OS, in either direction.
-      try {
-        localStorage.setItem("callifornia-theme", light ? "dark" : "light");
-      } catch (_e) {}
-    });
-  }
-
-  // Someone who flips their OS to light/dark with the page already open sees
-  // it follow, exactly as a fresh load would have — unless they have picked a
-  // theme here, which always wins.
-  if (window.matchMedia) {
-    var lightQuery = window.matchMedia("(prefers-color-scheme: light)");
-    var onSystemThemeChange = function (event) {
-      var saved = null;
-      try {
-        saved = localStorage.getItem("callifornia-theme");
-      } catch (_e) {}
-      if (saved) return;
-      if (event.matches) {
-        document.documentElement.setAttribute("data-theme", "light");
-      } else {
-        document.documentElement.removeAttribute("data-theme");
-      }
-    };
-    if (lightQuery.addEventListener) {
-      lightQuery.addEventListener("change", onSystemThemeChange);
-    } else if (lightQuery.addListener) {
-      lightQuery.addListener(onSystemThemeChange);  // Safari < 14
-    }
   }
 
   // --- Scroll reveal --------------------------------------------------------
@@ -98,6 +55,126 @@
   // the HTML; Linux falls back to the GitHub Releases page (see
   // GITHUB_RELEASES_URL below), since there is no direct package link to
   // fall back to without this fetch.
+  // --- Accepting the terms before a download --------------------------------
+  // A record, not a lock. The installer is a public URL on object storage and
+  // anybody who wants it around this box can have it, so the honest thing is
+  // to say that in the README rather than pretend otherwise here. What the box
+  // does buy is the thing a record is for: the person saw the two documents,
+  // said so, and the date of the version they said it about is kept.
+  //
+  // Stored as the version rather than a flag, so raising POLICY_VERSION asks
+  // everybody again instead of carrying them silently into a new document.
+  var POLICY_VERSION = "2026-08-25";
+  var ACCEPT_KEY = "callifornia-accepted";
+  var consentBoxes = document.querySelectorAll("[data-accept]");
+  var accepted = false;
+  try {
+    accepted = localStorage.getItem(ACCEPT_KEY) === POLICY_VERSION;
+  } catch (_e) {}
+
+  // Every download control keeps its real destination in `data-href` and only
+  // wears an `href` once the box is ticked. One place decides, so nothing that
+  // redraws a button later can hand the link back by accident.
+  function gatedControls() {
+    return document.querySelectorAll("[data-href]");
+  }
+  function setHref(el, url) {
+    if (!el) return;
+    el.setAttribute("data-href", url);
+    if (accepted) {
+      el.setAttribute("href", url);
+    } else {
+      el.removeAttribute("href");
+    }
+  }
+  function applyGate() {
+    Array.prototype.forEach.call(gatedControls(), function (el) {
+      if (accepted) {
+        el.setAttribute("href", el.getAttribute("data-href"));
+        el.removeAttribute("aria-disabled");
+      } else {
+        el.removeAttribute("href");
+        el.setAttribute("aria-disabled", "true");
+      }
+    });
+    Array.prototype.forEach.call(consentBoxes, function (box) {
+      box.checked = accepted;
+    });
+  }
+
+  // A click on a control with no href does nothing at all, which reads as a
+  // broken page. Say what is missing instead, and put the cursor on it.
+  function nudge(from) {
+    var block = from.closest(".cta-desktop") || document;
+    var row = block.querySelector(".consent");
+    var box = block.querySelector("[data-accept]") || consentBoxes[0];
+    if (row) {
+      row.classList.remove("consent--nudge");
+      void row.offsetWidth;               // restart the animation
+      row.classList.add("consent--nudge");
+    }
+    if (box) box.focus();
+  }
+
+  // The markup ships working hrefs so the page is useful before this file
+  // runs, and every one of them has to come under the gate now, including the
+  // two package rows that keep pointing at the releases page until
+  // latest.json answers and render() gives them a real one.
+  Array.prototype.forEach.call(
+    document.querySelectorAll("#download-btn, .menu-row[data-target]"),
+    function (el) {
+      var href = el.getAttribute("href");
+      if (href) el.setAttribute("data-href", href);
+    });
+  applyGate();
+
+  Array.prototype.forEach.call(consentBoxes, function (box) {
+    box.addEventListener("change", function () {
+      accepted = box.checked;
+      try {
+        if (accepted) {
+          localStorage.setItem(ACCEPT_KEY, POLICY_VERSION);
+        } else {
+          localStorage.removeItem(ACCEPT_KEY);
+        }
+      } catch (_e) {}
+      applyGate();
+    });
+  });
+
+  document.addEventListener("click", function (event) {
+    var el = event.target.closest && event.target.closest("[data-href]");
+    if (el && !accepted) {
+      event.preventDefault();
+      nudge(el);
+    }
+  });
+
+  // The hero's button is an anchor, so the browser does the travelling. What it
+  // will not do is say where you arrived, and a page that scrolls under you and
+  // then waits is worse than one that hands you the next thing. Focus lands on
+  // whatever is actually in the way: the box if it still needs ticking, the
+  // download itself if it does not.
+  var jump = document.getElementById("download-jump");
+  if (jump) {
+    jump.addEventListener("click", function () {
+      var landed = false;
+      function land() {
+        if (landed) return;
+        landed = true;
+        var box = consentBoxes[0];
+        var target = box && !box.checked ? box : document.getElementById("download-btn");
+        // preventScroll, or focusing would jerk the page to its own idea of
+        // where the element should sit and undo the smooth scroll.
+        if (target) target.focus({ preventScroll: true });
+      }
+      if ("onscrollend" in window) {
+        window.addEventListener("scrollend", land, { once: true });
+      }
+      window.setTimeout(land, 900);
+    });
+  }
+
   var meta = document.getElementById("download-meta");
   if (!meta) return;
 
@@ -108,8 +185,13 @@
   // NOTE: must match the bucket (or CDN domain) the release workflow uploads to.
   var META_URL = "https://callifornia-download.storage.yandexcloud.net/stable/latest.json";
 
-  var downloadBtns = [document.getElementById("download-btn"), document.getElementById("download-btn-2")];
-  var downloadLabels = [document.getElementById("download-label"), document.getElementById("download-label-2")];
+  // One button downloads, and it is the one in the card at the bottom. The
+  // hero's is a link to that card and says so in the markup: naming a platform
+  // up there promised a file that button does not hand over, and it named the
+  // wrong one for anybody whose browser the detection reads differently from
+  // the machine they are on.
+  var downloadBtns = [document.getElementById("download-btn")];
+  var downloadLabels = [document.getElementById("download-label")];
   // The split button's menu. Its rows ship with working hrefs (Windows on the
   // installer, Linux on the releases page), so the control is useful before
   // this file runs and if latest.json never answers.
@@ -163,20 +245,24 @@
       row.classList.toggle("menu-row--on", key === target);
 
       if (key === "windows") {
-        row.href = WIN_HREF;
+        setHref(row, WIN_HREF);
       } else if (linuxInfo) {
-        row.href = key === "rpm" ? linuxInfo.rpm : linuxInfo.deb;
+        setHref(row, key === "rpm" ? linuxInfo.rpm : linuxInfo.deb);
       }
 
       var size = row.querySelector(".size");
       if (!size) return;
+      // Each row's own figure or nothing. `size` in the linux entry is the
+      // .deb's, for the site that has always read it there; the .rpm carries
+      // its own, and a release from before that was published simply leaves
+      // the row without one rather than borrowing a number from a different
+      // file.
       if (key === "windows" && latestData && latestData.size) {
         size.textContent = megabytes(latestData.size);
       } else if (key === "deb" && linuxInfo && linuxInfo.size) {
-        // Only the .deb is measured in latest.json (the merge step weighs the
-        // file it just built), so the .rpm row stays without a figure rather
-        // than borrowing one that was never checked.
         size.textContent = megabytes(linuxInfo.size);
+      } else if (key === "rpm" && linuxInfo && linuxInfo.rpmSize) {
+        size.textContent = megabytes(linuxInfo.rpmSize);
       }
     });
   }
@@ -195,16 +281,23 @@
         href = state.pkg === "rpm" ? linuxInfo.rpm : linuxInfo.deb;
         var linuxVersion = String(linuxInfo.version || "").replace(/^v/, "");
         if (linuxVersion) {
-          // Only the .deb's size/hash are recorded in latest.json today (the
-          // merge step measures the file it just built) -- .rpm still gets a
-          // real, working link, just without a "NN MB" figure next to it.
-          if (state.pkg === "deb" && linuxInfo.size) {
+          // Written out rather than built from a variable, so the three keys
+          // are greppable from here and from the dictionary.
+          if (state.pkg === "rpm" && linuxInfo.rpmSize) {
+            metaText = t("meta.rpm", {
+              version: linuxVersion,
+              size: (linuxInfo.rpmSize / (1024 * 1024)).toFixed(0)
+            });
+          } else if (state.pkg === "rpm") {
+            // A release published before the .rpm was measured. The link
+            // works; only the figure is missing, and it stays missing rather
+            // than showing the .deb's.
+            metaText = t("meta.rpm.nosize", { version: linuxVersion });
+          } else if (linuxInfo.size) {
             metaText = t("meta.deb", {
               version: linuxVersion,
               size: (linuxInfo.size / (1024 * 1024)).toFixed(0)
             });
-          } else {
-            metaText = t("meta.rpm", { version: linuxVersion });
           }
         }
       } else {
@@ -226,7 +319,7 @@
       }
     }
 
-    downloadBtns.forEach(function (btn) { if (btn) btn.href = href; });
+    downloadBtns.forEach(function (btn) { setHref(btn, href); });
     downloadLabels.forEach(function (el) { if (el && label) el.textContent = label; });
     if (metaText) meta.textContent = metaText;
   }
@@ -278,6 +371,9 @@
   }
 
   render();
+  // render() has now given every control a data-href; the gate decides whether
+  // any of them wears it.
+  applyGate();
 
   fetch(META_URL, { cache: "no-cache" })
     .then(function (res) {

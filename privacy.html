@@ -4,24 +4,22 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title data-i18n="page.privacy.title">Privacy, Callifornia</title>
-  <meta name="description" data-i18n-content="page.privacy.desc" content="What data Callifornia collects, what it doesn't, and why." />
+  <meta name="description" data-i18n-content="page.privacy.desc" content="Who holds your data, what it is for, how long it stays, what the service cannot read at all, and what you can ask for." />
   <link rel="icon" href="assets/favicon.ico" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <!-- IBM Plex from this site, not from a font service. A stylesheet link to
+       fonts.googleapis.com hands a third party the address of everyone who
+       reads a page here, which privacy.html says does not happen. See
+       assets/fonts.css. -->
+  <link rel="preload" href="assets/fonts/ibm-plex-sans-400-latin.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="stylesheet" href="assets/fonts.css" />
   <link rel="stylesheet" href="assets/style.css" />
   <script>
-    // Runs before first paint to avoid a flash of the wrong theme. A choice
-    // made with the header toggle always wins; with none saved we follow the
-    // OS setting (main.js keeps following it while the page is open).
-    (function () {
-      try {
-        var saved = localStorage.getItem("callifornia-theme");
-        var light = saved === "light" || (!saved && window.matchMedia &&
-          window.matchMedia("(prefers-color-scheme: light)").matches);
-        if (light) document.documentElement.setAttribute("data-theme", "light");
-      } catch (e) {}
-    })();
+    // The theme is the operating system's, decided in the stylesheet, so
+    // nothing about it happens here. This one line marks the page as having
+    // JavaScript, which is what the language control waits for: it does
+    // nothing without it, and a control that appears a moment into the first
+    // paint is worse than one that was there all along.
+    document.documentElement.classList.add("js");
   </script>
 </head>
 <body>
@@ -41,11 +39,13 @@
           <a href="changelog.html" data-i18n="nav.changelog">Changelog</a>
         </nav>
         <div class="header-actions">
-          <button id="theme-toggle" class="theme-toggle" type="button" data-i18n-aria-label="aria.theme" aria-label="Switch theme">
-            <svg class="icon-moon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 14.3A8.5 8.5 0 1 1 9.7 3 7 7 0 0 0 21 14.3z"/></svg>
-            <svg class="icon-sun" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
-          </button>
-          <button data-lang-toggle class="lang-toggle" type="button" aria-label="Switch language">RU</button>
+          <!-- The app's SegmentedToggle, for the one setting a visitor has.
+               Each option is in its own language, which is how somebody who
+               cannot read the current one finds the way out. -->
+          <div class="seg seg--lang" role="group" data-i18n-aria-label="aria.lang" aria-label="Language">
+            <button type="button" data-lang="en" data-i18n-title="lang.en" title="Show the site in English" data-i18n-aria-label="lang.en" aria-label="Show the site in English">EN</button>
+            <button type="button" data-lang="ru" data-i18n-title="lang.ru" title="Show the site in Russian" data-i18n-aria-label="lang.ru" aria-label="Show the site in Russian">RU</button>
+          </div>
         </div>
       </div>
     </div>
@@ -54,46 +54,210 @@
   <main>
     <div class="page container container--narrow prose">
       <h1 class="page-title" data-i18n="privacy.title">Privacy</h1>
-      <p class="page-sub" data-i18n="privacy.sub">Last updated August 13, 2026. In short, Callifornia collects what it needs to connect your calls and carry your messages, and not much else.</p>
+      <p class="doc-meta" data-i18n="privacy.meta">In force from 25 August 2026. It replaces the version of 13 August 2026</p>
+      <p class="page-sub" data-i18n="privacy.sub">Most privacy policies are written to be defensible. This one is written to be read, because the promise underneath it, end to end encrypted, is one people reasonably hear as "the server knows nothing", and that is not true of this service or of any other. What follows is what the service holds, what it cannot hold, and what we do about the difference.</p>
 
-      <h2 data-i18n="privacy.collect.h">What we collect</h2>
+      <nav class="toc" data-i18n-aria-label="aria.toc" aria-label="On this page">
+        <ol>
+          <li><a href="#who" data-i18n="privacy.who.h">Who is responsible</a></li>
+          <li><a href="#scope" data-i18n="privacy.scope.h">What this covers</a></li>
+          <li><a href="#age" data-i18n="privacy.age.h">Who may use Callifornia</a></li>
+          <li><a href="#sealed" data-i18n="privacy.sealed.h">What the service cannot read</a></li>
+          <li><a href="#knows" data-i18n="privacy.knows.h">What the service does know</a></li>
+          <li><a href="#basis" data-i18n="privacy.basis.h">Why we are allowed to hold it</a></li>
+          <li><a href="#retention" data-i18n="privacy.retention.h">How long it stays</a></li>
+          <li><a href="#website" data-i18n="privacy.website.h">What this website does</a></li>
+          <li><a href="#processors" data-i18n="privacy.processors.h">Who else touches this data</a></li>
+          <li><a href="#location" data-i18n="privacy.location.h">Where it is kept</a></li>
+          <li><a href="#keys" data-i18n="privacy.lost.h">If you lose your key</a></li>
+          <li><a href="#crash" data-i18n="privacy.crash.h">Crash reports</a></li>
+          <li><a href="#security" data-i18n="privacy.security.h">Keeping it safe</a></li>
+          <li><a href="#rights" data-i18n="privacy.rights.h">What you can ask for</a></li>
+          <li><a href="#changes" data-i18n="privacy.changes.h">Changes to this policy</a></li>
+          <li><a href="#contact" data-i18n="privacy.contact.h">Contact</a></li>
+        </ol>
+      </nav>
+
+      <h2 id="who" data-i18n="privacy.who.h">Who is responsible</h2>
+      <p data-i18n-html="privacy.who.p">Callifornia is made and run by one person rather than a company, and that person is the operator of your personal data in the sense the law gives the word. Every decision described on this page is theirs, and the address at the bottom reaches them directly rather than a support queue. Write to <a href="mailto:fmtab2014@gmail.com">fmtab2014@gmail.com</a> about anything here, including every request under <a href="#rights">what you can ask for</a>.</p>
+
+      <h2 id="scope" data-i18n="privacy.scope.h">What this covers</h2>
+      <p data-i18n-html="privacy.scope.p">Three things that are not the same, and each is named wherever a rule applies to only one of them. The <strong>app</strong> on your computer. The <strong>service</strong> it talks to. And this <strong>website</strong>, a handful of static pages that hand out an installer, which turns out to have a privacy story of its own and gets a section for it. What you may and may not do with any of the three is a separate document, the <a href="terms.html">terms of use</a>.</p>
+
+      <h2 id="age" data-i18n="privacy.age.h">Who may use Callifornia</h2>
+      <p data-i18n="privacy.age.p">People aged 16 and over. Somebody younger may use it only with a parent or guardian agreeing on their behalf. Your age is never asked at sign up, and claiming that it is verified would be exactly the sort of thing this page exists to avoid saying, so instead this is the rule and an account we learn belongs to a child under 16 is deleted along with what it holds.</p>
+
+      <h2 id="sealed" data-i18n="privacy.sealed.h">What the service cannot read</h2>
+      <p data-i18n="privacy.sealed.p">Everything you say and everything you look like inside a conversation is sealed on your computer before it leaves, with keys the server never receives.</p>
       <ul>
-        <li data-i18n-html="privacy.collect.1"><strong>Account data</strong>, the username, display name and password you sign up with. This is what lets friends find and call you.</li>
-        <li data-i18n-html="privacy.collect.email"><strong>Your email address.</strong> It has one job: getting you back into your account if you forget your password, and confirming the address belongs to you in the first place. We don't send newsletters and there is nothing to subscribe to.</li>
-        <li data-i18n-html="privacy.collect.messages"><strong>Messages you send.</strong> Chat in a space is stored on our servers so it is there when you come back, and it stays until the space is deleted. Chat in a one-off call goes with the call.</li>
-        <li data-i18n-html="privacy.collect.pictures"><strong>Profile and space pictures</strong>, if you set one. These are currently served from a public address, so anyone who has the link can open the image without signing in.</li>
-        <li data-i18n-html="privacy.collect.social"><strong>Who you are connected to</strong>, your friends, your spaces and who else is in them, and whether you are online or in a call. Delivering a call or a message requires knowing where to send it.</li>
-        <li data-i18n-html="privacy.collect.2"><strong>Connection data</strong>, the technical signaling needed to establish a call between participants (who is joining which meeting, and the network details required to connect you), and the IP address your device connects from.</li>
-        <li data-i18n-html="privacy.collect.3"><strong>Version information</strong>, the app reports its version when talking to our servers so we can serve compatible updates.</li>
+        <li data-i18n-html="privacy.sealed.messages"><strong>Messages.</strong> Stored as ciphertext. There is no copy in the clear, no search over them on the server, and no way for us to produce their contents on request, not for you and not for anybody else.</li>
+        <li data-i18n-html="privacy.sealed.calls"><strong>Calls.</strong> Audio and video are encrypted on top of the transport, so the media server routes packets it cannot open.</li>
+        <li data-i18n-html="privacy.sealed.key"><strong>The key of a call.</strong> It travels in the part of a link a browser never sends to any server, or sealed inside an invitation that only the invited friend can open, or sealed to your own account inside your call history so that another computer of yours can open a call this one took. The service relays and stores what it cannot read.</li>
+        <li data-i18n-html="privacy.sealed.history"><strong>Your call history.</strong> Who you called, how long it lasted, how it ended and the key of the room are sealed to your account before they leave your computer, so that all of your computers show the same list. The service keeps those envelopes in order and cannot open one. What it does see beside each of them is when the call was, which it records anyway. See the next section.</li>
+      </ul>
+      <p data-i18n-html="privacy.sealed.cost">Encryption is only as good as the keys, and the keys live on your computers. We cannot recover them, which is the honest cost of the arrangement and is spelled out under <a href="#keys">if you lose your key</a>.</p>
+
+      <h2 id="knows" data-i18n="privacy.knows.h">What the service does know</h2>
+      <p data-i18n="privacy.knows.p">This is the part that usually goes unsaid. None of it is a leftover to be tidied away later. Some of it is structural, and pretending otherwise would be the dishonest half of a privacy policy.</p>
+      <ul>
+        <li data-i18n-html="privacy.knows.email"><strong>Your email address.</strong> Needed to confirm the account when it is created, to send a reset code, and to let a new computer in when you have no other computer to approve it. Stored in the clear.</li>
+        <li data-i18n-html="privacy.knows.profile"><strong>Your username, display name and picture.</strong> The username is public by design, because it is how people find each other, and search runs over the display name too. The name and the picture are also what the people in a call see beside you.</li>
+        <li data-i18n-html="privacy.knows.graph"><strong>Who you are connected to.</strong> Your friends. Who you talk to is a plain query against the database, even though what you say is not.</li>
+        <li data-i18n-html="privacy.knows.calls"><strong>Who was in which call, and for how long.</strong> Recorded for every room, including rooms joined by link. This is also why your call history is kept here at all, since the timing is already in this database and your own sealed copy of it adds nothing the service did not have.</li>
+        <li data-i18n-html="privacy.knows.volume"><strong>How much you say.</strong> The number of messages, their size, and the minutes of video. Ciphertext still has a length and a timestamp.</li>
+        <li data-i18n-html="privacy.knows.presence"><strong>Who is online.</strong> Presence is live state rather than history, but while you are online the service knows it.</li>
+        <li data-i18n-html="privacy.knows.ip"><strong>Your IP addresses.</strong> In the web server's logs and in the media server's connections.</li>
+        <li data-i18n-html="privacy.knows.version"><strong>Which version you are running.</strong> The app asks the update server whether a newer one exists, and that request carries the version and the platform, which is what answering it needs and all it carries.</li>
+        <li data-i18n-html="privacy.knows.devices"><strong>Which computers you have added,</strong> when they connect and how many of them are signed in. A computer this account has not used before gets a session that opens nothing until the computer you already use approves it, and is then remembered by an eight character name it made up for itself.</li>
+      </ul>
+      <p data-i18n-html="privacy.knows.nothing"><strong>And nothing else off your machine.</strong> Callifornia does not read your address book, your files, or anything outside its own settings and the camera and microphone you switch on yourself.</p>
+      <p data-i18n="privacy.knows.meta">Taken together this is metadata, and metadata is not the residue left over once the important part is protected. Who, with whom, and when is frequently enough on its own. Some of it can be reduced, with shorter log retention, no addresses in logs and no presence history. The social graph cannot be hidden inside a relational database without a different architecture, and we are not going to claim otherwise.</p>
+
+      <h2 id="basis" data-i18n="privacy.basis.h">Why we are allowed to hold it</h2>
+      <p data-i18n="privacy.basis.p">Two grounds, and nothing is held on a third.</p>
+      <ul>
+        <li data-i18n-html="privacy.basis.contract"><strong>Because you asked for the service.</strong> An account, its friends, its rooms and the timing of its calls exist so that the thing you signed up for can work at all. Take any of it away and there is no call to place. Accepting the <a href="terms.html">terms of use</a> before you download is what puts that arrangement on the record.</li>
+        <li data-i18n-html="privacy.basis.consent"><strong>Because you said yes.</strong> Crash reports, and nothing else on this page. They are off until you turn them on, off again the moment you turn them off, and refusing costs you nothing.</li>
+      </ul>
+      <p data-i18n="privacy.basis.note">There is no advertising, no profiling and no scoring of you, so there is no third ground quietly doing the work those usually need.</p>
+
+      <h2 id="retention" data-i18n="privacy.retention.h">How long it stays</h2>
+      <div class="table-scroll">
+        <table class="doc-table">
+          <thead>
+            <tr>
+              <th data-i18n="privacy.retention.th1">What</th>
+              <th data-i18n="privacy.retention.th2">How long</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td data-i18n="privacy.retention.r1a">Account, profile, friends, the computers you added</td>
+              <td data-i18n="privacy.retention.r1b">While the account exists, and gone when it is deleted</td>
+            </tr>
+            <tr>
+              <td data-i18n="privacy.retention.r2a">An account that never confirms its address</td>
+              <td data-i18n="privacy.retention.r2b">A week, and the username it was holding goes with it</td>
+            </tr>
+            <tr>
+              <td data-i18n="privacy.retention.r3a">A call, its chat and its key</td>
+              <td data-i18n="privacy.retention.r3b">A month after the last sign of life in the room, or the moment whoever started it ends the link</td>
+            </tr>
+            <tr>
+              <td data-i18n="privacy.retention.r4a">Your sealed call history</td>
+              <td data-i18n="privacy.retention.r4b">Thirty days per call, and sooner if you clear it or switch it off</td>
+            </tr>
+            <tr>
+              <td data-i18n="privacy.retention.r5a">Web server logs, which carry addresses</td>
+              <td data-i18n="privacy.retention.r5b">Fourteen days, then deleted automatically</td>
+            </tr>
+            <tr>
+              <td data-i18n="privacy.retention.r6a">Counters and graphs about how the service is running</td>
+              <td data-i18n="privacy.retention.r6b">Fifteen days. They count requests and errors rather than people</td>
+            </tr>
+            <tr>
+              <td data-i18n="privacy.retention.r7a">Crash reports you chose to send</td>
+              <td data-i18n="privacy.retention.r7b">Until deleted by hand. There is no automatic sweep for these yet, and asking is how yours goes sooner</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2 id="website" data-i18n="privacy.website.h">What this website does</h2>
+      <p data-i18n="privacy.website.p">Separately from the service, because these pages are a different thing with different visitors, most of whom never sign up for anything.</p>
+      <ul>
+        <li data-i18n-html="privacy.website.cookies"><strong>No cookies and no analytics.</strong> Not a lighter analytics, not a self hosted one, none. Nothing here counts you, follows you between pages or reports your visit anywhere, which is also why you have never been asked to dismiss a banner.</li>
+        <li data-i18n-html="privacy.website.storage"><strong>Three small things in your browser's own storage,</strong> on your machine and sent nowhere. Which language you picked, which platform the download button should offer, and that you accepted the terms and read this page. Clearing your browsing data removes all three.</li>
+        <li data-i18n-html="privacy.website.fonts"><strong>Fonts are served from here,</strong> alongside the pages, rather than fetched from a font service. That is deliberate. A font loaded from somebody else's domain hands them the address of every visitor who reads this page, and a page about privacy is a poor place to do that.</li>
+        <li data-i18n-html="privacy.website.hosting"><strong>The pages come from GitHub Pages</strong> and the installer from Yandex Object Storage, so each of those sees the request that fetched it, in the ordinary way any web server sees the addresses it answers. Neither is asked for anything more.</li>
       </ul>
 
-      <h2 data-i18n="privacy.never.h">What we don't collect</h2>
+      <h2 id="processors" data-i18n="privacy.processors.h">Who else touches this data</h2>
+      <p data-i18n="privacy.processors.p">Two, both acting on instructions rather than for themselves, and neither given the data for any purpose of their own.</p>
       <ul>
-        <li data-i18n-html="privacy.never.1"><strong>Your calls are not recorded.</strong> Audio, video and screen sharing are encrypted on the way to our server and on the way out of it, and nothing is written down.</li>
-        <li data-i18n-html="privacy.never.2"><strong>No advertising or tracking.</strong> The app contains no ad SDKs, no analytics trackers, and no sharing of data with anybody else. We don't sell data, and there is nothing to sell.</li>
-        <li data-i18n-html="privacy.never.3"><strong>No contact scraping.</strong> Callifornia never reads your address book, files, or anything else on your machine beyond its own settings.</li>
+        <li data-i18n-html="privacy.processors.yandex"><strong>Yandex Cloud.</strong> The machines the service runs on, the database, the file storage and the mail that carries confirmation and reset codes.</li>
+        <li data-i18n-html="privacy.processors.github"><strong>GitHub.</strong> This website and the release files, and nothing about your account, which never reaches it.</li>
+      </ul>
+      <p data-i18n="privacy.processors.lawful">There is no advertising network, no analytics vendor and nobody buying anything. Lawful requests are answered with what we hold, which is the list further up and nothing more. Message contents cannot be handed over, because they are not ours to hand over.</p>
+
+      <h2 id="location" data-i18n="privacy.location.h">Where it is kept</h2>
+      <p data-i18n="privacy.location.p">On servers in Russia. Recording, systematising, accumulating, storing, changing and retrieving the personal data of users in Russia all happen in databases located in Russia, which is what the law requires and how it is actually set up rather than a sentence added to satisfy it.</p>
+      <p data-i18n="privacy.location.cross">Nothing is transferred to another country. The website deliberately fetches nothing from a foreign service while you read it, and the one place that used to, a font service, was the reason this paragraph could not previously be written.</p>
+
+      <h2 id="keys" data-i18n="privacy.lost.h">If you lose your key</h2>
+      <p data-i18n="privacy.lost.p">The key that opens your conversations exists only on your own computers. This follows directly from the service not having it.</p>
+      <div class="table-scroll">
+        <table class="doc-table">
+          <thead>
+            <tr>
+              <th data-i18n="privacy.lost.th1">What happened</th>
+              <th data-i18n="privacy.lost.th2">Your account</th>
+              <th data-i18n="privacy.lost.th3">Your conversations</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td data-i18n="privacy.lost.r1a">Forgot your password and reset it by email</td>
+              <td data-i18n="privacy.lost.r1b">comes back</td>
+              <td data-i18n-html="privacy.lost.r1c"><strong>lost</strong></td>
+            </tr>
+            <tr>
+              <td data-i18n="privacy.lost.r2a">Changed a password you still knew</td>
+              <td data-i18n="privacy.lost.r2b">kept</td>
+              <td data-i18n="privacy.lost.r2c">kept, since the key is not tied to the password</td>
+            </tr>
+            <tr>
+              <td data-i18n="privacy.lost.r3a">Reinstalled the app on the same computer</td>
+              <td data-i18n="privacy.lost.r3b">kept</td>
+              <td data-i18n="privacy.lost.r3c">kept, if the system keychain survived</td>
+            </tr>
+            <tr>
+              <td data-i18n="privacy.lost.r4a">A new computer while the old one still works</td>
+              <td data-i18n="privacy.lost.r4b">kept</td>
+              <td data-i18n="privacy.lost.r4c">new calls ring on both, and an old call opens where its link was opened</td>
+            </tr>
+            <tr>
+              <td data-i18n="privacy.lost.r5a">Lost every computer you had</td>
+              <td data-i18n="privacy.lost.r5b">comes back by email</td>
+              <td data-i18n-html="privacy.lost.r5c"><strong>lost for good</strong></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p data-i18n="privacy.lost.told">You are told this when you sign up, in the reset email, and again on the reset screen before you confirm. It is not in the small print because it is not a detail.</p>
+
+      <h2 id="crash" data-i18n="privacy.crash.h">Crash reports</h2>
+      <p data-i18n-html="privacy.crash.p">Sent only if you agree to it, and you are asked once, plainly. What travels is three text files, the version and the error code, the return addresses of the stack that crashed, and the tail of the app's own log. The memory dump the system writes beside them <strong>never leaves your computer</strong>, because a key in use at the moment of a crash lives in memory, and the service is the one party this whole design keeps keys away from. The dump stays on your disk in case you ever decide to send it yourself.</p>
+
+      <h2 id="security" data-i18n="privacy.security.h">Keeping it safe</h2>
+      <p data-i18n="privacy.security.p">What is actually in place, rather than a sentence about taking security seriously.</p>
+      <ul>
+        <li data-i18n="privacy.security.1">Messages, call media and room keys are sealed on your computer, so the most valuable thing here is not ours to lose</li>
+        <li data-i18n="privacy.security.2">Passwords are stored as Argon2id hashes with a secret that lives outside the database, so the database on its own is not enough to attack them</li>
+        <li data-i18n="privacy.security.3">Everything between you and the service travels over TLS. A profile picture is served through an address that asks for a session first, though the storage behind that address still answers anyone who knows an object's exact key, which makes a picture the one item on this list that is not yet closed all the way</li>
+        <li data-i18n="privacy.security.4">A computer this account has not used before opens nothing until an existing one approves it</li>
+        <li data-i18n="privacy.security.5">Sign in and registration are rate limited, so guessing at passwords is slow rather than free</li>
+        <li data-i18n="privacy.security.6">The database is backed up on a schedule, and the backups sit with the same provider under the same account</li>
+      </ul>
+      <p data-i18n="privacy.security.honest">None of this makes a system unbreakable and saying so would be a lie. If something does go wrong in a way that touches your data, you will be told what happened and what it means, on this site and by email where an address is affected.</p>
+
+      <h2 id="rights" data-i18n="privacy.rights.h">What you can ask for</h2>
+      <p data-i18n="privacy.rights.p">All of it by writing to the address below, from the email the account uses so that we can tell it is you. An answer comes within thirty days and usually far sooner.</p>
+      <ul>
+        <li data-i18n-html="privacy.rights.1"><strong>Whether anything about you is held at all,</strong> and if so what, where it came from, what it is for and who else has seen it</li>
+        <li data-i18n-html="privacy.rights.2"><strong>A copy of it,</strong> in a form you can read</li>
+        <li data-i18n-html="privacy.rights.3"><strong>Correction,</strong> if something is wrong or out of date, most of which you can also do yourself in the app</li>
+        <li data-i18n-html="privacy.rights.4"><strong>Deletion,</strong> of the account and what belongs to it. There is no button for this in the app yet, so for now asking is how it is done, and it is done rather than argued with</li>
+        <li data-i18n-html="privacy.rights.5"><strong>Blocking,</strong> if you believe data is incomplete, out of date, obtained unlawfully or not needed for what it was collected for</li>
+        <li data-i18n-html="privacy.rights.6"><strong>Withdrawing consent,</strong> which in practice means crash reports, switchable in the app at any moment without asking anybody</li>
+        <li data-i18n-html="privacy.rights.7"><strong>Complaining,</strong> to Roskomnadzor or to a court, and you never have to write to us first</li>
       </ul>
 
-      <h2 data-i18n="privacy.e2e.h">What "encrypted" does and does not mean here</h2>
-      <p data-i18n-html="privacy.e2e.p">Callifornia is not end-to-end encrypted, and we would rather say so plainly than let the word "encrypted" do work it hasn't earned. Traffic between your app and our servers is encrypted, and so is call media on both legs — but calls pass through our server to be routed, and messages are stored in our database in a form we can read. In practice that means an administrator with access to the servers could read stored messages, and the same is true of anybody who obtained that access without permission. If that matters for what you are about to say, say it somewhere else.</p>
+      <h2 id="changes" data-i18n="privacy.changes.h">Changes to this policy</h2>
+      <p data-i18n-html="privacy.changes.p">The date at the top is how you tell. A change that actually affects what is held or what it is used for is announced on this site and in the <a href="changelog.html">changelog</a> before it takes effect, and the box before the download asks again so that nobody is carried into a new version without noticing.</p>
 
-      <h2 data-i18n="privacy.processors.h">Who else touches this data</h2>
-      <p data-i18n-html="privacy.processors.p">Callifornia runs on Yandex Cloud, which hosts the servers, the database and the file storage. Confirmation and password-reset emails are sent through Yandex Cloud Postbox. We use no other third parties, and no analytics or advertising services of any kind.</p>
-
-      <h2 data-i18n="privacy.crash.h">Crash reports, only if you ask</h2>
-      <p data-i18n-html="privacy.crash.p">If the app crashes, it can save a technical report (a minidump with stack traces, the app version, OS version, and the tail of the app's own log) and send it to us so we can fix the bug. This is <strong>off by default</strong>. Reports are only sent if you explicitly enable crash reporting, and they are used solely for debugging.</p>
-
-      <h2 data-i18n="privacy.updates.h">Updates</h2>
-      <p data-i18n="privacy.updates.p">The app periodically asks our update server whether a new version exists. That request carries the app's version and platform, enough to answer that question and nothing more. Updates themselves are cryptographically signed, and the app verifies the signature before applying anything.</p>
-
-      <h2 data-i18n="privacy.retention.h">Data retention &amp; deletion</h2>
-      <p data-i18n-html="privacy.retention.p">Account data is kept while your account exists. Messages in a space are kept until the space is deleted; a one-off call room and everything said in it are removed after 30 days of not being used. An account that never confirms its email address is deleted after a week, along with the username it was holding. If you want your account and its data deleted, contact us at the address below and we'll remove it.</p>
-
-      <h2 data-i18n="privacy.changes.h">Changes to this policy</h2>
-      <p data-i18n-html="privacy.changes.p">If this policy changes in a way that matters, we'll note it in the <a href="changelog.html">changelog</a> and update the date at the top of this page.</p>
-
-      <h2 data-i18n="privacy.contact.h">Contact</h2>
-      <p data-i18n-html="privacy.contact.p">Questions about privacy or your data go to <a href="mailto:fmtab2014@gmail.com">fmtab2014@gmail.com</a>.</p>
+      <h2 id="contact" data-i18n="privacy.contact.h">Contact</h2>
+      <p data-i18n-html="privacy.contact.p">Everything on this page goes to <a href="mailto:fmtab2014@gmail.com">fmtab2014@gmail.com</a>. If something here turns out to be wrong or out of date, that is a bug and we would like to hear about it.</p>
     </div>
   </main>
 
@@ -105,7 +269,8 @@
       </span>
       <nav class="footer-links" data-i18n-aria-label="aria.footer" aria-label="Footer">
         <a href="changelog.html" data-i18n="footer.changelog">Changelog</a>
-        <a href="privacy.html" data-i18n="footer.privacy">Privacy</a>
+        <a href="privacy.html" data-i18n="footer.privacy" aria-current="page">Privacy</a>
+        <a href="terms.html" data-i18n="footer.terms">Terms</a>
         <a href="mailto:fmtab2014@gmail.com" data-i18n="footer.contact">Contact</a>
       </nav>
     </div>

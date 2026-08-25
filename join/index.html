@@ -16,22 +16,20 @@
   <meta property="og:image" content="https://callifornia.online/assets/logo.png" />
   <meta name="twitter:card" content="summary" />
 
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <!-- IBM Plex from this site, not from a font service. A stylesheet link to
+       fonts.googleapis.com hands a third party the address of everyone who
+       reads a page here, which privacy.html says does not happen. See
+       assets/fonts.css. -->
+  <link rel="preload" href="../assets/fonts/ibm-plex-sans-400-latin.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="stylesheet" href="../assets/fonts.css" />
   <link rel="stylesheet" href="../assets/style.css" />
   <script>
-    // Runs before first paint to avoid a flash of the wrong theme. A choice
-    // made with the header toggle always wins; with none saved we follow the
-    // OS setting (main.js keeps following it while the page is open).
-    (function () {
-      try {
-        var saved = localStorage.getItem("callifornia-theme");
-        var light = saved === "light" || (!saved && window.matchMedia &&
-          window.matchMedia("(prefers-color-scheme: light)").matches);
-        if (light) document.documentElement.setAttribute("data-theme", "light");
-      } catch (e) {}
-    })();
+    // The theme is the operating system's, decided in the stylesheet, so
+    // nothing about it happens here. This one line marks the page as having
+    // JavaScript, which is what the language control waits for: it does
+    // nothing without it, and a control that appears a moment into the first
+    // paint is worse than one that was there all along.
+    document.documentElement.classList.add("js");
   </script>
 </head>
 <body>
@@ -45,11 +43,13 @@
       </a>
       <div class="header-right">
         <div class="header-actions">
-          <button id="theme-toggle" class="theme-toggle" type="button" data-i18n-aria-label="aria.theme" aria-label="Switch theme">
-            <svg class="icon-moon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 14.3A8.5 8.5 0 1 1 9.7 3 7 7 0 0 0 21 14.3z"/></svg>
-            <svg class="icon-sun" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
-          </button>
-          <button data-lang-toggle class="lang-toggle" type="button" aria-label="Switch language">RU</button>
+          <!-- The app's SegmentedToggle, for the one setting a visitor has.
+               Each option is in its own language, which is how somebody who
+               cannot read the current one finds the way out. -->
+          <div class="seg seg--lang" role="group" data-i18n-aria-label="aria.lang" aria-label="Language">
+            <button type="button" data-lang="en" data-i18n-title="lang.en" title="Show the site in English" data-i18n-aria-label="lang.en" aria-label="Show the site in English">EN</button>
+            <button type="button" data-lang="ru" data-i18n-title="lang.ru" title="Show the site in Russian" data-i18n-aria-label="lang.ru" aria-label="Show the site in Russian">RU</button>
+          </div>
         </div>
       </div>
     </div>
@@ -73,9 +73,7 @@
 
         <div class="join-actions">
           <a id="open-btn" class="btn-primary" href="#">
-            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/>
-            </svg>
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
             <span data-i18n="join.valid.btn">Open in Callifornia</span>
           </a>
         </div>
@@ -88,8 +86,9 @@
         </div>
         <h1 data-i18n="join.invalid.title">This link looks broken</h1>
         <p class="hero-sub" data-i18n="join.invalid.sub">
-          It doesn&rsquo;t contain a call ID. Ask whoever sent it for a new
-          link, or open Callifornia and enter the call ID by hand.
+          It doesn&rsquo;t carry a call. Ask whoever sent it for a fresh link,
+          and take the whole of it, because the key that opens the call lives
+          inside the link and cannot be typed in by hand.
         </p>
         <div class="join-actions">
           <a class="btn-primary" href="../index.html" data-i18n="join.invalid.btn">Go to the Callifornia home page</a>
@@ -119,6 +118,7 @@
       <nav class="footer-links" data-i18n-aria-label="aria.footer" aria-label="Footer">
         <a href="../changelog.html" data-i18n="footer.changelog">Changelog</a>
         <a href="../privacy.html" data-i18n="footer.privacy">Privacy</a>
+        <a href="../terms.html" data-i18n="footer.terms">Terms</a>
         <a href="mailto:fmtab2014@gmail.com" data-i18n="footer.contact">Contact</a>
       </nav>
     </div>

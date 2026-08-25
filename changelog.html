@@ -6,22 +6,20 @@
   <title data-i18n="page.changelog.title">Changelog, Callifornia</title>
   <meta name="description" data-i18n-content="page.changelog.desc" content="What's new in Callifornia, release notes for every version." />
   <link rel="icon" href="assets/favicon.ico" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <!-- IBM Plex from this site, not from a font service. A stylesheet link to
+       fonts.googleapis.com hands a third party the address of everyone who
+       reads a page here, which privacy.html says does not happen. See
+       assets/fonts.css. -->
+  <link rel="preload" href="assets/fonts/ibm-plex-sans-400-latin.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="stylesheet" href="assets/fonts.css" />
   <link rel="stylesheet" href="assets/style.css" />
   <script>
-    // Runs before first paint to avoid a flash of the wrong theme. A choice
-    // made with the header toggle always wins; with none saved we follow the
-    // OS setting (main.js keeps following it while the page is open).
-    (function () {
-      try {
-        var saved = localStorage.getItem("callifornia-theme");
-        var light = saved === "light" || (!saved && window.matchMedia &&
-          window.matchMedia("(prefers-color-scheme: light)").matches);
-        if (light) document.documentElement.setAttribute("data-theme", "light");
-      } catch (e) {}
-    })();
+    // The theme is the operating system's, decided in the stylesheet, so
+    // nothing about it happens here. This one line marks the page as having
+    // JavaScript, which is what the language control waits for: it does
+    // nothing without it, and a control that appears a moment into the first
+    // paint is worse than one that was there all along.
+    document.documentElement.classList.add("js");
   </script>
 </head>
 <body>
@@ -41,11 +39,13 @@
           <a href="changelog.html" data-i18n="nav.changelog" aria-current="page">Changelog</a>
         </nav>
         <div class="header-actions">
-          <button id="theme-toggle" class="theme-toggle" type="button" data-i18n-aria-label="aria.theme" aria-label="Switch theme">
-            <svg class="icon-moon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 14.3A8.5 8.5 0 1 1 9.7 3 7 7 0 0 0 21 14.3z"/></svg>
-            <svg class="icon-sun" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
-          </button>
-          <button data-lang-toggle class="lang-toggle" type="button" aria-label="Switch language">RU</button>
+          <!-- The app's SegmentedToggle, for the one setting a visitor has.
+               Each option is in its own language, which is how somebody who
+               cannot read the current one finds the way out. -->
+          <div class="seg seg--lang" role="group" data-i18n-aria-label="aria.lang" aria-label="Language">
+            <button type="button" data-lang="en" data-i18n-title="lang.en" title="Show the site in English" data-i18n-aria-label="lang.en" aria-label="Show the site in English">EN</button>
+            <button type="button" data-lang="ru" data-i18n-title="lang.ru" title="Show the site in Russian" data-i18n-aria-label="lang.ru" aria-label="Show the site in Russian">RU</button>
+          </div>
         </div>
       </div>
     </div>
@@ -55,6 +55,60 @@
     <div class="page container container--narrow">
       <h1 class="page-title" data-i18n="changelog.title">Changelog</h1>
       <p class="page-sub" data-i18n="changelog.sub">The releases worth reading about, newest first. The app applies updates on its own, and this page is here so you can see what changed and when.</p>
+
+      <article class="release">
+        <div class="release-meta">
+          <p class="release-version">v0.2.1</p>
+          <p class="release-date" data-i18n="cl.021.date">23 August 2026</p>
+        </div>
+        <div class="release-body">
+          <h3 data-i18n="cl.021.title">A moment before the door opens</h3>
+          <ul>
+            <li data-i18n="cl.021.li1">A call now sets itself up before anyone can see or hear you. Camera and microphone are yours to decide on a screen with a live level meter, and a link opened outside the app always stops there first.</li>
+            <li data-i18n="cl.021.li2">The safety number check became one card with the number split in two halves, instead of three paragraphs to read before anything could be compared</li>
+            <li data-i18n="cl.021.li3">The key of a room travels with your call history, so a call taken on one computer opens on another</li>
+            <li data-i18n="cl.021.li4">Invites that went missing, and invites that arrived under the wrong name</li>
+            <li data-i18n="cl.021.li5">A brief connection hiccup no longer claims your session expired and puts you back on the home screen</li>
+            <li data-i18n="cl.021.li6">Confirmation codes lost their dash, and the emails carrying them read correctly in a dark mailbox</li>
+          </ul>
+        </div>
+      </article>
+
+      <article class="release">
+        <div class="release-meta">
+          <p class="release-version">v0.2.0</p>
+          <p class="release-date" data-i18n="cl.020.date">21 August 2026</p>
+          <span class="release-tag" data-i18n="cl.020.tag">Mandatory</span>
+        </div>
+        <div class="release-body">
+          <h3 data-i18n="cl.020.title">Sealed on your side, and a computer that has to be let in</h3>
+          <ul>
+            <li data-i18n="cl.020.li1">Messages, call audio and video, and the key to every room are sealed on your computer with keys the service never receives. What it stores is ciphertext it cannot open.</li>
+            <li data-i18n="cl.020.li2">An account needs a confirmed address. You sign up with an email and a password, a code confirms the address, and your username comes from that address.</li>
+            <li data-i18n="cl.020.li3">A computer this account has not used before signs in but opens nothing until a computer you already use reads an eight character code off it. With no other computer left, a code goes to your email instead.</li>
+            <li data-i18n="cl.020.li4">Safety numbers, so you can be sure it is really them, and a notice on somebody's row the moment their key changes</li>
+            <li data-i18n="cl.020.li5">A call history that belongs to the account rather than to one machine, sealed before it leaves, so all of your computers show the same list. It can be switched off or cleared, and calls older than thirty days go on their own.</li>
+            <li data-i18n="cl.020.li6">Spaces and groups are gone. A call is a link, and the people you talk to live in one list.</li>
+          </ul>
+          <p class="release-note" data-i18n="cl.020.note">Older installs update themselves, and conversations from before this release do not come across, because nothing that could carry them survived the move to keys the service does not hold.</p>
+        </div>
+      </article>
+
+      <article class="release">
+        <div class="release-meta">
+          <p class="release-version">v0.1.1</p>
+          <p class="release-date" data-i18n="cl.011.date">11 August 2026</p>
+        </div>
+        <div class="release-body">
+          <h3 data-i18n="cl.011.title">The app is called Callifornia</h3>
+          <ul>
+            <li data-i18n="cl.011.li1">Renamed from Calls, with a home of its own at callifornia.online</li>
+            <li data-i18n="cl.011.li2">Russian throughout, chosen from the system the first time it runs and switchable in settings without a restart</li>
+            <li data-i18n="cl.011.li3">The installer asks which language before it starts</li>
+          </ul>
+          <p class="release-note" data-i18n="cl.011.note">This one arrives as a fresh install rather than an update. A copy of Calls already on the machine keeps working and stays where it is, so take the new installer from the home page.</p>
+        </div>
+      </article>
 
       <article class="release">
         <div class="release-meta">
@@ -196,6 +250,7 @@
       <nav class="footer-links" data-i18n-aria-label="aria.footer" aria-label="Footer">
         <a href="changelog.html" data-i18n="footer.changelog">Changelog</a>
         <a href="privacy.html" data-i18n="footer.privacy">Privacy</a>
+        <a href="terms.html" data-i18n="footer.terms">Terms</a>
         <a href="mailto:fmtab2014@gmail.com" data-i18n="footer.contact">Contact</a>
       </nav>
     </div>

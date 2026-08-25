@@ -3,35 +3,33 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title data-i18n="page.index.title">Callifornia, simple video calls for Windows and Linux</title>
-  <meta name="description" data-i18n-content="page.index.desc" content="A simple, fast desktop app for video calls. Free and lightweight, for Windows and Linux." />
+  <title data-i18n="page.index.title">Callifornia, encrypted video calls for Windows and Linux</title>
+  <meta name="description" data-i18n-content="page.index.desc" content="A simple, fast desktop app for video calls. Free, lightweight and encrypted end to end, for Windows and Linux." />
   <link rel="icon" href="assets/favicon.ico" />
 
   <!-- Link previews. Absolute URLs on purpose: a scraper reads these out of
        context, and a relative path is the one thing several of them get wrong. -->
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://callifornia.online/" />
-  <meta property="og:title" content="Callifornia, simple video calls for Windows and Linux" />
-  <meta property="og:description" content="A simple, fast desktop app for video calls. Free and lightweight, for Windows and Linux." />
+  <meta property="og:title" content="Callifornia, encrypted video calls for Windows and Linux" />
+  <meta property="og:description" content="A simple, fast desktop app for video calls. Free, lightweight and encrypted end to end, for Windows and Linux." />
   <meta property="og:image" content="https://callifornia.online/assets/logo.png" />
   <meta name="twitter:card" content="summary" />
 
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <!-- IBM Plex from this site, not from a font service. A stylesheet link to
+       fonts.googleapis.com hands a third party the address of everyone who
+       reads a page here, which privacy.html says does not happen. See
+       assets/fonts.css. -->
+  <link rel="preload" href="assets/fonts/ibm-plex-sans-400-latin.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="stylesheet" href="assets/fonts.css" />
   <link rel="stylesheet" href="assets/style.css" />
   <script>
-    // Runs before first paint to avoid a flash of the wrong theme. A choice
-    // made with the header toggle always wins; with none saved we follow the
-    // OS setting (main.js keeps following it while the page is open).
-    (function () {
-      try {
-        var saved = localStorage.getItem("callifornia-theme");
-        var light = saved === "light" || (!saved && window.matchMedia &&
-          window.matchMedia("(prefers-color-scheme: light)").matches);
-        if (light) document.documentElement.setAttribute("data-theme", "light");
-      } catch (e) {}
-    })();
+    // The theme is the operating system's, decided in the stylesheet, so
+    // nothing about it happens here. This one line marks the page as having
+    // JavaScript, which is what the language control waits for: it does
+    // nothing without it, and a control that appears a moment into the first
+    // paint is worse than one that was there all along.
+    document.documentElement.classList.add("js");
   </script>
 </head>
 <body>
@@ -54,11 +52,13 @@
           <a href="changelog.html" data-i18n="nav.changelog">Changelog</a>
         </nav>
         <div class="header-actions">
-          <button id="theme-toggle" class="theme-toggle" type="button" data-i18n-aria-label="aria.theme" aria-label="Switch theme">
-            <svg class="icon-moon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 14.3A8.5 8.5 0 1 1 9.7 3 7 7 0 0 0 21 14.3z"/></svg>
-            <svg class="icon-sun" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
-          </button>
-          <button data-lang-toggle class="lang-toggle" type="button" aria-label="Switch language">RU</button>
+          <!-- The app's SegmentedToggle, for the one setting a visitor has.
+               Each option is in its own language, which is how somebody who
+               cannot read the current one finds the way out. -->
+          <div class="seg seg--lang" role="group" data-i18n-aria-label="aria.lang" aria-label="Language">
+            <button type="button" data-lang="en" data-i18n-title="lang.en" title="Show the site in English" data-i18n-aria-label="lang.en" aria-label="Show the site in English">EN</button>
+            <button type="button" data-lang="ru" data-i18n-title="lang.ru" title="Show the site in Russian" data-i18n-aria-label="lang.ru" aria-label="Show the site in Russian">RU</button>
+          </div>
         </div>
       </div>
     </div>
@@ -71,56 +71,23 @@
     <section class="hero">
       <div class="hero-copy">
         <p class="eyebrow" data-i18n="hero.eyebrow">Video calls for your desktop</p>
-        <h1 data-i18n-html="hero.title">Chat, play, work.<br />Zero data leaks.</h1>
-        <p class="hero-sub" data-i18n="hero.sub">A simple, fast desktop app for video calls. Free and lightweight, for Windows and Linux.</p>
+        <h1 data-i18n-html="hero.title">Chat, play, work.<br /><span>Beautiful outside.</span> <span>Bulletproof inside.</span></h1>
+        <p class="hero-sub" data-i18n="hero.sub">A simple, fast desktop app for video calls. Free, lightweight and encrypted end to end, for Windows and Linux.</p>
 
+        <!-- One button, and it downloads nothing. The picker, the version
+             line and the box that has to be ticked all live together at the
+             bottom of the page, so this carries you there rather than growing
+             a second copy of them up here. -->
         <div class="cta-desktop">
-          <div class="download-block">
-            <!-- One control instead of a button and two rows of pills. The
-                 platform JS detected is the button; the rest live behind the
-                 caret, sizes included. A <details> rather than a scripted
-                 popover, so it opens with no JavaScript and every row inside
-                 stays a real link (main.js fills in the hrefs and sizes it
-                 learns from latest.json, and remembers what was picked). -->
-            <div class="split" id="download-split">
-              <a id="download-btn" class="btn-primary" href="https://callifornia-download.storage.yandexcloud.net/stable/CalliforniaSetup.exe" rel="noopener" download>
-                <svg viewBox="0 0 16 16" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                  <path d="M8 1.5v9M4 6.5 8 10.5 12 6.5M2.5 14h11"/>
-                </svg>
-                <span id="download-label">Download for Windows</span>
-              </a>
-              <details class="split-menu" id="download-details">
-                <summary class="split-caret" data-i18n-aria-label="aria.other" aria-label="Other platforms">
-                  <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
-                </summary>
-                <div class="dl-menu">
-                  <a class="menu-row" data-target="windows" href="https://callifornia-download.storage.yandexcloud.net/stable/CalliforniaSetup.exe" rel="noopener" download>
-                    <span class="grow">Windows<span class="sub" data-i18n="menu.win.sub">10 and 11, 64 bit</span></span>
-                    <span class="size" data-size="windows"></span>
-                  </a>
-                  <a class="menu-row" data-target="deb" href="https://github.com/frontmany/CalliforniaApp/releases/latest" rel="noopener">
-                    <span class="grow">Linux, .deb <span class="beta-badge" data-i18n="os.beta">Beta</span><span class="sub" data-i18n="menu.deb.sub">Debian and Ubuntu</span></span>
-                    <span class="size" data-size="deb"></span>
-                  </a>
-                  <a class="menu-row" data-target="rpm" href="https://github.com/frontmany/CalliforniaApp/releases/latest" rel="noopener">
-                    <span class="grow">Linux, .rpm <span class="beta-badge" data-i18n="os.beta">Beta</span><span class="sub" data-i18n="menu.rpm.sub">Fedora and RHEL</span></span>
-                    <span class="size" data-size="rpm"></span>
-                  </a>
-                  <div class="menu-sep"></div>
-                  <span class="menu-row menu-row--off" aria-disabled="true">
-                    <span class="grow">macOS<span class="sub" data-i18n="menu.mac.sub">Packaging, not a rewrite</span></span>
-                    <span class="size" data-i18n="os.soon">Soon</span>
-                  </span>
-                </div>
-              </details>
-            </div>
-            <p id="download-meta" class="download-meta">Latest version ready to download</p>
-          </div>
+          <a id="download-jump" class="btn-primary" href="#get">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v11"/><path d="M7.5 10.5 12 15l4.5-4.5"/><path d="M4.5 20h15"/></svg>
+            <span data-i18n="download.jump">Download Callifornia</span>
+          </a>
         </div>
 
         <div class="cta-mobile">
-          <span class="mobile-badge" data-i18n="mobile.badge">Coming soon for mobile</span>
-          <p class="mobile-text" data-i18n="mobile.text">Callifornia is currently available for Windows and Linux desktop. Open this page on a computer to download it.</p>
+          <span class="mobile-badge" data-i18n="mobile.badge">Made for computers</span>
+          <p class="mobile-text" data-i18n="mobile.text">Callifornia is a desktop app for Windows and Linux. Open this page on a computer to download it.</p>
         </div>
       </div>
 
@@ -142,8 +109,8 @@
 
       <div class="feature" data-reveal>
         <div class="feature-copy">
-          <h3 data-i18n="f1.title">Join with a link, or just the code</h3>
-          <p data-i18n="f1.text">Every call has a link, and a short code inside it. Send either one in any chat, and whoever has the app is in the call seconds later. Nothing expires, and nobody waits outside for a host to let them in.</p>
+          <h3 data-i18n="f1.title">One link, and you are in</h3>
+          <p data-i18n="f1.text">Every call is a link. Send it in any chat, and whoever has the app is in the call seconds later. The key that opens the room rides inside the link, in the part a browser never sends to a server, so the invitation and the permission are one and the same. Nobody waits outside for a host to let them in.</p>
         </div>
         <div class="feature-visual">
           <div class="join-mockup" aria-hidden="true">
@@ -153,12 +120,12 @@
               <span class="join-glyph">
                 <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M10.6 13.4a4.5 4.5 0 0 0 6.7.5l2.6-2.6a4.5 4.5 0 0 0-6.4-6.4L12 6.4"/><path d="M13.4 10.6a4.5 4.5 0 0 0-6.7-.5l-2.6 2.6a4.5 4.5 0 0 0 6.4 6.4L12 17.6"/></svg>
               </span>
-              <span class="join-value">team-standup-42</span>
+              <span class="join-value">callifornia.online/join/?id=k7m2xq9dfa#k=…</span>
               <span class="join-go">
                 <svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
               </span>
             </div>
-            <p class="join-hint" data-i18n="mock.join.hint">Paste the call link, or type just its code.</p>
+            <p class="mock-hint" data-i18n="mock.join.hint">Paste the call link. The key that opens it lives in the link itself.</p>
           </div>
         </div>
       </div>
@@ -166,38 +133,56 @@
       <div class="feature" data-reveal>
         <div class="feature-copy">
           <h3 data-i18n="f2.title">See who is around before you call</h3>
-          <p data-i18n="f2.text">Add somebody once and call them whenever, without hunting through chats for the right link. Their status is live, so you can tell at a glance who is free, who is already in a call, and who is sitting in a shared space waiting for you.</p>
+          <p data-i18n="f2.text">Add somebody once and call them whenever, without hunting through chats for the right link. Their status is live, so you can tell at a glance who is free and who is already in a call. And if somebody's key ever changes, their row says so, right where you were about to click.</p>
         </div>
         <div class="feature-visual">
+          <!-- A friend row as PeopleScreen.qml draws it: one initial on the
+               avatar, the presence dot riding it, and under the name a single
+               line holding the handle, the status and, when there is one, the
+               key notice. -->
           <div class="panel panel--people" aria-hidden="true">
             <div class="person-row">
-              <span class="avatar">AK<span class="dot dot--waiting"></span></span>
+              <span class="avatar">A<span class="dot dot--online"></span></span>
               <div class="person-grow">
                 <p class="person-name">Anna K.</p>
-                <p class="person-meta person-meta--waiting" data-i18n="mock.presence.waiting">Waiting for you</p>
+                <p class="person-meta">
+                  <span class="handle">@anna</span>
+                  <span class="status status--online" data-i18n="mock.presence.online">Online</span>
+                </p>
               </div>
             </div>
             <div class="person-row">
-              <span class="avatar">MR<span class="dot dot--incall"></span></span>
+              <span class="avatar">M<span class="dot dot--incall"></span></span>
               <div class="person-grow">
                 <p class="person-name">Max R.</p>
-                <p class="person-meta person-meta--incall" data-i18n="mock.presence.incall">In a call</p>
+                <p class="person-meta">
+                  <span class="handle">@max</span>
+                  <span class="status status--incall" data-i18n="mock.presence.incall">In a call</span>
+                </p>
               </div>
             </div>
-            <div class="person-row">
-              <span class="avatar">DL<span class="dot dot--online"></span></span>
+            <div class="person-row person-row--offline">
+              <span class="avatar">D<span class="dot dot--offline"></span></span>
               <div class="person-grow">
                 <p class="person-name">Dana L.</p>
-                <p class="person-meta person-meta--online" data-i18n="mock.presence.online">Online</p>
+                <p class="person-meta">
+                  <span class="handle">@dana</span>
+                  <span class="status" data-i18n="mock.presence.offline">Offline</span>
+                </p>
               </div>
             </div>
             <div class="person-row">
-              <span class="avatar">
-                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8.6" r="3.2"/><path d="M6.4 19.4v-1.1a4.2 4.2 0 0 1 4.2-4.2h2.8a4.2 4.2 0 0 1 4.2 4.2v1.1"/><path d="M6.2 6.4a2.7 2.7 0 0 0 0 5.4M3 17.4v-.8a3.4 3.4 0 0 1 2.3-3.2"/><path d="M17.8 6.4a2.7 2.7 0 0 1 0 5.4M21 17.4v-.8a3.4 3.4 0 0 0-2.3-3.2"/></svg>
-              </span>
+              <span class="avatar">I<span class="dot dot--online"></span></span>
               <div class="person-grow">
-                <p class="person-name" data-i18n="mock.people.space">Thursday club</p>
-                <p class="person-meta" data-i18n="mock.people.members">4 people</p>
+                <p class="person-name">Ivan S.</p>
+                <p class="person-meta">
+                  <span class="handle">@ivan</span>
+                  <span class="status status--online" data-i18n="mock.presence.online">Online</span>
+                  <span class="key-chip">
+                    <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/></svg>
+                    <span data-i18n="mock.presence.newkey">New key</span>
+                  </span>
+                </p>
               </div>
             </div>
           </div>
@@ -206,8 +191,34 @@
 
       <div class="feature" data-reveal>
         <div class="feature-copy">
-          <h3 data-i18n="f3.title">Updates, kept simple</h3>
-          <p data-i18n="f3.text">On Windows, new versions arrive in the background and apply with a single restart, so you never reinstall anything. On Linux, the app tells you when one's ready and your package manager takes it from there. Either way, every update is cryptographically signed.</p>
+          <h3 data-i18n="f3.title">Sealed before it leaves your computer</h3>
+          <p data-i18n="f3.text">Messages, call audio and video, and the key to every room are locked on your side with keys the server never receives. What it holds is ciphertext it cannot open, and the privacy page says in plain words what it does still know. To be certain there is nobody in the middle, read the safety numbers to each other once, and the app remembers that you did.</p>
+        </div>
+        <div class="feature-visual">
+          <!-- SafetyNumberDialog.qml's card: one number split in two halves by
+               a rule, thirty digits each in six groups of five. The half you
+               read aloud carries the accent bar and the accent label. -->
+          <div class="safety-card" aria-hidden="true">
+            <p class="eyebrow" data-i18n="mock.safety.eyebrow">Check it is really Anna</p>
+            <div class="safety-panel">
+              <div class="safety-half safety-half--ours">
+                <p class="safety-label" data-i18n="mock.safety.you">You read</p>
+                <p class="safety-digits">40219 87365 10248 66931 05772 34180</p>
+              </div>
+              <div class="safety-half">
+                <p class="safety-label" data-i18n="mock.safety.them">Anna reads</p>
+                <p class="safety-digits">75394 20618 49027 13865 90341 58226</p>
+              </div>
+            </div>
+            <p class="mock-hint" data-i18n="mock.safety.hint">Read your half out loud, they read theirs. If both match, nobody is in the middle.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="feature" data-reveal>
+        <div class="feature-copy">
+          <h3 data-i18n="f4.title">Updates, kept simple</h3>
+          <p data-i18n="f4.text">On Windows, new versions arrive in the background and apply with a single restart, so you never reinstall anything. On Linux, the app tells you when one's ready and your package manager takes it from there. Either way, every update is cryptographically signed.</p>
         </div>
         <div class="feature-visual">
           <div class="panel" aria-hidden="true">
@@ -249,32 +260,32 @@
             <svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-8.5 8.5 8.5 8.5 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 8.5-8.5 8.38 8.38 0 0 1 8.5 8.5z"/></svg>
           </span>
           <h3 data-i18n="also.chat.title">Chat in the call</h3>
-          <p data-i18n="also.chat.text">For a link or a name that nobody wants to spell out loud. It stays with the call, so it is there the next time you open it.</p>
+          <p data-i18n="also.chat.text">For a link or a name that nobody wants to spell out loud. It stays with the call, sealed, and search finds it again the next time you open it.</p>
         </div>
         <div class="tile">
           <span class="tile-glyph">
-            <svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="3.5" width="7.5" height="7.5" rx="1.6"/><rect x="13" y="3.5" width="7.5" height="7.5" rx="1.6"/><rect x="3.5" y="13" width="7.5" height="7.5" rx="1.6"/><rect x="13" y="13" width="7.5" height="7.5" rx="1.6"/></svg>
+            <svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7.2v5.1l3.4 2"/></svg>
           </span>
-          <h3 data-i18n="also.spaces.title">Spaces that stay put</h3>
-          <p data-i18n="also.spaces.text">A room of its own for a team or a group of friends, always at the same place.</p>
+          <h3 data-i18n="also.history.title">Your calls, on every computer</h3>
+          <p data-i18n="also.history.text">Who you called, who called you and how long it lasted. Sealed before it leaves, so all of your computers show one list, and you can switch it off or clear it whenever you like.</p>
         </div>
         <div class="tile">
           <span class="tile-glyph">
             <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M21 3.6L2.6 8.4l9.2 4.4c1.1 3.2 2.6 6.4 4.4 9.2C18.2 16.2 19.9 9.9 21 3.6z"/><path d="M21 3.6c-3.6 3.2-6.8 6.2-9.2 9.2"/></svg>
           </span>
           <h3 data-i18n="also.invites.title">Invites, not links</h3>
-          <p data-i18n="also.invites.text">Ask a friend to join the call you are in. A knock shows up in their app, and one click brings them over.</p>
-        </div>
-        <div class="tile">
-          <span class="tile-glyph">
-            <svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M21 14.3A8.5 8.5 0 1 1 9.7 3 7 7 0 0 0 21 14.3z"/></svg>
-          </span>
-          <h3 data-i18n="also.theme.title">Light and dark</h3>
-          <p data-i18n="also.theme.text">Follows the theme your system is in, or stays on whichever one you prefer.</p>
+          <p data-i18n="also.invites.text">Ask a friend to join the call you are in. Their app knocks, and answering brings them over, camera and microphone set the way they want them.</p>
         </div>
         <div class="tile">
           <span class="tile-glyph">
             <svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></svg>
+          </span>
+          <h3 data-i18n="also.device.title">A computer you let in</h3>
+          <p data-i18n="also.device.text">Signing in somewhere new opens nothing until a computer you already use reads a code off it. If there is no other computer left, a code goes to your email instead.</p>
+        </div>
+        <div class="tile">
+          <span class="tile-glyph">
+            <svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.6-6.5 10-6.5S22 12 22 12s-3.6 6.5-10 6.5S2 12 2 12z"/><circle cx="12" cy="12" r="2.8"/><path d="M3 3l18 18"/></svg>
           </span>
           <h3 data-i18n="also.private.title">Nothing to sell</h3>
           <p data-i18n="also.private.text">No ads, no trackers, no analytics SDK. Calls are never recorded, and crash reports are off until you turn them on.</p>
@@ -296,13 +307,13 @@
         </div>
         <div class="step">
           <div class="step-num">2</div>
-          <h3 data-i18n="how.2.title">Sign in</h3>
-          <p data-i18n="how.2.text">Create an account with a name and a password. That's the whole form, and you are not filling out a profile.</p>
+          <h3 data-i18n="how.2.title">Make an account</h3>
+          <p data-i18n="how.2.text">An address and a password is the whole form. A code lands in your inbox, you type it in, and your username comes from the address itself. You are not filling out a profile.</p>
         </div>
         <div class="step">
           <div class="step-num">3</div>
           <h3 data-i18n="how.3.title">Start talking</h3>
-          <p data-i18n="how.3.text">Start a meeting and share its short ID, or call a friend directly. Screen sharing is one click away.</p>
+          <p data-i18n="how.3.text">Start a call and send its link, or ring a friend straight from your list. Screen sharing is one click away.</p>
         </div>
       </div>
     </section>
@@ -316,7 +327,7 @@
         <details class="faq-item">
           <summary>
             <span data-i18n="faq.free.q">Is Callifornia really free?</span>
-            <svg class="faq-chevron" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+            <svg class="faq-chevron" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
           </summary>
           <div class="faq-answer">
             <p data-i18n="faq.free.a">Yes. There's no subscription, no trial timer, and no features locked behind a paywall. You download it, sign in, and call people.</p>
@@ -325,16 +336,16 @@
         <details class="faq-item">
           <summary>
             <span data-i18n="faq.platforms.q">Which platforms are supported?</span>
-            <svg class="faq-chevron" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+            <svg class="faq-chevron" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
           </summary>
           <div class="faq-answer">
-            <p data-i18n-html="faq.platforms.a">Windows 10 and 11 (64 bit), and Linux (.deb for Debian and Ubuntu, .rpm for Fedora and RHEL). Linux support is new, so it's marked beta while it settles. macOS is planned, and since the app's core is already cross platform it's a matter of packaging rather than a rewrite.</p>
+            <p data-i18n-html="faq.platforms.a">Windows 10 and 11 (64 bit), and Linux (.deb for Debian and Ubuntu, .rpm for Fedora and RHEL). The Linux build is younger than the Windows one, so it keeps a beta badge while it settles. macOS is planned, and since the app's core is already cross platform it's a matter of packaging rather than a rewrite.</p>
           </div>
         </details>
         <details class="faq-item">
           <summary>
             <span data-i18n="faq.smartscreen.q">Windows warned me about an unrecognized app. Why?</span>
-            <svg class="faq-chevron" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+            <svg class="faq-chevron" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
           </summary>
           <div class="faq-answer">
             <p data-i18n-html="faq.smartscreen.a1">That's Microsoft SmartScreen being cautious about new publishers. The installer isn't signed with a paid certificate yet, so Windows shows a generic warning for it. Click "More info", then "Run anyway".</p>
@@ -344,16 +355,34 @@
         <details class="faq-item">
           <summary>
             <span data-i18n="faq.account.q">Do I need an account?</span>
-            <svg class="faq-chevron" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+            <svg class="faq-chevron" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
           </summary>
           <div class="faq-answer">
-            <p data-i18n="faq.account.a">Yes, a lightweight one. An account is what lets friends find you by name and call you directly instead of passing meeting IDs around every time.</p>
+            <p data-i18n="faq.account.a">Yes, a lightweight one. You sign up with an email address and a password, confirm the address with a code, and your username is made from that address. The username is what friends search for, and you can change it, your display name and your photo later. The address is there for password resets and for letting a new computer in, not for a mailing list.</p>
+          </div>
+        </details>
+        <details class="faq-item">
+          <summary>
+            <span data-i18n="faq.second.q">Why does a second computer ask me for a code?</span>
+            <svg class="faq-chevron" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+          </summary>
+          <div class="faq-answer">
+            <p data-i18n="faq.second.a">Because a password on its own cannot tell you apart from somebody who has your password. A computer this account has not used before signs in but opens nothing until one you already use reads an eight character code off it. Typing that code proves somebody is sitting at both machines. When there is no other computer left, a code goes to your email instead, the way a password reset does.</p>
+          </div>
+        </details>
+        <details class="faq-item">
+          <summary>
+            <span data-i18n="faq.lostkey.q">What happens if I lose my computer?</span>
+            <svg class="faq-chevron" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+          </summary>
+          <div class="faq-answer">
+            <p data-i18n-html="faq.lostkey.a">Your account comes back by email. What was said before does not, because it is locked with a key that lived on the computer you no longer have, and the service never had a copy. Resetting a forgotten password has the same effect, while changing a password you still know keeps everything, since the key was never tied to it. The table in the <a href="privacy.html">privacy policy</a> lays out every case.</p>
           </div>
         </details>
         <details class="faq-item">
           <summary>
             <span data-i18n="faq.updates.q">How do updates work?</span>
-            <svg class="faq-chevron" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+            <svg class="faq-chevron" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
           </summary>
           <div class="faq-answer">
             <p data-i18n-html="faq.updates.a">On Windows, the app checks for new versions in the background, downloads only the files that changed, and verifies a cryptographic signature on every update before applying it, so you restart once and you're done. On Linux, updates ship through a signed APT and YUM repository instead, so the app tells you one is available and your package manager installs it (one click from inside the app if it can ask for your password, otherwise a regular <code>apt upgrade</code>/<code>dnf upgrade</code>). See what's changed in the <a href="changelog.html">changelog</a>.</p>
@@ -362,30 +391,74 @@
         <details class="faq-item">
           <summary>
             <span data-i18n="faq.data.q">What data does Callifornia collect?</span>
-            <svg class="faq-chevron" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+            <svg class="faq-chevron" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
           </summary>
           <div class="faq-answer">
-            <p data-i18n-html="faq.data.a">As little as it can get away with, meaning your account details and whatever is needed to connect calls. Calls are never recorded, and crash reports are strictly voluntary and off by default. The full details are in the <a href="privacy.html">privacy policy</a>.</p>
+            <p data-i18n-html="faq.data.a">What you say is not part of it. Messages and call media are sealed on your computer, so the service holds ciphertext it cannot open. What it does hold is your address, your profile, who your friends are, and when and how long you called, which is metadata and worth knowing about. Calls are never recorded, and crash reports are strictly voluntary and off by default. The <a href="privacy.html">privacy policy</a> spells out both halves.</p>
           </div>
         </details>
       </div>
     </section>
 
-    <section class="cta-final container" data-reveal>
+    <section class="cta-final container" id="get" data-reveal>
       <div class="cta-card">
         <div>
           <h2 data-i18n="cta.title">Ready when you are.</h2>
           <p class="section-sub" data-i18n="cta.sub">Download Callifornia and be on your first call in under a minute.</p>
           <div class="cta-desktop">
-            <a id="download-btn-2" class="btn-primary" href="https://callifornia-download.storage.yandexcloud.net/stable/CalliforniaSetup.exe" rel="noopener" download>
-              <svg viewBox="0 0 16 16" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <path d="M8 1.5v9M4 6.5 8 10.5 12 6.5M2.5 14h11"/>
-              </svg>
-              <span id="download-label-2">Download for Windows</span>
-            </a>
+            <div class="download-block">
+              <!-- One control instead of a button and two rows of pills. The
+                   platform JS detected is the button; the rest live behind the
+                   caret, sizes included. A <details> rather than a scripted
+                   popover, so it opens with no JavaScript and every row inside
+                   stays a real link (main.js fills in the hrefs and sizes it
+                   learns from latest.json, and remembers what was picked). -->
+              <div class="split" id="download-split">
+                <a id="download-btn" class="btn-primary" href="https://callifornia-download.storage.yandexcloud.net/stable/CalliforniaSetup.exe" rel="noopener" download>
+                  <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v11"/><path d="M7.5 10.5 12 15l4.5-4.5"/><path d="M4.5 20h15"/></svg>
+                  <span id="download-label">Download for Windows</span>
+                </a>
+                <details class="split-menu" id="download-details">
+                  <summary class="split-caret" data-i18n-aria-label="aria.other" aria-label="Other platforms">
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+                  </summary>
+                  <div class="dl-menu">
+                    <a class="menu-row" data-target="windows" href="https://callifornia-download.storage.yandexcloud.net/stable/CalliforniaSetup.exe" rel="noopener" download>
+                      <span class="grow">Windows<span class="sub" data-i18n="menu.win.sub">10 and 11, 64 bit</span></span>
+                      <span class="size" data-size="windows"></span>
+                    </a>
+                    <a class="menu-row" data-target="deb" href="https://github.com/frontmany/CalliforniaApp/releases/latest" rel="noopener">
+                      <span class="grow">Linux, .deb <span class="beta-badge" data-i18n="os.beta">Beta</span><span class="sub" data-i18n="menu.deb.sub">Debian and Ubuntu</span></span>
+                      <span class="size" data-size="deb"></span>
+                    </a>
+                    <a class="menu-row" data-target="rpm" href="https://github.com/frontmany/CalliforniaApp/releases/latest" rel="noopener">
+                      <span class="grow">Linux, .rpm <span class="beta-badge" data-i18n="os.beta">Beta</span><span class="sub" data-i18n="menu.rpm.sub">Fedora and RHEL</span></span>
+                      <span class="size" data-size="rpm"></span>
+                    </a>
+                    <div class="menu-sep"></div>
+                    <span class="menu-row menu-row--off" aria-disabled="true">
+                      <span class="grow">macOS<span class="sub" data-i18n="menu.mac.sub">Packaging, not a rewrite</span></span>
+                      <span class="size" data-i18n="os.soon">Soon</span>
+                    </span>
+                  </div>
+                </details>
+              </div>
+              <!-- Both lines are captions on the button, so they group under it
+                   rather than standing as two more items in its column. -->
+              <div class="download-note">
+                <p id="download-meta" class="download-meta">Latest version ready to download</p>
+                <!-- Clickwrap. The box is what puts acceptance on the record; it
+                     cannot be what prevents a download, since the installer sits
+                     on public object storage and always did. See the README. -->
+                <div class="consent">
+                  <input class="consent-box" type="checkbox" id="accept" data-accept />
+                  <label for="accept" data-i18n-html="consent.label">I have read and accept the <a href="terms.html">terms of use</a> and the <a href="privacy.html">privacy policy</a>.</label>
+                </div>
+              </div>
+            </div>
           </div>
           <div class="cta-mobile">
-            <span class="mobile-badge" data-i18n="mobile.badge">Coming soon for mobile</span>
+            <span class="mobile-badge" data-i18n="mobile.badge">Made for computers</span>
           </div>
         </div>
         <!-- The calm pose, not the star-eyed one. This card is the last thing
@@ -407,6 +480,7 @@
       <nav class="footer-links" data-i18n-aria-label="aria.footer" aria-label="Footer">
         <a href="changelog.html" data-i18n="footer.changelog">Changelog</a>
         <a href="privacy.html" data-i18n="footer.privacy">Privacy</a>
+        <a href="terms.html" data-i18n="footer.terms">Terms</a>
         <a href="mailto:fmtab2014@gmail.com" data-i18n="footer.contact">Contact</a>
       </nav>
     </div>
