@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title data-i18n="page.thanks.title">Downloading Callifornia</title>
+  <meta name="description" data-i18n-content="page.thanks.desc" content="Your download has started. What to do with the file once it lands." />
+  <link rel="icon" href="assets/favicon.ico" />
+  <!-- A page nobody should arrive at except through a download. Keep it out
+       of search, where it would be the first thing somebody read. -->
+  <meta name="robots" content="noindex" />
+  <!-- IBM Plex from this site, not from a font service. A stylesheet link to
+       fonts.googleapis.com hands a third party the address of everyone who
+       reads a page here, which privacy.html says does not happen. See
+       assets/fonts.css. -->
+  <link rel="preload" href="assets/fonts/ibm-plex-sans-400-latin.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="stylesheet" href="assets/fonts.css" />
+  <link rel="stylesheet" href="assets/style.css" />
+  <script>
+    // The theme is the operating system's, decided in the stylesheet, so
+    // nothing about it happens here. This one line marks the page as having
+    // JavaScript, which is what the language control waits for: it does
+    // nothing without it, and a control that appears a moment into the first
+    // paint is worse than one that was there all along.
+    document.documentElement.classList.add("js");
+  </script>
+</head>
+<body>
+  <div class="backdrop" aria-hidden="true"></div>
+
+  <header class="site-header">
+    <div class="container header-row">
+      <a class="brand" href="index.html">
+        <img src="assets/logo-mark.webp" alt="" class="brand-logo" width="28" height="28" />
+        <span>Callifornia</span>
+      </a>
+      <div class="header-right">
+        <nav class="site-nav" data-i18n-aria-label="aria.site" aria-label="Site">
+          <a href="index.html#features" data-i18n="nav.features">Features</a>
+          <a href="download.html" data-i18n="nav.download">Download</a>
+          <a href="index.html#faq" data-i18n="nav.faq">FAQ</a>
+          <a href="changelog.html" data-i18n="nav.changelog">Changelog</a>
+        </nav>
+        <div class="header-actions">
+          <!-- The app's SegmentedToggle, for the one setting a visitor has.
+               Each option is in its own language, which is how somebody who
+               cannot read the current one finds the way out. -->
+          <div class="seg seg--lang" role="group" data-i18n-aria-label="aria.lang" aria-label="Language">
+            <button type="button" data-lang="en" data-i18n-title="lang.en" title="Show the site in English" data-i18n-aria-label="lang.en" aria-label="Show the site in English">EN</button>
+            <button type="button" data-lang="ru" data-i18n-title="lang.ru" title="Show the site in Russian" data-i18n-aria-label="lang.ru" aria-label="Show the site in Russian">RU</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="thanks-main">
+    <section class="thanks">
+      <!-- Three of the five poses, drawn on load the way HeroArt.qml draws one
+           every time Home opens, so the trio is never the same twice. The
+           markup ships a set so the page is whole without JavaScript, and
+           main.js reshuffles it. The middle one stands forward; the other two
+           are smaller and tucked behind, which is what makes it a group rather
+           than three pieces in a row. -->
+      <div class="thanks-pack" id="thanks-pack" aria-hidden="true">
+        <img src="assets/mascot-sit.webp" alt="" width="512" height="560" fetchpriority="high" />
+        <img src="assets/mascot-cheer.webp" alt="" width="430" height="460" fetchpriority="high" />
+        <img src="assets/mascot-hi.webp" alt="" width="430" height="460" fetchpriority="high" />
+      </div>
+
+      <p class="eyebrow" data-i18n="thanks.eyebrow">On its way</p>
+      <h1 class="thanks-title" data-i18n="thanks.title">Fetching.</h1>
+      <p class="thanks-note" data-i18n="thanks.note">Thank you. Have a good call.</p>
+
+      <a class="thanks-back" href="index.html" data-i18n="thanks.back">Back to the home page</a>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-row">
+      <span class="footer-brand">
+        <img src="assets/logo-mark.webp" alt="" width="20" height="20" />
+        <span>© <span id="year">2026</span> Callifornia</span>
+      </span>
+      <nav class="footer-links" data-i18n-aria-label="aria.footer" aria-label="Footer">
+        <a href="changelog.html" data-i18n="footer.changelog">Changelog</a>
+        <a href="privacy.html" data-i18n="footer.privacy">Privacy</a>
+        <a href="terms.html" data-i18n="footer.terms">Terms</a>
+        <a href="mailto:fmtab2014@gmail.com" data-i18n="footer.contact">Contact</a>
+      </nav>
+    </div>
+  </footer>
+
+  <script src="assets/i18n.js"></script>
+  <script src="assets/main.js"></script>
+</body>
+</html>

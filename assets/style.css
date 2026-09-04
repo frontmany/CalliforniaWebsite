@@ -455,6 +455,8 @@ main { position: relative; z-index: 1; flex: 1; }
    does not end up with a dog and no room for the headline. */
 @media (max-height: 780px) {
   .hero-art { --art-w: clamp(210px, 28%, 380px); }
+  /* The trio scales off --dog's own vw term, so it needs no rule here. */
+  .thanks { --dog: clamp(96px, 22vw, 210px); }
 }
 
 .download-block {
@@ -1200,6 +1202,102 @@ a.menu-row:hover { background: var(--control-hover); }
 
 /* ---------- Bottom call to action ---------- */
 
+/* ---------- The page after the click ----------
+   Built around the three of them. Everything that was explaining something has
+   gone, because the home page and the download page already explain it and
+   this is the moment somebody is waiting rather than reading. What is left is
+   the fact, the retry and the way out.
+
+   `--dog` is the size of the one in front; the two behind take a share of it,
+   so the group scales as one thing and the overlap never drifts. */
+.thanks-main {
+  display: flex;
+  flex: 1;
+  /* Centred when there is room, top aligned when there is not. Plain `center`
+     overflows in both directions once the content is taller than the box, and
+     the half that goes off the top cannot be scrolled back to. */
+  align-items: center;
+  align-items: safe center;
+}
+
+.thanks {
+  --dog: clamp(104px, 30vw, 280px);
+  width: 100%;
+  padding: clamp(32px, 6vh, 64px) var(--pad) clamp(48px, 8vh, 96px);
+  text-align: center;
+}
+
+/* Shoulder to shoulder and slightly in front of each other, on one baseline.
+   The shadow is the site's answer to a piece modelled with a flat base: the
+   app hides that base with the window edge, a page has no such edge, and
+   without it they float. */
+.thanks-pack {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  margin-bottom: clamp(18px, 3vh, 34px);
+  animation: thanks-rise 0.7s cubic-bezier(0.2, 0.9, 0.3, 1) both;
+}
+.thanks-pack img {
+  display: block;
+  width: var(--dog);
+  height: auto;
+  filter: drop-shadow(0 16px 20px var(--art-shadow));
+  transform-origin: bottom center;
+  transition: transform 0.25s cubic-bezier(0.2, 0.9, 0.3, 1);
+}
+/* The two outside stand back: smaller, tucked under the middle one, and behind
+   it in the stack, which is the whole difference between a group and a row. */
+.thanks-pack img:first-child,
+.thanks-pack img:last-child {
+  width: calc(var(--dog) * 0.82);
+  position: relative;
+  z-index: 0;
+}
+.thanks-pack img:first-child { margin-right: calc(var(--dog) * -0.1); }
+.thanks-pack img:last-child { margin-left: calc(var(--dog) * -0.1); }
+.thanks-pack img:nth-child(2) { position: relative; z-index: 1; }
+/* Standing still is what makes them read as standing, so the only motion is
+   the one a cursor asks for, and it lifts from the feet. */
+.thanks-pack img:hover { transform: translateY(-8px) scale(1.04); z-index: 2; }
+
+@keyframes thanks-rise {
+  from { opacity: 0; transform: translateY(24px) scale(0.95); }
+  to { opacity: 1; transform: none; }
+}
+
+.thanks .eyebrow { margin-bottom: 10px; }
+
+.thanks-title {
+  font-size: clamp(36px, 5.4vw, 64px);
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  line-height: 1.04;
+  margin: 0 0 16px;
+}
+
+/* Not the mono line the site keeps for a fact, because this is a sentence.
+   Held to a reading measure so it never runs the width of the page. */
+.thanks-note {
+  max-width: 430px;
+  margin: 0 auto;
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--muted);
+}
+
+/* The only thing on the page to press, so it wears the colour this site gives
+   everything it means you to press, and sits where the retry line used to. */
+.thanks-back {
+  display: inline-block;
+  margin-top: 16px;
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--accent);
+  text-decoration: none;
+}
+.thanks-back:hover { text-decoration: underline; }
+
 /* ---------- Footer ---------- */
 
 .site-footer {
@@ -1437,6 +1535,9 @@ a.menu-row:hover { background: var(--control-hover); }
   .seg::before { transition: background 0.25s ease, border-color 0.25s ease; }
   /* The nudge has nothing to fall back on, so it becomes a still highlight. */
   .accept--nudge { animation: none; }
+  /* The thank you page still arrives, it just stops arriving with a flourish. */
+  .thanks-pack { animation: none; }
+  .thanks-pack img:hover { transform: none; }
 }
 
 /* ---------- Responsive ---------- */

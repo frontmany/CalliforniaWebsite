@@ -232,7 +232,7 @@ up once `CalliforniaApp`'s release pipeline produces one (see
 
 **Every row shows its own file's size or none at all.** In that entry, `size`
 and `sha256` are the `.deb`'s, which is where the site has always read them,
-and the `.rpm` carries `rpmSize` / `rpmSha256` beside them. Until 2026-08-25
+and the `.rpm` carries `rpmSize` / `rpmSha256` beside them. Until 2026-09-04
 nothing measured the `.rpm` at all, so its row simply had no figure; the merge
 step in `release.yml` now weighs both packages, and `ci/linux/local-build`
 writes both into `linux-facts.txt` for a release run by hand.

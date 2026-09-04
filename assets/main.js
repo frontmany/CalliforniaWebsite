@@ -23,6 +23,13 @@
     return i18n ? i18n.t(key, vars) : null;
   }
 
+  var WIN_HREF = "https://callifornia-download.storage.yandexcloud.net/stable/CalliforniaSetup.exe";
+  // Fallback while latest.json hasn't loaded (or failed): always has both
+  // packages attached, unlike the bucket paths which have no versionless alias.
+  var GITHUB_RELEASES_URL = "https://github.com/frontmany/CalliforniaApp/releases/latest";
+  // NOTE: must match the bucket (or CDN domain) the release workflow uploads to.
+  var META_URL = "https://callifornia-download.storage.yandexcloud.net/stable/latest.json";
+
   // --- Scroll reveal --------------------------------------------------------
   var revealed = document.querySelectorAll("[data-reveal]");
   if ("IntersectionObserver" in window && revealed.length) {
@@ -56,6 +63,26 @@
   // the HTML; Linux falls back to the GitHub Releases page (see
   // GITHUB_RELEASES_URL below), since there is no direct package link to
   // fall back to without this fetch.
+  // --- The page after the click ---------------------------------------------
+  // Reached only by a download that has already started. Nothing here needs to
+  // know which file it was: the page thanks you and shows three of the five
+  // poses, drawn on load the way HeroArt.qml draws one every time Home opens,
+  // so the trio is never the same twice.
+  var pack = document.getElementById("thanks-pack");
+  if (pack) {
+    var poses = ["cheer", "hi", "oops", "sit", "wave"];
+    for (var i = poses.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var swap = poses[i];
+      poses[i] = poses[j];
+      poses[j] = swap;
+    }
+    Array.prototype.forEach.call(pack.querySelectorAll("img"), function (img, n) {
+      img.src = "assets/mascot-" + poses[n] + ".webp";
+    });
+    return;
+  }
+
   // --- Accepting the terms before a download --------------------------------
   // A record, not a lock. The installer is a public URL on object storage and
   // anybody who wants it around this box can have it, so the honest thing is
@@ -65,7 +92,7 @@
   //
   // Stored as the version rather than a flag, so raising POLICY_VERSION asks
   // everybody again instead of carrying them silently into a new document.
-  var POLICY_VERSION = "2026-08-25";
+  var POLICY_VERSION = "2026-09-04";
   var ACCEPT_KEY = "callifornia-accepted";
   var panel = document.querySelector("[data-accept-panel]");
   var box = document.querySelector("[data-accept]");
@@ -152,21 +179,27 @@
 
   document.addEventListener("click", function (event) {
     var el = event.target.closest && event.target.closest("[data-href]");
-    if (el && !accepted) {
+    if (!el) return;
+    if (!accepted) {
       event.preventDefault();
       nudge();
+      return;
     }
+    // The releases page is a page, not a file: following it navigates away, and
+    // a thank you screen nobody arrives at is worse than saying nothing. Every
+    // other destination is a type the browser saves, so the click has committed
+    // the download and this page is free to become the next one.
+    // Nothing on the thank you page reads which file it was any more, so the
+    // query that used to carry it is gone with the line that showed it.
+    var url = el.getAttribute("data-href");
+    if (!url || url === GITHUB_RELEASES_URL) return;
+    window.setTimeout(function () {
+      window.location.href = "thanks.html";
+    }, 900);
   });
 
   var meta = document.getElementById("download-meta");
   if (!meta) return;
-
-  var WIN_HREF = "https://callifornia-download.storage.yandexcloud.net/stable/CalliforniaSetup.exe";
-  // Fallback while latest.json hasn't loaded (or failed): always has both
-  // packages attached, unlike the bucket paths which have no versionless alias.
-  var GITHUB_RELEASES_URL = "https://github.com/frontmany/CalliforniaApp/releases/latest";
-  // NOTE: must match the bucket (or CDN domain) the release workflow uploads to.
-  var META_URL = "https://callifornia-download.storage.yandexcloud.net/stable/latest.json";
 
   // One button, on this page. The home page's two calls to action are plain
   // links here and carry no platform in their label, because they hand over no
