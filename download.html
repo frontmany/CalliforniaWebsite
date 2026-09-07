@@ -59,74 +59,16 @@
         <p class="page-sub" data-i18n="dl.sub">One file, and from the first call what you say is unreadable even to the service.</p>
       </div>
 
-      <div class="cta-desktop">
-        <!-- Clickwrap, and a step rather than small print. It is a record and
-             not a lock: the installer is a public URL on object storage and
-             always was. See the README. -->
-        <div class="accept" data-accept-panel>
-          <input class="accept-box" type="checkbox" id="accept" data-accept />
-          <label class="accept-label" for="accept" data-i18n-html="consent.label">I have read and accept the <a href="terms.html">terms of use</a> and the <a href="privacy.html">privacy policy</a>.</label>
-        </div>
+      <!-- Above the button rather than under it, and with no rule or caption
+           around it: it is not a section, it is what the page opens with.
+           Being here also means it is on screen the moment the page is, so the
+           arrow it collects into is seen rather than scrolled past.
 
-        <div class="download-block">
-          <!-- One control instead of a button and two rows of pills. The
-               platform JS detected is the button; the rest live behind the
-               caret, sizes included. A <details> rather than a scripted
-               popover, so it opens with no JavaScript and every row inside
-               stays a real link (main.js fills in the hrefs and sizes it
-               learns from latest.json, and remembers what was picked). -->
-          <div class="split" id="download-split">
-            <a id="download-btn" class="btn-primary" href="https://callifornia-download.storage.yandexcloud.net/stable/CalliforniaSetup.exe" rel="noopener" download>
-              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v11"/><path d="M7.5 10.5 12 15l4.5-4.5"/><path d="M4.5 20h15"/></svg>
-              <span id="download-label">Download for Windows</span>
-            </a>
-            <details class="split-menu" id="download-details">
-              <summary class="split-caret" data-i18n-aria-label="aria.other" aria-label="Other platforms">
-                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
-              </summary>
-              <div class="dl-menu">
-                <a class="menu-row" data-target="windows" href="https://callifornia-download.storage.yandexcloud.net/stable/CalliforniaSetup.exe" rel="noopener" download>
-                  <span class="grow">Windows<span class="sub" data-i18n="menu.win.sub">10 and 11, 64 bit</span></span>
-                  <span class="size" data-size="windows"></span>
-                </a>
-                <a class="menu-row" data-target="deb" href="https://github.com/frontmany/CalliforniaApp/releases/latest" rel="noopener">
-                  <span class="grow">Linux, .deb <span class="beta-badge" data-i18n="os.beta">Beta</span><span class="sub" data-i18n="menu.deb.sub">Debian and Ubuntu</span></span>
-                  <span class="size" data-size="deb"></span>
-                </a>
-                <a class="menu-row" data-target="rpm" href="https://github.com/frontmany/CalliforniaApp/releases/latest" rel="noopener">
-                  <span class="grow">Linux, .rpm <span class="beta-badge" data-i18n="os.beta">Beta</span><span class="sub" data-i18n="menu.rpm.sub">Fedora and RHEL</span></span>
-                  <span class="size" data-size="rpm"></span>
-                </a>
-                <div class="menu-sep"></div>
-                <span class="menu-row menu-row--off" aria-disabled="true">
-                  <span class="grow">macOS<span class="sub" data-i18n="menu.mac.sub">Planned, the core is already cross platform</span></span>
-                  <span class="size" data-i18n="os.soon">Soon</span>
-                </span>
-              </div>
-            </details>
-          </div>
-          <p id="download-meta" class="download-meta">Latest version ready to download</p>
-        </div>
-      </div>
-
-      <div class="cta-mobile">
-        <span class="mobile-badge" data-i18n="mobile.badge">Made for computers</span>
-        <p class="mobile-text" data-i18n="mobile.text">Callifornia is a desktop app for Windows and Linux. Open this page on a computer to download it.</p>
-      </div>
-
-      <!-- The warning that used to sit here moved to the home page, next to
-           the paragraph about signatures, where it belongs.
-
-           What stands here instead is what a download actually is on this
-           service: a file pulled through a network rather than handed over by
-           one machine. Four sources feed three relays and the relays feed the
-           file, and a pulse crosses every edge on a loop. It is a drawing, not
-           a diagram of the real topology, and it claims nothing: no numbers,
-           no labels, no host names.
-
-           SVG so it stays crisp at any size, and pathLength="100" on every
-           edge so a single dash rule drives lines of different lengths at the
-           same speed. -->
+           A drawing, and it claims nothing: no numbers, no labels, no host
+           names. Ten nodes wander, the edges are redrawn between them every
+           frame, and the whole thing falls into an arrow pointing at the
+           button below. main.js drives it, and the stylesheet holds a still
+           version for anyone without it. -->
       <section class="dl-net-wrap" data-reveal>
         <svg class="net" viewBox="0 0 320 212" role="img" aria-hidden="true">
           <g class="net-base">
@@ -188,8 +130,62 @@
             <circle class="net-node" cx="280" cy="155" r="6.5" style="--n:9" />
           </g>
         </svg>
-        <p class="dl-net-note" data-i18n="net.note">One file, at an address that does not change. Every release carries a checksum beside it, so what arrived can be checked against what was published.</p>
       </section>
+
+      <div class="cta-desktop">
+        <!-- Clickwrap, and a step rather than small print. It is a record and
+             not a lock: the installer is a public URL on object storage and
+             always was. See the README. -->
+        <div class="accept" data-accept-panel>
+          <input class="accept-box" type="checkbox" id="accept" data-accept />
+          <label class="accept-label" for="accept" data-i18n-html="consent.label">I have read and accept the <a href="terms.html">terms of use</a> and the <a href="privacy.html">privacy policy</a>.</label>
+        </div>
+
+        <div class="download-block">
+          <!-- One control instead of a button and two rows of pills. The
+               platform JS detected is the button; the rest live behind the
+               caret, sizes included. A <details> rather than a scripted
+               popover, so it opens with no JavaScript and every row inside
+               stays a real link (main.js fills in the hrefs and sizes it
+               learns from latest.json, and remembers what was picked). -->
+          <div class="split" id="download-split">
+            <a id="download-btn" class="btn-primary" href="https://callifornia-download.storage.yandexcloud.net/stable/CalliforniaSetup.exe" rel="noopener" download>
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v11"/><path d="M7.5 10.5 12 15l4.5-4.5"/><path d="M4.5 20h15"/></svg>
+              <span id="download-label">Download for Windows</span>
+            </a>
+            <details class="split-menu" id="download-details">
+              <summary class="split-caret" data-i18n-aria-label="aria.other" aria-label="Other platforms">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+              </summary>
+              <div class="dl-menu">
+                <a class="menu-row" data-target="windows" href="https://callifornia-download.storage.yandexcloud.net/stable/CalliforniaSetup.exe" rel="noopener" download>
+                  <span class="grow">Windows<span class="sub" data-i18n="menu.win.sub">10 and 11, 64 bit</span></span>
+                  <span class="size" data-size="windows"></span>
+                </a>
+                <a class="menu-row" data-target="deb" href="https://github.com/frontmany/CalliforniaApp/releases/latest" rel="noopener">
+                  <span class="grow">Linux, .deb <span class="beta-badge" data-i18n="os.beta">Beta</span><span class="sub" data-i18n="menu.deb.sub">Debian and Ubuntu</span></span>
+                  <span class="size" data-size="deb"></span>
+                </a>
+                <a class="menu-row" data-target="rpm" href="https://github.com/frontmany/CalliforniaApp/releases/latest" rel="noopener">
+                  <span class="grow">Linux, .rpm <span class="beta-badge" data-i18n="os.beta">Beta</span><span class="sub" data-i18n="menu.rpm.sub">Fedora and RHEL</span></span>
+                  <span class="size" data-size="rpm"></span>
+                </a>
+                <div class="menu-sep"></div>
+                <span class="menu-row menu-row--off" aria-disabled="true">
+                  <span class="grow">macOS<span class="sub" data-i18n="menu.mac.sub">Planned, the core is already cross platform</span></span>
+                  <span class="size" data-i18n="os.soon">Soon</span>
+                </span>
+              </div>
+            </details>
+          </div>
+          <p id="download-meta" class="download-meta">Latest version ready to download</p>
+        </div>
+      </div>
+
+      <div class="cta-mobile">
+        <span class="mobile-badge" data-i18n="mobile.badge">Made for computers</span>
+        <p class="mobile-text" data-i18n="mobile.text">Callifornia is a desktop app for Windows and Linux. Open this page on a computer to download it.</p>
+      </div>
 
     </div>
   </main>
