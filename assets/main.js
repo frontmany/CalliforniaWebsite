@@ -64,17 +64,30 @@
   // doing.
   var burger = document.querySelector(".burger");
   if (burger) {
+    function closeIfOutside(event) {
+      if (burger.open && !burger.contains(event.target)) burger.open = false;
+    }
+    // pointerdown, not click alone. A tap on something that is not interactive
+    // does not reliably reach the document as a click in Safari, which is
+    // exactly the case here: everything outside this panel is prose. pointerdown
+    // fires for a finger and for a mouse alike and does not care what it landed
+    // on. click stays as well, for anything old enough to lack pointer events;
+    // closing an already closed panel costs nothing.
+    document.addEventListener("pointerdown", closeIfOutside);
+    document.addEventListener("click", closeIfOutside);
+
+    // A link inside closes it too, because most of them are fragments on the
+    // page you are already on: nothing navigates, and the panel would sit over
+    // the thing it just scrolled to.
+    //
+    // On click rather than on pointerdown, and that is not a preference. Taking
+    // the panel out of the layout while the finger is still down means the
+    // click lands where the link no longer is, and the navigation is lost.
     document.addEventListener("click", function (event) {
-      if (!burger.open) return;
-      // A link inside it closes it too. On this site most of them are fragments
-      // on the page you are already on, so nothing navigates and the panel
-      // would otherwise sit there over the thing it just scrolled to.
-      if (event.target.closest && event.target.closest(".burger-menu a")) {
-        burger.open = false;
-        return;
-      }
-      if (!burger.contains(event.target)) burger.open = false;
+      if (!burger.open || !event.target.closest) return;
+      if (event.target.closest(".burger-menu a")) burger.open = false;
     });
+
     document.addEventListener("keydown", function (event) {
       if (event.key !== "Escape" || !burger.open) return;
       burger.open = false;
