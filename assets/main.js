@@ -113,15 +113,19 @@
     var ARROW = [
       // The shaft, seven of them, 16.5 apart. A gathered node is 16 across, so
       // neighbours meet and stop: half a pixel of daylight, no overlap.
-      { x: 160, y: 56.5 }, { x: 160, y: 73 }, { x: 160, y: 89.5 }, { x: 160, y: 106 },
-      { x: 160, y: 122.5 }, { x: 160, y: 139 }, { x: 160, y: 155.5 },
+      //
+      // Centred on 138 rather than on the middle of the box. The block is left
+      // aligned on the page, and an arrow centred in its own canvas sat right
+      // of the column it points down.
+      { x: 138, y: 56.5 }, { x: 138, y: 73 }, { x: 138, y: 89.5 }, { x: 138, y: 106 },
+      { x: 138, y: 122.5 }, { x: 138, y: 139 }, { x: 138, y: 155.5 },
       // Three to a wing, leaving the point at 32 degrees at the same spacing.
       // The angle is a constraint rather than a look: steeper, and the first
       // wing node comes within a diameter of the shaft node above the point,
       // which is the one place in this shape where two runs pass close to each
       // other. Measured across all 78 pairs, the tightest is 16.03 against 16.
-      { x: 146, y: 146.8 }, { x: 132, y: 138 }, { x: 118, y: 129.3 },
-      { x: 174, y: 146.8 }, { x: 188, y: 138 }, { x: 202, y: 129.3 }
+      { x: 124, y: 146.8 }, { x: 110, y: 138 }, { x: 96, y: 129.3 },
+      { x: 152, y: 146.8 }, { x: 166, y: 138 }, { x: 180, y: 129.3 }
     ];
 
     // Which node goes to which point. Every pair is measured, the shortest are
