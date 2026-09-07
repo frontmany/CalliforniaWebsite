@@ -134,7 +134,13 @@
 
     var CYCLE = 13;          // seconds for wander, gather, hold, let go
     var pos = home.map(function (h) { return { x: h.x, y: h.y }; });
-    var running = true, last = 0, t = 0;
+    var running = true, last = 0;
+
+    // Not zero. The clock only runs while the block is on screen, and from a
+    // standing start the arrow would not form until the sixth second, which is
+    // longer than anyone waits on a download page. It starts 1.2s short of the
+    // gather instead: long enough to read as a network first, then it collects.
+    var t = CYCLE * 0.42 - 1.2;
 
     // Ease in and out of the gather so the pull has weight at both ends.
     function ease(u) { return u < 0.5 ? 4 * u * u * u : 1 - Math.pow(-2 * u + 2, 3) / 2; }
