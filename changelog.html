@@ -38,6 +38,23 @@
           <a href="index.html#faq" data-i18n="nav.faq">FAQ</a>
           <a href="changelog.html" data-i18n="nav.changelog" aria-current="page">Changelog</a>
         </nav>
+
+        <!-- The same links for a phone, where the row above does not fit. A
+             details element rather than a scripted panel, so it opens with no
+             JavaScript. Its own copy of the links, because a closed details
+             hides its content in the user agent stylesheet and one nav cannot
+             be both a row here and a panel there. -->
+        <details class="burger">
+          <summary class="burger-btn" data-i18n-aria-label="aria.menu" aria-label="Menu">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16"/><path d="M4 12h16"/><path d="M4 17h16"/></svg>
+          </summary>
+          <nav class="burger-menu" data-i18n-aria-label="aria.site" aria-label="Site">
+            <a href="index.html#features" data-i18n="nav.features">Features</a>
+            <a href="download.html" data-i18n="nav.download">Download</a>
+            <a href="index.html#faq" data-i18n="nav.faq">FAQ</a>
+            <a href="changelog.html" data-i18n="nav.changelog" aria-current="page">Changelog</a>
+          </nav>
+        </details>
         <div class="header-actions">
           <!-- The app's SegmentedToggle, for the one setting a visitor has.
                Each option is in its own language, which is how somebody who

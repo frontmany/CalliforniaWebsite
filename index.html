@@ -51,6 +51,25 @@
           <a href="#faq" data-i18n="nav.faq">FAQ</a>
           <a href="changelog.html" data-i18n="nav.changelog">Changelog</a>
         </nav>
+
+        <!-- The same four links for a phone, where the row above does not fit.
+             A details element rather than a scripted panel, so it opens with no
+             JavaScript, which is how the download picker and the FAQ on this
+             site already work. It carries its own copy of the links because a
+             closed details hides its content in the user agent stylesheet, and
+             one nav cannot be both a row here and a panel there. -->
+        <details class="burger">
+          <summary class="burger-btn" data-i18n-aria-label="aria.menu" aria-label="Menu">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16"/><path d="M4 12h16"/><path d="M4 17h16"/></svg>
+          </summary>
+          <nav class="burger-menu" data-i18n-aria-label="aria.site" aria-label="Site">
+            <a href="#features" data-i18n="nav.features">Features</a>
+            <a href="download.html" data-i18n="nav.download">Download</a>
+            <a href="#faq" data-i18n="nav.faq">FAQ</a>
+            <a href="changelog.html" data-i18n="nav.changelog">Changelog</a>
+          </nav>
+        </details>
+
         <div class="header-actions">
           <!-- The app's SegmentedToggle, for the one setting a visitor has.
                Each option is in its own language, which is how somebody who
@@ -477,7 +496,7 @@
          drives it, so it cannot arrive late or fail to arrive. -->
     <section id="how" class="section container">
       <div class="section-head--center" data-reveal>
-        <p class="eyebrow" data-i18n="seal.eyebrow">What the service sees</p>
+        <p class="eyebrow" data-i18n="seal.eyebrow">Encryption</p>
         <h2 class="section-title" data-i18n="seal.title">One message, three places</h2>
         <p class="section-sub" data-i18n="seal.sub">It is sealed before it leaves you and opened after it arrives. In between, the thing that carries it is holding what it cannot read.</p>
       </div>
@@ -500,9 +519,6 @@
                  strip is showing, which costs one transform and no script. -->
             <span class="seal-hex" aria-hidden="true">
               <span class="seal-hex-strip">9f2c a71b 4e08 d3f5 6b91 c204 8ae7 1d5b 30f9 7c46 e2a8 5901 bd37 4f6e a0c2 87d1 2b95 6ea3 f418 c7d0 39b6 5a2f 0e84 d91c</span>
-            </span>
-            <span class="seal-lock" aria-hidden="true">
-              <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10.5" width="16" height="10" rx="2"/><path d="M8 10.5V7a4 4 0 0 1 8 0v3.5"/></svg>
             </span>
           </div>
         </figure>

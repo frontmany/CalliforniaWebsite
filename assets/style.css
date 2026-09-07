@@ -929,6 +929,56 @@ a.menu-row:hover { background: var(--control-hover); }
   animation-play-state: running;
 }
 
+/* ---------- Burger ----------
+   Only ever on a phone, where the nav row does not fit. A <details>, so it
+   opens without JavaScript and closes on Escape by itself, which is the same
+   bargain the download picker and the FAQ already take. */
+.burger {
+  display: none;
+  position: relative;
+}
+
+.burger-btn {
+  list-style: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-md);
+  color: var(--muted);
+  transition: background 0.15s ease, color 0.15s ease;
+}
+.burger-btn::-webkit-details-marker { display: none; }
+.burger-btn:hover { background: var(--control-hover); color: var(--text); }
+.burger[open] .burger-btn { background: var(--control-hover); color: var(--text); }
+
+.burger-menu {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  min-width: 190px;
+  padding: 6px;
+  background: var(--elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-panel);
+}
+
+.burger-menu a {
+  padding: 11px 12px;
+  border-radius: var(--radius-sm);
+  color: var(--text);
+  text-decoration: none;
+  font-size: 15px;
+  transition: background 0.15s ease;
+}
+.burger-menu a:hover { background: var(--control-hover); }
+
 /* ---------- Sections ---------- */
 
 .section {
@@ -1370,9 +1420,9 @@ a.menu-row:hover { background: var(--control-hover); }
 .tile {
   background: var(--canvas);
   padding: 28px 26px 30px;
-  transition: background 0.25s ease;
 }
-.tile:hover { background: var(--surface); }
+/* No hover. These are not controls and nothing happens when one is
+   clicked, so lighting under the cursor promised something. */
 
 .tile-glyph {
   display: flex;
@@ -1384,18 +1434,7 @@ a.menu-row:hover { background: var(--control-hover); }
   background: var(--accent-soft);
   color: var(--accent-text);
   margin-bottom: 16px;
-  transition: background 0.3s ease, color 0.3s ease,
-              transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
 }
-/* The glyph fills in on hover, which is the one bit of colour the block gets
-   and the only thing that moves. White on the accent is 4.11:1, above the 3:1
-   a non-text mark needs. */
-.tile:hover .tile-glyph {
-  background: var(--accent);
-  color: #fff;
-  transform: translateY(-3px);
-}
-
 .tile h3 {
   font-size: 15px;
   font-weight: 600;
@@ -1517,19 +1556,16 @@ a.menu-row:hover { background: var(--control-hover); }
   to   { transform: translateX(-60%); }
 }
 
-.seal-lock {
-  flex: none;
-  display: flex;
-  color: var(--accent-text);
-}
-
 /* The wire the packet runs along. The dot is drawn once and moved, so the
    whole thing is two elements rather than a row of dashes. */
 .seal-wire {
   position: relative;
-  align-self: center;
+  /* The row aligns to its bottom, so the cards sit on the baseline and the
+     wire is lifted half a card to meet their middles. 42 is half of the 84
+     the cards below are held to: change one and change the other. */
+  align-self: end;
+  margin-bottom: 42px;
   height: 1px;
-  margin-bottom: 30px;
   background: var(--border);
 }
 
@@ -2318,8 +2354,6 @@ a.menu-row:hover { background: var(--control-hover); }
     transform: none;
     transition: none;
   }
-  /* The glyph still fills in on hover, it just stops rising. */
-  .tile:hover .tile-glyph { transform: none; }
   /* The FAQ panel goes back to opening in one frame. */
   .faq-item::details-content { transition: none; }
   /* The seal holds still. All three cards are readable frozen, and the packet
@@ -2478,6 +2512,14 @@ a.menu-row:hover { background: var(--control-hover); }
   .section { padding: 72px var(--edge); }
   .page { padding: 56px var(--pad) 88px; }
   .site-nav { display: none; }
+  .burger { display: block; }
+
+  /* The closing block's button goes with the hero's. Both hand over an
+     installer for a desktop, and this page already says so once, in the notice
+     under the hero. A second button that cannot do anything is worse than no
+     button. */
+  .closer .btn-primary { display: none; }
+  .closer-sub { margin-bottom: 0; }
   /* One column, so every span has to collapse with it or the cells overflow
      the grid they are given. */
   .tiles { grid-template-columns: 1fr; }
@@ -2488,12 +2530,13 @@ a.menu-row:hover { background: var(--control-hover); }
      tightens rather than push the wordmark off the left of it. */
   .header-right { gap: 14px; }
 
-  /* On a phone the nav and the download button are both gone, which leaves
-     this as the only control on the page. 34x28 is above the 28x28 floor but
-     well under the 44x44 a touch target wants, and missing it switches the
-     language of the whole site. */
+  /* A touch target rather than a desktop one. 34x28 is above the 28x28 floor
+     but well under the 44x44 a finger wants, and missing it switches the
+     language of the whole site.
+
+     One rule, not two: there were two, and the second set the width back to 34
+     and quietly undid the first. */
   .seg--lang > button { width: 44px; height: 40px; }
-  .seg--lang > button { width: 34px; }
   .toc ol { columns: 1; }
   .faq-item summary { font-size: 15px; padding: 18px 12px; margin: 0 -12px; }
 
