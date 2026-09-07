@@ -111,21 +111,23 @@
     // arrived. These sit about seventeen apart against a gathered node roughly
     // sixteen across, which closes the line without overlapping it.
     var ARROW = [
-      // The shaft, seven of them, 16.5 apart. A gathered node is 16 across, so
-      // neighbours meet and stop: half a pixel of daylight, no overlap.
+      // The shaft, seven of them, 19.5 apart. A gathered node is 16 across, so
+      // that is a little under 3 of daylight between one and the next: they
+      // read as a run of separate marks rather than as a drawn line.
       //
       // Centred on 138 rather than on the middle of the box. The block is left
       // aligned on the page, and an arrow centred in its own canvas sat right
       // of the column it points down.
-      { x: 138, y: 56.5 }, { x: 138, y: 73 }, { x: 138, y: 89.5 }, { x: 138, y: 106 },
-      { x: 138, y: 122.5 }, { x: 138, y: 139 }, { x: 138, y: 155.5 },
+      { x: 138, y: 47.5 }, { x: 138, y: 67 }, { x: 138, y: 86.5 }, { x: 138, y: 106 },
+      { x: 138, y: 125.5 }, { x: 138, y: 145 }, { x: 138, y: 164.5 },
       // Three to a wing, leaving the point at 32 degrees at the same spacing.
       // The angle is a constraint rather than a look: steeper, and the first
-      // wing node comes within a diameter of the shaft node above the point,
-      // which is the one place in this shape where two runs pass close to each
-      // other. Measured across all 78 pairs, the tightest is 16.03 against 16.
-      { x: 124, y: 146.8 }, { x: 110, y: 138 }, { x: 96, y: 129.3 },
-      { x: 152, y: 146.8 }, { x: 166, y: 138 }, { x: 180, y: 129.3 }
+      // wing node comes closer to the shaft node above the point than any two
+      // neighbours in a run are, which is the one place in this shape where
+      // two runs pass near each other. Across all 78 pairs the tightest is
+      // 18.89, so the gap never closes anywhere.
+      { x: 121.5, y: 154.2 }, { x: 104.9, y: 143.8 }, { x: 88.4, y: 133.5 },
+      { x: 154.5, y: 154.2 }, { x: 171.1, y: 143.8 }, { x: 187.6, y: 133.5 }
     ];
 
     // Which node goes to which point. Every pair is measured, the shortest are
