@@ -53,6 +53,36 @@
   var year = document.getElementById("year");
   if (year) year.textContent = new Date().getFullYear();
 
+  // --- The burger, on every page --------------------------------------------
+  // A details element opens and closes on its own summary and on nothing else:
+  // it does not close when a click lands outside it, and it does not close on
+  // Escape either, whatever its resemblance to a menu suggests. Three lines
+  // below give it the three ways out a menu is expected to have.
+  //
+  // The page still works without this. The panel opens either way; unhandled,
+  // it just stays open until the summary is pressed again, which is what it was
+  // doing.
+  var burger = document.querySelector(".burger");
+  if (burger) {
+    document.addEventListener("click", function (event) {
+      if (!burger.open) return;
+      // A link inside it closes it too. On this site most of them are fragments
+      // on the page you are already on, so nothing navigates and the panel
+      // would otherwise sit there over the thing it just scrolled to.
+      if (event.target.closest && event.target.closest(".burger-menu a")) {
+        burger.open = false;
+        return;
+      }
+      if (!burger.contains(event.target)) burger.open = false;
+    });
+    document.addEventListener("keydown", function (event) {
+      if (event.key !== "Escape" || !burger.open) return;
+      burger.open = false;
+      var summary = burger.querySelector("summary");
+      if (summary) summary.focus();
+    });
+  }
+
   // --- The network on the download page -------------------------------------
   // Everything else on this site animates in CSS, and says so. This one cannot:
   // the edges have to follow the nodes, and a CSS keyframe moves a path but

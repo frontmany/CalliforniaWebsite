@@ -931,8 +931,12 @@ a.menu-row:hover { background: var(--control-hover); }
 
 /* ---------- Burger ----------
    Only ever on a phone, where the nav row does not fit. A <details>, so it
-   opens without JavaScript and closes on Escape by itself, which is the same
-   bargain the download picker and the FAQ already take. */
+   opens without JavaScript, which is the same bargain the download picker and
+   the FAQ already take.
+
+   Closing it is the part a details does not do: it answers its own summary and
+   nothing else, so a click outside and Escape are wired in main.js. Without
+   that script the panel still opens and still closes on the summary. */
 .burger {
   display: none;
   position: relative;
