@@ -90,12 +90,35 @@
       };
     });
 
-    // Where they collect. It is the middle of the graph itself, not one of the
-    // nodes: no node here is the destination, and none of them is drawn
-    // differently from the rest.
-    var MID = home.reduce(function (a, h) {
-      return { x: a.x + h.x / home.length, y: a.y + h.y / home.length };
-    }, { x: 0, y: 0 });
+    // What they collect into: a shaft of four and two arms of three, which is
+    // an arrow pointing down. Ten points for ten nodes, so every node has
+    // somewhere to be and none of them is left over.
+    var ARROW = [
+      { x: 160, y: 40 }, { x: 160, y: 72 }, { x: 160, y: 104 }, { x: 160, y: 138 },
+      { x: 122, y: 98 }, { x: 135, y: 112 }, { x: 148, y: 126 },
+      { x: 198, y: 98 }, { x: 185, y: 112 }, { x: 172, y: 126 }
+    ];
+
+    // Which node goes to which point. Every pair is measured, the shortest are
+    // taken first, and each side is used once: assigning in node order instead
+    // would send nodes across each other on the way in, and ten paths crossing
+    // is what the gather is supposed to resolve, not create.
+    var target = new Array(home.length);
+    (function assign() {
+      var pairs = [];
+      home.forEach(function (h, i) {
+        ARROW.forEach(function (p, k) {
+          pairs.push({ i: i, k: k, d: (p.x - h.x) * (p.x - h.x) + (p.y - h.y) * (p.y - h.y) });
+        });
+      });
+      pairs.sort(function (a, b) { return a.d - b.d; });
+      var tookNode = {}, tookPoint = {};
+      pairs.forEach(function (p) {
+        if (tookNode[p.i] || tookPoint[p.k]) return;
+        tookNode[p.i] = tookPoint[p.k] = true;
+        target[p.i] = ARROW[p.k];
+      });
+    })();
 
     // One pulse per edge, drawn as a dot rather than a dash: a dash needs a
     // path length, and these paths change length every frame.
@@ -121,12 +144,12 @@
     // The tempo is the point: it drifts, then hurries as it collects, holds
     // still for a beat, and lets go slowly.
     function phase(u) {
-      if (u < 0.46) return { g: 0, speed: 0.55 };                          // wander
-      if (u < 0.66) { var a = ease((u - 0.46) / 0.20);
-                      return { g: a * 0.88, speed: 0.55 + a * 2.2 }; }     // gather
-      if (u < 0.76) return { g: 0.88, speed: 0.35 };                       // hold
-      var b = ease((u - 0.76) / 0.24);
-      return { g: 0.88 * (1 - b), speed: 0.35 + b * 0.4 };                 // let go
+      if (u < 0.42) return { g: 0, speed: 0.55 };                          // wander
+      if (u < 0.60) { var a = ease((u - 0.42) / 0.18);
+                      return { g: a, speed: 0.55 + a * 2.2 }; }            // gather
+      if (u < 0.78) return { g: 1, speed: 0.3 };                           // hold the arrow
+      var b = ease((u - 0.78) / 0.22);
+      return { g: 1 - b, speed: 0.3 + b * 0.45 };                          // let go
     }
 
     function frame(now) {
@@ -140,14 +163,23 @@
 
       for (var i = 0; i < home.length; i++) {
         var h = home[i];
-        // Wander first, then pull whatever that produced toward the middle.
+        // Wander first, then pull whatever that produced onto the place this
+        // node has been given in the arrow.
         var wx = h.x + Math.sin(t * h.fx + h.px) * 13;
         var wy = h.y + Math.sin(t * h.fy + h.py) * 11;
-        pos[i].x = wx + (MID.x - wx) * ph.g;
-        pos[i].y = wy + (MID.y - wy) * ph.g;
+        pos[i].x = wx + (target[i].x - wx) * ph.g;
+        pos[i].y = wy + (target[i].y - wy) * ph.g;
         nodes[i].setAttribute("cx", pos[i].x.toFixed(2));
         nodes[i].setAttribute("cy", pos[i].y.toFixed(2));
+        // Firmer once they are in formation, so the shape reads as something
+        // drawn rather than as ten dots that happen to be near each other.
+        nodes[i].setAttribute("r", (6.5 + ph.g * 1.6).toFixed(2));
       }
+
+      // The web fades as the arrow comes together. Twenty one lines drawn
+      // across a shape stop it being the shape, so by the time it has formed
+      // there is nothing left on the canvas but the arrow.
+      var web = Math.max(0, 1 - ph.g * 1.25);
 
       for (var e = 0; e < edges.length; e++) {
         var a = +edges[e].getAttribute("data-a");
@@ -156,6 +188,7 @@
         var q = pos[b];
         edges[e].setAttribute("d", "M" + p.x.toFixed(2) + " " + p.y.toFixed(2) +
                                    "L" + q.x.toFixed(2) + " " + q.y.toFixed(2));
+        edges[e].setAttribute("opacity", web.toFixed(3));
 
         // The pulse rides the same edge, at the tempo of the moment.
         var pu = pulses[e];
@@ -166,7 +199,7 @@
         pu.el.setAttribute("cx", (p.x + (q.x - p.x) * k).toFixed(2));
         pu.el.setAttribute("cy", (p.y + (q.y - p.y) * k).toFixed(2));
         // Fades in and out rather than appearing at an end and vanishing.
-        pu.el.setAttribute("opacity", Math.sin(k * Math.PI).toFixed(3));
+        pu.el.setAttribute("opacity", (Math.sin(k * Math.PI) * web).toFixed(3));
       }
 
       requestAnimationFrame(frame);
