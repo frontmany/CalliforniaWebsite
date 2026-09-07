@@ -1588,14 +1588,20 @@ a.menu-row:hover { background: var(--control-hover); }
      page's own top padding is the only gap above it; below it the margin is
      the one that separates it from the heading. */
   margin: 0 0 clamp(26px, 3.5vw, 42px);
-  text-align: center;
 }
 
+/* Left, on the same edge as the eyebrow, the heading and the button under it.
+   Centred, it was the one thing on the page not lining up with anything, and
+   the arrow it forms pointed down a column that was not there. */
 .net {
+  display: block;
   width: 100%;
   max-width: 380px;
   height: auto;
   fill: none;
+  /* The drawing carries its own air inside the viewBox, so a flush left edge
+     would put the leftmost node further left than the text beside it. */
+  margin-left: -18px;
 }
 
 /* The structure, always visible under the pulses. Without it the graph would

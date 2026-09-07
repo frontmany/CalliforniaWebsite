@@ -90,13 +90,26 @@
       };
     });
 
-    // What they collect into: a shaft of four and two arms of three, which is
-    // an arrow pointing down. Ten points for ten nodes, so every node has
-    // somewhere to be and none of them is left over.
+    // What they collect into: a shaft of seven and two arms of four, an arrow
+    // pointing down. Fifteen points for fifteen nodes, so every node has
+    // somewhere to be and none is left over.
+    //
+    // Seven in the shaft and not four: the shaft is the longest run in the
+    // shape, and four points across it left holes between them once the nodes
+    // arrived. These sit about seventeen apart against a gathered node roughly
+    // sixteen across, which closes the line without overlapping it.
     var ARROW = [
-      { x: 160, y: 40 }, { x: 160, y: 72 }, { x: 160, y: 104 }, { x: 160, y: 138 },
-      { x: 122, y: 98 }, { x: 135, y: 112 }, { x: 148, y: 126 },
-      { x: 198, y: 98 }, { x: 185, y: 112 }, { x: 172, y: 126 }
+      // The shaft, 16.5 apart. A gathered node is 16 across, so neighbours
+      // meet and stop: half a pixel of daylight, no overlap.
+      { x: 160, y: 36 }, { x: 160, y: 52.5 }, { x: 160, y: 69 }, { x: 160, y: 85.5 },
+      { x: 160, y: 102 }, { x: 160, y: 118.5 }, { x: 160, y: 135 },
+      // The arms leave the point at 32 degrees, at the same spacing. The angle
+      // is not a look, it is the constraint: steeper, and the first arm node
+      // comes within a diameter of the shaft node above the point, which is
+      // the one place in this shape where two runs pass close to each other.
+      // Measured across all 105 pairs, the tightest is 16.03 against 16.
+      { x: 146, y: 126.3 }, { x: 132, y: 117.5 }, { x: 118, y: 108.8 }, { x: 104, y: 100 },
+      { x: 174, y: 126.3 }, { x: 188, y: 117.5 }, { x: 202, y: 108.8 }, { x: 216, y: 100 }
     ];
 
     // Which node goes to which point. Every pair is measured, the shortest are
@@ -118,6 +131,34 @@
         tookNode[p.i] = tookPoint[p.k] = true;
         target[p.i] = ARROW[p.k];
       });
+
+      // Nearest-first is not the shortest set of paths, and it left two nodes
+      // crossing at fifteen. The shortest set has no crossings in it at all,
+      // because two paths that cross can always be swapped for a shorter pair
+      // that does not. So the greedy pass is only a start, and pairs are
+      // swapped until no swap is an improvement. A hundred and five pairs a
+      // pass, settled in a few, once, before the first frame.
+      // Real distance, not the square of it. The swap only removes crossings
+      // under the triangle inequality, and that holds for lengths: for two
+      // paths that cross, the two ways of re-pairing their ends give a shorter
+      // total. Squared, it does not, and a crossing survived every pass.
+      function cost(i, p) {
+        return Math.sqrt((p.x - home[i].x) * (p.x - home[i].x) +
+                         (p.y - home[i].y) * (p.y - home[i].y));
+      }
+      for (var pass = 0; pass < 12; pass++) {
+        var swapped = false;
+        for (var i = 0; i < target.length; i++) {
+          for (var j = i + 1; j < target.length; j++) {
+            if (cost(i, target[j]) + cost(j, target[i]) <
+                cost(i, target[i]) + cost(j, target[j]) - 0.001) {
+              var tmp = target[i]; target[i] = target[j]; target[j] = tmp;
+              swapped = true;
+            }
+          }
+        }
+        if (!swapped) break;
+      }
     })();
 
     // One pulse per edge, drawn as a dot rather than a dash: a dash needs a
@@ -179,7 +220,9 @@
         nodes[i].setAttribute("cy", pos[i].y.toFixed(2));
         // Firmer once they are in formation, so the shape reads as something
         // drawn rather than as ten dots that happen to be near each other.
-        nodes[i].setAttribute("r", (6.5 + ph.g * 1.6).toFixed(2));
+        // 8.0 once gathered, which is the radius the arrow above is spaced
+        // against. Change one and the other stops being right.
+        nodes[i].setAttribute("r", (6.5 + ph.g * 1.5).toFixed(2));
       }
 
       // The web fades as the arrow comes together. Twenty one lines drawn
