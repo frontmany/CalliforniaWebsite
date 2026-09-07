@@ -1705,7 +1705,7 @@ a.menu-row:hover { background: var(--control-hover); }
   16%, 40%      { stroke: var(--accent); fill: var(--accent-soft); }
 }
 
- ---------- The first run warning ----------
+/* ---------- The first run warning ----------
    Lives on the home page now, beside the paragraph about signatures.
 
    One 9s loop: the notice sits closed, "More info" lights and is taken, the
