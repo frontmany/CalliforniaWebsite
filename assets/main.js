@@ -83,10 +83,22 @@
       return {
         x: +c.getAttribute("cx"),
         y: +c.getAttribute("cy"),
-        fx: 0.21 + i * 0.037,
-        fy: 0.29 + i * 0.026,
-        px: i * 1.7,
-        py: i * 2.3
+        // Frequencies with no small common multiple between them, so the
+        // thirteen never come back into step and start looking choreographed.
+        fx: 0.19 + (i % 7) * 0.031 + i * 0.006,
+        fy: 0.26 + (i % 5) * 0.043 + i * 0.005,
+        px: i * 1.73,
+        py: i * 2.39,
+        // Its own reach, too. One amplitude for all of them left the rest
+        // positions showing through as a grid, because every node was drawing
+        // the same shape around its own point.
+        //
+        // The ceilings are a budget, not a taste: two sines reach 1.35 of the
+        // x amplitude and 1.4 of the y, a node is 8 in radius, and the box is
+        // 320 by 212. At 20 and 16 the furthest any node ever gets is 6 short
+        // of the edge. Raise them and nodes clip against it.
+        ax: 14 + (i % 4) * 2,
+        ay: 10 + (i % 3) * 3
       };
     });
 
@@ -212,8 +224,14 @@
         var h = home[i];
         // Wander first, then pull whatever that produced onto the place this
         // node has been given in the arrow.
-        var wx = h.x + Math.sin(t * h.fx + h.px) * 13;
-        var wy = h.y + Math.sin(t * h.fy + h.py) * 11;
+        // Two sines per axis rather than one: a single sine traces an ellipse
+        // and thirteen ellipses read as a pattern. Two of different periods
+        // trace something that does not close, which is what stops the whole
+        // thing looking like it is on rails.
+        var wx = h.x + Math.sin(t * h.fx + h.px) * h.ax
+                     + Math.sin(t * h.fy * 1.7 + h.py) * (h.ax * 0.35);
+        var wy = h.y + Math.sin(t * h.fy + h.py) * h.ay
+                     + Math.sin(t * h.fx * 1.3 + h.px) * (h.ay * 0.4);
         pos[i].x = wx + (target[i].x - wx) * ph.g;
         pos[i].y = wy + (target[i].y - wy) * ph.g;
         nodes[i].setAttribute("cx", pos[i].x.toFixed(2));
