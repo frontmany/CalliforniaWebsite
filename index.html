@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title data-i18n="page.index.title">Callifornia, encrypted video calls for Windows and Linux</title>
-  <meta name="description" data-i18n-content="page.index.desc" content="A simple, fast desktop app for video calls. Free, lightweight and encrypted end to end, for Windows and Linux." />
+  <meta name="description" data-i18n-content="page.index.desc" content="A free desktop app for video calls, for Windows and Linux. Messages and call media are sealed on your computer, and the key never reaches the service." />
   <link rel="icon" href="assets/favicon.ico" />
 
   <!-- Link previews. Absolute URLs on purpose: a scraper reads these out of
@@ -12,7 +12,7 @@
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://callifornia.online/" />
   <meta property="og:title" content="Callifornia, encrypted video calls for Windows and Linux" />
-  <meta property="og:description" content="A simple, fast desktop app for video calls. Free, lightweight and encrypted end to end, for Windows and Linux." />
+  <meta property="og:description" content="A free desktop app for video calls, for Windows and Linux. Messages and call media are sealed on your computer, and the key never reaches the service." />
   <meta property="og:image" content="https://callifornia.online/assets/logo.png" />
   <meta name="twitter:card" content="summary" />
 
@@ -71,8 +71,13 @@
     <section class="hero">
       <div class="hero-copy">
         <p class="eyebrow" data-i18n="hero.eyebrow">Video calls for your desktop</p>
-        <h1 data-i18n-html="hero.title">Chat, play, work.<br /><span>Flawless look.</span> <span>Uncompromising safety.</span></h1>
-        <p class="hero-sub" data-i18n="hero.sub">A simple, fast desktop app for video calls. Free, lightweight and encrypted end to end, for Windows and Linux.</p>
+        <h1 data-i18n-html="hero.title">Chat, play, work.<br /><span>The key stays with you</span></h1>
+        <!-- Not "a simple, fast, lightweight app": that was three adjectives
+             nobody can check, and the free/Windows/Linux half of it now sits
+             in the facts list below as three things they can. What is left for
+             the sub is the one thing the headline asserts but does not
+             explain. -->
+        <p class="hero-sub" data-i18n="hero.sub">Messages, audio and video are sealed on your computer. What the service keeps, it cannot open.</p>
 
         <!-- One button, and it downloads nothing. The picker, the version
              line and the box that has to be ticked live on a page of their
@@ -84,6 +89,18 @@
             <span data-i18n="download.jump">Download Callifornia</span>
           </a>
         </div>
+
+        <!-- The hero used to end at the button, and the composition ran out of
+             content two thirds of the way down its own minimum height. What
+             fills the rest is deliberately not another claim: every item here
+             is a fact the reader can check on this page or in the installer,
+             which is the one thing the old headline's "flawless" and
+             "uncompromising" could not offer. -->
+        <ul class="hero-facts" role="list">
+          <li data-i18n="hero.fact.free">Free, and no ads</li>
+          <li data-i18n="hero.fact.os">Windows 10, 11 and Linux</li>
+          <li data-i18n="hero.fact.install">Installs without administrator rights</li>
+        </ul>
 
         <div class="cta-mobile">
           <span class="mobile-badge" data-i18n="mobile.badge">Made for computers</span>
@@ -100,11 +117,129 @@
     </section>
 
 
+    <!-- A band of sound between the hero and the features. It is the one
+         thing on the page that is purely a breath rather than an argument, and
+         it is honest about the product in the way a picture of a fake call was
+         not: this is an app people talk through.
+
+         Two animations per bar, both on the bar itself. The height runs on a
+         negative stagger, which makes the row read as one wave travelling
+         rather than a hundred bars twitching. The colour runs on a positive
+         one, so a light crosses the band left to right. The glow is
+         box-shadow in currentColor, so it brightens and fades with the colour
+         instead of needing a rule of its own. -->
+    <div class="waveband" aria-hidden="true">
+      <div class="container">
+        <div class="wave" data-reveal>
+          <span style="--i:0"></span>
+          <span style="--i:1"></span>
+          <span style="--i:2"></span>
+          <span style="--i:3"></span>
+          <span style="--i:4"></span>
+          <span style="--i:5"></span>
+          <span style="--i:6"></span>
+          <span style="--i:7"></span>
+          <span style="--i:8"></span>
+          <span style="--i:9"></span>
+          <span style="--i:10"></span>
+          <span style="--i:11"></span>
+          <span style="--i:12"></span>
+          <span style="--i:13"></span>
+          <span style="--i:14"></span>
+          <span style="--i:15"></span>
+          <span style="--i:16"></span>
+          <span style="--i:17"></span>
+          <span style="--i:18"></span>
+          <span style="--i:19"></span>
+          <span style="--i:20"></span>
+          <span style="--i:21"></span>
+          <span style="--i:22"></span>
+          <span style="--i:23"></span>
+          <span style="--i:24"></span>
+          <span style="--i:25"></span>
+          <span style="--i:26"></span>
+          <span style="--i:27"></span>
+          <span style="--i:28"></span>
+          <span style="--i:29"></span>
+          <span style="--i:30"></span>
+          <span style="--i:31"></span>
+          <span style="--i:32"></span>
+          <span style="--i:33"></span>
+          <span style="--i:34"></span>
+          <span style="--i:35"></span>
+          <span style="--i:36"></span>
+          <span style="--i:37"></span>
+          <span style="--i:38"></span>
+          <span style="--i:39"></span>
+          <span style="--i:40"></span>
+          <span style="--i:41"></span>
+          <span style="--i:42"></span>
+          <span style="--i:43"></span>
+          <span style="--i:44"></span>
+          <span style="--i:45"></span>
+          <span style="--i:46"></span>
+          <span style="--i:47"></span>
+          <span style="--i:48"></span>
+          <span style="--i:49"></span>
+          <span style="--i:50"></span>
+          <span style="--i:51"></span>
+          <span style="--i:52"></span>
+          <span style="--i:53"></span>
+          <span style="--i:54"></span>
+          <span style="--i:55"></span>
+          <span style="--i:56"></span>
+          <span style="--i:57"></span>
+          <span style="--i:58"></span>
+          <span style="--i:59"></span>
+          <span style="--i:60"></span>
+          <span style="--i:61"></span>
+          <span style="--i:62"></span>
+          <span style="--i:63"></span>
+          <span style="--i:64"></span>
+          <span style="--i:65"></span>
+          <span style="--i:66"></span>
+          <span style="--i:67"></span>
+          <span style="--i:68"></span>
+          <span style="--i:69"></span>
+          <span style="--i:70"></span>
+          <span style="--i:71"></span>
+          <span style="--i:72"></span>
+          <span style="--i:73"></span>
+          <span style="--i:74"></span>
+          <span style="--i:75"></span>
+          <span style="--i:76"></span>
+          <span style="--i:77"></span>
+          <span style="--i:78"></span>
+          <span style="--i:79"></span>
+          <span style="--i:80"></span>
+          <span style="--i:81"></span>
+          <span style="--i:82"></span>
+          <span style="--i:83"></span>
+          <span style="--i:84"></span>
+          <span style="--i:85"></span>
+          <span style="--i:86"></span>
+          <span style="--i:87"></span>
+          <span style="--i:88"></span>
+          <span style="--i:89"></span>
+          <span style="--i:90"></span>
+          <span style="--i:91"></span>
+          <span style="--i:92"></span>
+          <span style="--i:93"></span>
+          <span style="--i:94"></span>
+          <span style="--i:95"></span>
+          <span style="--i:96"></span>
+          <span style="--i:97"></span>
+          <span style="--i:98"></span>
+          <span style="--i:99"></span>
+        </div>
+      </div>
+    </div>
+
     <section id="features" class="section container">
       <div data-reveal>
         <p class="eyebrow" data-i18n="features.eyebrow">Features</p>
-        <h2 class="section-title" data-i18n="features.title">Everything a call needs. Nothing it doesn't.</h2>
-        <p class="section-sub" data-i18n="features.sub">Callifornia is built as a native desktop app around one idea. Getting people talking should take seconds, not setup.</p>
+        <h2 class="section-title" data-i18n="features.title">Everything a call needs. Nothing it doesn't</h2>
+        <p class="section-sub" data-i18n="features.sub">Callifornia is a native desktop app built around one idea. Getting people talking should take seconds.</p>
       </div>
 
       <div class="feature" data-reveal>
@@ -113,9 +248,17 @@
           <p data-i18n="f1.text">Every call is a link. Send it in any chat, and whoever has the app is in the call seconds later. The key that opens the room rides inside the link, in the part a browser never sends to a server, so the invitation and the permission are one and the same. Nobody waits outside for a host to let them in.</p>
         </div>
         <div class="feature-visual">
-          <div class="join-mockup" aria-hidden="true">
-            <p class="eyebrow" data-i18n="mock.join.eyebrow">Join a call</p>
-            <p class="join-title" data-i18n="mock.join.title">Drop the link in here.</p>
+          <!-- All four visuals share this frame. The bar carries the label the
+               eyebrow used to, so the caption sits on the picture rather than
+               floating above it. -->
+          <div class="mock" aria-hidden="true">
+            <div class="mock-bar">
+              <span class="mock-dots"></span>
+              <p class="mock-label" data-i18n="mock.join.eyebrow">Join a call</p>
+            </div>
+            <div class="mock-body">
+          <div class="join-mockup">
+            <p class="join-title" data-i18n="mock.join.title">Drop the link in here</p>
             <div class="join-field">
               <span class="join-glyph">
                 <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M10.6 13.4a4.5 4.5 0 0 0 6.7.5l2.6-2.6a4.5 4.5 0 0 0-6.4-6.4L12 6.4"/><path d="M13.4 10.6a4.5 4.5 0 0 0-6.7-.5l-2.6 2.6a4.5 4.5 0 0 0 6.4 6.4L12 17.6"/></svg>
@@ -125,7 +268,9 @@
                 <svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
               </span>
             </div>
-            <p class="mock-hint" data-i18n="mock.join.hint">Paste the call link. The key that opens it lives in the link itself.</p>
+            <p class="mock-hint" data-i18n="mock.join.hint">Paste the call link. The key that opens it lives in the link itself</p>
+          </div>
+            </div>
           </div>
         </div>
       </div>
@@ -140,7 +285,13 @@
                avatar, the presence dot riding it, and under the name a single
                line holding the handle, the status and, when there is one, the
                key notice. -->
-          <div class="panel panel--people" aria-hidden="true">
+          <div class="mock" aria-hidden="true">
+            <div class="mock-bar">
+              <span class="mock-dots"></span>
+              <p class="mock-label" data-i18n="mock.people.label">People</p>
+            </div>
+            <div class="mock-body">
+          <div class="panel panel--people">
             <div class="person-row">
               <span class="avatar">A<span class="dot dot--online"></span></span>
               <div class="person-grow">
@@ -186,20 +337,30 @@
               </div>
             </div>
           </div>
+            </div>
+          </div>
         </div>
       </div>
 
       <div class="feature" data-reveal>
         <div class="feature-copy">
           <h3 data-i18n="f3.title">Sealed before it leaves your computer</h3>
-          <p data-i18n="f3.text">Messages, call audio and video, and the key to every room are locked on your side with keys the server never receives. What it holds is ciphertext it cannot open, and the privacy page says in plain words what it does still know. To be certain there is nobody in the middle, read the safety numbers to each other once, and the app remembers that you did.</p>
+          <p data-i18n="f3.text">Messages, call audio and video, and the key to every room are locked on your side with keys the service never receives. What it holds is ciphertext it cannot open, and the privacy page says in plain words what exactly it does still know. To be certain there is nobody in the middle, read the safety numbers to each other once, and the app remembers that you did.</p>
         </div>
         <div class="feature-visual">
           <!-- SafetyNumberDialog.qml's card: one number split in two halves by
                a rule, thirty digits each in six groups of five. The half you
                read aloud carries the accent bar and the accent label. -->
-          <div class="safety-card" aria-hidden="true">
-            <p class="eyebrow" data-i18n="mock.safety.eyebrow">Check it is really Anna</p>
+          <div class="mock" aria-hidden="true">
+            <div class="mock-bar">
+              <span class="mock-dots"></span>
+              <!-- The bar carries the task rather than a screen name. This
+                   card had both, one under the other, which put two lines of
+                   uppercase mono on top of each other. -->
+              <p class="mock-label" data-i18n="mock.safety.eyebrow">Check it is really Anna</p>
+            </div>
+            <div class="mock-body">
+          <div class="safety-card">
             <div class="safety-panel">
               <div class="safety-half safety-half--ours">
                 <p class="safety-label" data-i18n="mock.safety.you">You read</p>
@@ -210,32 +371,43 @@
                 <p class="safety-digits">75394 20618 49027 13865 90341 58226</p>
               </div>
             </div>
-            <p class="mock-hint" data-i18n="mock.safety.hint">Read your half out loud, they read theirs. If both match, nobody is in the middle.</p>
+            <p class="mock-hint" data-i18n="mock.safety.hint">Read your half out loud, they read theirs. If both match, nobody is in the middle</p>
+          </div>
+            </div>
           </div>
         </div>
       </div>
 
       <div class="feature" data-reveal>
         <div class="feature-copy">
-          <h3 data-i18n="f4.title">Updates, kept simple</h3>
-          <p data-i18n="f4.text">On Windows, new versions arrive in the background and apply with a single restart, so you never reinstall anything. On Linux, the app tells you when one's ready and your package manager takes it from there. Either way, every update is cryptographically signed.</p>
+          <h3 data-i18n="f4.title">Every update is signed, and the installer is not yet</h3>
+          <p data-i18n="f4.text">Updates arrive in the background and apply with one restart, and the signature on each is checked before anything is installed. The installer itself is not signed with a paid certificate yet, so on the first run Windows shows a notice about an unrecognised publisher. It says nothing about what is in the file, and two clicks are the whole of it.</p>
         </div>
         <div class="feature-visual">
-          <div class="panel" aria-hidden="true">
-            <div class="panel-row">
-              <span class="panel-icon">
-                <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+          <!-- A diagram in this site's own colours and radii, not a copy of the
+               Windows dialog: it is here to show which two words to click, and
+               an imitation of somebody else's chrome would claim more than
+               that. The whole thing runs on one 9s loop in CSS. -->
+          <div class="ss" aria-hidden="true">
+            <div class="ss-head">
+              <span class="ss-shield">
+                <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/></svg>
               </span>
               <div>
-                <p class="panel-title" data-i18n="mock.update.title">Downloading update</p>
-                <p class="panel-note" data-i18n="mock.update.note">Only the changed files</p>
+                <p class="ss-title" data-i18n="warn.mock.title">Windows protected your PC</p>
+                <p class="ss-sub" data-i18n="warn.mock.sub">Unrecognised publisher</p>
               </div>
             </div>
-            <div class="progress"><div class="progress-fill"></div></div>
-            <p class="panel-foot">
-              <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></svg>
-              <span data-i18n="mock.update.signed">Signature checked before anything is applied</span>
-            </p>
+
+            <p class="ss-more" data-i18n="warn.mock.more">More info</p>
+
+            <div class="ss-reveal">
+              <p class="ss-file"><span data-i18n="warn.mock.app">App</span> <b>CalliforniaSetup.exe</b></p>
+              <div class="ss-actions">
+                <span class="ss-btn ss-btn--run" data-i18n="warn.mock.run">Run anyway</span>
+                <span class="ss-btn" data-i18n="warn.mock.no">Don't run</span>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -244,7 +416,7 @@
     <section class="section container">
       <div data-reveal>
         <p class="eyebrow" data-i18n="also.eyebrow">Also inside</p>
-        <h2 class="section-title" data-i18n="also.title">Small things that add up.</h2>
+        <h2 class="section-title" data-i18n="also.title">Small things that add up</h2>
       </div>
 
       <div class="tiles" data-reveal>
@@ -293,29 +465,59 @@
       </div>
     </section>
 
+    <!-- This slot used to hold "on a call in three steps": download, sign up,
+         call, which is the install path of every application ever written and
+         said nothing this page had not already said twice. What stands here
+         instead is the one claim the page leans on hardest and had never
+         actually shown: the same message, in the three places it exists, with
+         the middle one being what the service holds.
+
+         The motion is the point rather than decoration. It runs on a loop
+         rather than once on reveal, and every part of it is CSS: no script
+         drives it, so it cannot arrive late or fail to arrive. -->
     <section id="how" class="section container">
       <div class="section-head--center" data-reveal>
-        <p class="eyebrow" data-i18n="how.eyebrow">How it works</p>
-        <h2 class="section-title" data-i18n="how.title">On a call in three steps</h2>
-        <p class="section-sub" data-i18n="how.sub">No admin rights, no account maze, no browser plugins.</p>
+        <p class="eyebrow" data-i18n="seal.eyebrow">What the service sees</p>
+        <h2 class="section-title" data-i18n="seal.title">One message, three places</h2>
+        <p class="section-sub" data-i18n="seal.sub">It is sealed before it leaves you and opened after it arrives. In between, the thing that carries it is holding what it cannot read.</p>
       </div>
-      <div class="steps" data-reveal>
-        <div class="step">
-          <div class="step-num">1</div>
-          <h3 data-i18n="how.1.title">Download &amp; run</h3>
-          <p data-i18n="how.1.text">Grab the installer and run it. It installs for you alone, needs no administrator rights, and finishes in seconds.</p>
-        </div>
-        <div class="step">
-          <div class="step-num">2</div>
-          <h3 data-i18n="how.2.title">Make an account</h3>
-          <p data-i18n="how.2.text">An address and a password is the whole form. A code lands in your inbox, you type it in, and your username comes from the address itself. You are not filling out a profile.</p>
-        </div>
-        <div class="step">
-          <div class="step-num">3</div>
-          <h3 data-i18n="how.3.title">Start talking</h3>
-          <p data-i18n="how.3.text">Start a call and send its link, or ring a friend straight from your list. Screen sharing is one click away.</p>
-        </div>
+
+      <div class="seal" data-reveal>
+        <figure class="seal-node">
+          <figcaption class="seal-cap" data-i18n="seal.you">On your computer</figcaption>
+          <div class="seal-card">
+            <p class="seal-msg" data-i18n="seal.msg">See you at seven</p>
+          </div>
+        </figure>
+
+        <div class="seal-wire" aria-hidden="true"><span class="seal-packet"></span></div>
+
+        <figure class="seal-node seal-node--mid">
+          <figcaption class="seal-cap" data-i18n="seal.mid">On the service</figcaption>
+          <div class="seal-card seal-card--cipher">
+            <!-- A strip of hex wider than its window, slid left in steps. The
+                 characters appear to change because a different slice of the
+                 strip is showing, which costs one transform and no script. -->
+            <span class="seal-hex" aria-hidden="true">
+              <span class="seal-hex-strip">9f2c a71b 4e08 d3f5 6b91 c204 8ae7 1d5b 30f9 7c46 e2a8 5901 bd37 4f6e a0c2 87d1 2b95 6ea3 f418 c7d0 39b6 5a2f 0e84 d91c</span>
+            </span>
+            <span class="seal-lock" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10.5" width="16" height="10" rx="2"/><path d="M8 10.5V7a4 4 0 0 1 8 0v3.5"/></svg>
+            </span>
+          </div>
+        </figure>
+
+        <div class="seal-wire" aria-hidden="true"><span class="seal-packet seal-packet--late"></span></div>
+
+        <figure class="seal-node">
+          <figcaption class="seal-cap" data-i18n="seal.them">On theirs</figcaption>
+          <div class="seal-card seal-card--in">
+            <p class="seal-msg" data-i18n="seal.msg">See you at seven</p>
+          </div>
+        </figure>
       </div>
+
+      <p class="seal-note" data-i18n="seal.note">The key that opens it is made on your computers and stays there. The service relays and stores the middle column, and that is all it ever has.</p>
     </section>
 
     <section id="faq" class="section container">
@@ -367,7 +569,7 @@
             <svg class="faq-chevron" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
           </summary>
           <div class="faq-answer">
-            <p data-i18n="faq.second.a">Because a password on its own cannot tell you apart from somebody who has your password. A computer this account has not used before signs in but opens nothing until one you already use reads an eight character code off it. Typing that code proves somebody is sitting at both machines. When there is no other computer left, a code goes to your email instead, the way a password reset does.</p>
+            <p data-i18n="faq.second.a">Because a password on its own cannot tell you apart from somebody who has your password. A computer this account has not used before signs in but opens nothing until one you already use reads an eight character code off it. Typing that code proves somebody is sitting at both computers. When there is no other computer left, a code goes to your email instead, the way a password reset does.</p>
           </div>
         </details>
         <details class="faq-item">
@@ -397,6 +599,26 @@
             <p data-i18n-html="faq.data.a">What you say is not part of it. Messages and call media are sealed on your computer, so the service holds ciphertext it cannot open. What it does hold is your address, your profile, who your friends are, and when and how long you called, which is metadata and worth knowing about. Calls are never recorded, and crash reports are strictly voluntary and off by default. The <a href="privacy.html">privacy policy</a> spells out both halves.</p>
           </div>
         </details>
+      </div>
+    </section>
+
+    <!-- The page used to end on the last FAQ answer, with its only download
+         button three screens above. Somebody convinced by the way down had to
+         scroll back up to act on it. -->
+    <section class="section container">
+      <div class="closer" data-reveal>
+        <div class="closer-copy">
+          <p class="eyebrow" data-i18n="closer.eyebrow">Try it</p>
+          <h2 class="section-title" data-i18n="closer.title">Call somebody today</h2>
+          <p class="closer-sub" data-i18n="closer.sub">The download takes a minute, and the account asks for an address and a password. After that you can call people.</p>
+          <a class="btn-primary" href="download.html">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v11"/><path d="M7.5 10.5 12 15l4.5-4.5"/><path d="M4.5 20h15"/></svg>
+            <span data-i18n="download.jump">Download Callifornia</span>
+          </a>
+        </div>
+        <div class="closer-art" aria-hidden="true">
+          <img src="assets/mascot-cheer.webp" alt="" width="520" height="560" loading="lazy" />
+        </div>
       </div>
     </section>
 

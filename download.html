@@ -99,7 +99,7 @@
                 </a>
                 <div class="menu-sep"></div>
                 <span class="menu-row menu-row--off" aria-disabled="true">
-                  <span class="grow">macOS<span class="sub" data-i18n="menu.mac.sub">Packaging, not a rewrite</span></span>
+                  <span class="grow">macOS<span class="sub" data-i18n="menu.mac.sub">Planned, the core is already cross platform</span></span>
                   <span class="size" data-i18n="os.soon">Soon</span>
                 </span>
               </div>
@@ -113,6 +113,72 @@
         <span class="mobile-badge" data-i18n="mobile.badge">Made for computers</span>
         <p class="mobile-text" data-i18n="mobile.text">Callifornia is a desktop app for Windows and Linux. Open this page on a computer to download it.</p>
       </div>
+
+      <!-- The warning that used to sit here moved to the home page, next to
+           the paragraph about signatures, where it belongs.
+
+           What stands here instead is what a download actually is on this
+           service: a file pulled through a network rather than handed over by
+           one machine. Four sources feed three relays and the relays feed the
+           file, and a pulse crosses every edge on a loop. It is a drawing, not
+           a diagram of the real topology, and it claims nothing: no numbers,
+           no labels, no host names.
+
+           SVG so it stays crisp at any size, and pathLength="100" on every
+           edge so a single dash rule drives lines of different lengths at the
+           same speed. -->
+      <section class="dl-net-wrap" data-reveal>
+        <svg class="net" viewBox="0 0 320 212" role="img" aria-hidden="true">
+          <g class="net-base">
+            <path d="M34 34 L158 58" />
+            <path d="M34 34 L158 106" />
+            <path d="M34 34 L158 154" />
+            <path d="M34 82 L158 58" />
+            <path d="M34 82 L158 106" />
+            <path d="M34 82 L158 154" />
+            <path d="M34 130 L158 58" />
+            <path d="M34 130 L158 106" />
+            <path d="M34 130 L158 154" />
+            <path d="M34 178 L158 58" />
+            <path d="M34 178 L158 106" />
+            <path d="M34 178 L158 154" />
+            <path d="M158 58 L286 106" />
+            <path d="M158 106 L286 106" />
+            <path d="M158 154 L286 106" />
+          </g>
+          <g class="net-flow">
+            <path d="M34 34 L158 58" pathLength="100" style="--e:0" />
+            <path d="M34 34 L158 106" pathLength="100" style="--e:1" />
+            <path d="M34 34 L158 154" pathLength="100" style="--e:2" />
+            <path d="M34 82 L158 58" pathLength="100" style="--e:3" />
+            <path d="M34 82 L158 106" pathLength="100" style="--e:4" />
+            <path d="M34 82 L158 154" pathLength="100" style="--e:5" />
+            <path d="M34 130 L158 58" pathLength="100" style="--e:6" />
+            <path d="M34 130 L158 106" pathLength="100" style="--e:7" />
+            <path d="M34 130 L158 154" pathLength="100" style="--e:8" />
+            <path d="M34 178 L158 58" pathLength="100" style="--e:9" />
+            <path d="M34 178 L158 106" pathLength="100" style="--e:10" />
+            <path d="M34 178 L158 154" pathLength="100" style="--e:11" />
+            <path d="M158 58 L286 106" pathLength="100" style="--e:12" />
+            <path d="M158 106 L286 106" pathLength="100" style="--e:13" />
+            <path d="M158 154 L286 106" pathLength="100" style="--e:14" />
+          </g>
+          <g class="net-nodes">
+            <circle class="net-node" cx="34" cy="34" r="7" style="--n:0" />
+            <circle class="net-node" cx="34" cy="82" r="7" style="--n:1" />
+            <circle class="net-node" cx="34" cy="130" r="7" style="--n:2" />
+            <circle class="net-node" cx="34" cy="178" r="7" style="--n:3" />
+            <circle class="net-node" cx="158" cy="58" r="7" style="--n:4" />
+            <circle class="net-node" cx="158" cy="106" r="7" style="--n:5" />
+            <circle class="net-node" cx="158" cy="154" r="7" style="--n:6" />
+          </g>
+          <g class="net-out">
+            <circle class="net-out-ring" cx="286" cy="106" r="20" />
+            <circle class="net-out-core" cx="286" cy="106" r="15" />
+          </g>
+        </svg>
+        <p class="dl-net-note" data-i18n="net.note">Nothing on the way holds the key. What travels is a file, and what it becomes on your computer is the only place it is readable.</p>
+      </section>
 
     </div>
   </main>
