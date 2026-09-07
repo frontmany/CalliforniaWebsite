@@ -1584,9 +1584,10 @@ a.menu-row:hover { background: var(--control-hover); }
    and turns it into a delay, so fifteen paths need one keyframe rule. */
 .dl-net-wrap {
   --net-cycle: 3.2s;
-  /* No rule above it and no caption under it. It sits between the title and
-     the button as a piece of the page rather than a section of its own. */
-  margin: clamp(20px, 3vw, 34px) 0 clamp(24px, 3.5vw, 40px);
+  /* First on the page, above its own title, with no rule and no caption. The
+     page's own top padding is the only gap above it; below it the margin is
+     the one that separates it from the heading. */
+  margin: 0 0 clamp(26px, 3.5vw, 42px);
   text-align: center;
 }
 

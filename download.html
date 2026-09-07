@@ -53,22 +53,15 @@
 
   <main>
     <div class="page container container--narrow">
-      <div class="dl-head">
-        <p class="eyebrow" data-i18n="dl.eyebrow">Download</p>
-        <h1 class="page-title" data-i18n="dl.title">Install Callifornia</h1>
-        <p class="page-sub" data-i18n="dl.sub">One file, and from the first call what you say is unreadable even to the service.</p>
-      </div>
-
-      <!-- Above the button rather than under it, and with no rule or caption
-           around it: it is not a section, it is what the page opens with.
-           Being here also means it is on screen the moment the page is, so the
-           arrow it collects into is seen rather than scrolled past.
+      <!-- The first thing on the page, above its own title. It is on screen
+           the instant the page is, so the arrow it collects into is seen
+           rather than scrolled past, and what it points down at is
+           everything else on the page.
 
            A drawing, and it claims nothing: no numbers, no labels, no host
            names. Ten nodes wander, the edges are redrawn between them every
-           frame, and the whole thing falls into an arrow pointing at the
-           button below. main.js drives it, and the stylesheet holds a still
-           version for anyone without it. -->
+           frame, and the whole thing falls into an arrow. main.js drives it,
+           and the stylesheet holds a still version for anyone without it. -->
       <section class="dl-net-wrap" data-reveal>
         <svg class="net" viewBox="0 0 320 212" role="img" aria-hidden="true">
           <g class="net-base">
@@ -131,6 +124,12 @@
           </g>
         </svg>
       </section>
+
+      <div class="dl-head">
+        <p class="eyebrow" data-i18n="dl.eyebrow">Download</p>
+        <h1 class="page-title" data-i18n="dl.title">Install Callifornia</h1>
+        <p class="page-sub" data-i18n="dl.sub">One file, and from the first call what you say is unreadable even to the service.</p>
+      </div>
 
       <div class="cta-desktop">
         <!-- Clickwrap, and a step rather than small print. It is a record and
