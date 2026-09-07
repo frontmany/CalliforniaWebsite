@@ -99,17 +99,21 @@
     // arrived. These sit about seventeen apart against a gathered node roughly
     // sixteen across, which closes the line without overlapping it.
     var ARROW = [
-      // The shaft, 16.5 apart. A gathered node is 16 across, so neighbours
-      // meet and stop: half a pixel of daylight, no overlap.
-      { x: 160, y: 36 }, { x: 160, y: 52.5 }, { x: 160, y: 69 }, { x: 160, y: 85.5 },
-      { x: 160, y: 102 }, { x: 160, y: 118.5 }, { x: 160, y: 135 },
-      // The arms leave the point at 32 degrees, at the same spacing. The angle
-      // is not a look, it is the constraint: steeper, and the first arm node
+      // The shaft, nine of them, 16.5 apart. A gathered node is 16 across, so
+      // neighbours meet and stop: half a pixel of daylight, no overlap.
+      { x: 160, y: 40 }, { x: 160, y: 56.5 }, { x: 160, y: 73 }, { x: 160, y: 89.5 },
+      { x: 160, y: 106 }, { x: 160, y: 122.5 }, { x: 160, y: 139 }, { x: 160, y: 155.5 },
+      { x: 160, y: 172 },
+      // Three to a wing, not four. Four made the head as long as the stem and
+      // the shape stopped reading as an arrow and started reading as a Y.
+      //
+      // They leave the point at 32 degrees, at the same spacing. The angle is
+      // a constraint rather than a look: steeper, and the first wing node
       // comes within a diameter of the shaft node above the point, which is
       // the one place in this shape where two runs pass close to each other.
       // Measured across all 105 pairs, the tightest is 16.03 against 16.
-      { x: 146, y: 126.3 }, { x: 132, y: 117.5 }, { x: 118, y: 108.8 }, { x: 104, y: 100 },
-      { x: 174, y: 126.3 }, { x: 188, y: 117.5 }, { x: 202, y: 108.8 }, { x: 216, y: 100 }
+      { x: 146, y: 163.3 }, { x: 132, y: 154.5 }, { x: 118, y: 145.8 },
+      { x: 174, y: 163.3 }, { x: 188, y: 154.5 }, { x: 202, y: 145.8 }
     ];
 
     // Which node goes to which point. Every pair is measured, the shortest are
