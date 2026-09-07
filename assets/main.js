@@ -53,6 +53,134 @@
   var year = document.getElementById("year");
   if (year) year.textContent = new Date().getFullYear();
 
+  // --- The network on the download page -------------------------------------
+  // Everything else on this site animates in CSS, and says so. This one cannot:
+  // the edges have to follow the nodes, and a CSS keyframe moves a path but
+  // cannot recompute where its ends are. So the nodes wander, and every frame
+  // the edges are redrawn between wherever they now are.
+  //
+  // Without this script the markup is still a graph and the stylesheet still
+  // runs the simpler version of it, so nothing here is load-bearing: the class
+  // below is what switches the CSS animations off and hands over.
+  (function network() {
+    var svg = document.querySelector(".net");
+    if (!svg || !window.requestAnimationFrame) return;
+
+    var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)");
+    if (reduce && reduce.matches) return;
+
+    var nodes = [].slice.call(svg.querySelectorAll(".net-node"));
+    var edges = [].slice.call(svg.querySelectorAll(".net-base path"));
+    var flow = svg.querySelector(".net-flow");
+    if (!nodes.length || !edges.length || !flow) return;
+
+    svg.classList.add("net--live");
+
+    // Where each node belongs when nothing is pulling on it, and the two
+    // frequencies and phases that make its wander its own. Primes-ish ratios so
+    // they do not fall into step and start looking choreographed.
+    var home = nodes.map(function (c, i) {
+      return {
+        x: +c.getAttribute("cx"),
+        y: +c.getAttribute("cy"),
+        fx: 0.21 + i * 0.037,
+        fy: 0.29 + i * 0.026,
+        px: i * 1.7,
+        py: i * 2.3
+      };
+    });
+
+    // Where they collect. It is the middle of the graph itself, not one of the
+    // nodes: no node here is the destination, and none of them is drawn
+    // differently from the rest.
+    var MID = home.reduce(function (a, h) {
+      return { x: a.x + h.x / home.length, y: a.y + h.y / home.length };
+    }, { x: 0, y: 0 });
+
+    // One pulse per edge, drawn as a dot rather than a dash: a dash needs a
+    // path length, and these paths change length every frame.
+    var pulses = edges.map(function (_, i) {
+      var c = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+      c.setAttribute("r", "2.6");
+      c.setAttribute("class", "net-pulse");
+      flow.appendChild(c);
+      return { at: (i * 0.13) % 1 };
+    });
+    // The stylesheet's own pulses would otherwise run underneath these.
+    [].slice.call(flow.querySelectorAll("path")).forEach(function (p) { p.remove(); });
+
+    var CYCLE = 13;          // seconds for wander, gather, hold, let go
+    var pos = home.map(function (h) { return { x: h.x, y: h.y }; });
+    var running = true, last = 0, t = 0;
+
+    // Ease in and out of the gather so the pull has weight at both ends.
+    function ease(u) { return u < 0.5 ? 4 * u * u * u : 1 - Math.pow(-2 * u + 2, 3) / 2; }
+
+    // How hard everything is being pulled toward the middle, and how fast the
+    // whole thing is moving, both as functions of where we are in the cycle.
+    // The tempo is the point: it drifts, then hurries as it collects, holds
+    // still for a beat, and lets go slowly.
+    function phase(u) {
+      if (u < 0.46) return { g: 0, speed: 0.55 };                          // wander
+      if (u < 0.66) { var a = ease((u - 0.46) / 0.20);
+                      return { g: a * 0.88, speed: 0.55 + a * 2.2 }; }     // gather
+      if (u < 0.76) return { g: 0.88, speed: 0.35 };                       // hold
+      var b = ease((u - 0.76) / 0.24);
+      return { g: 0.88 * (1 - b), speed: 0.35 + b * 0.4 };                 // let go
+    }
+
+    function frame(now) {
+      if (!running) { last = now; requestAnimationFrame(frame); return; }
+      var dt = last ? Math.min((now - last) / 1000, 0.05) : 0;
+      last = now;
+      t += dt;
+
+      var u = (t % CYCLE) / CYCLE;
+      var ph = phase(u);
+
+      for (var i = 0; i < home.length; i++) {
+        var h = home[i];
+        // Wander first, then pull whatever that produced toward the middle.
+        var wx = h.x + Math.sin(t * h.fx + h.px) * 13;
+        var wy = h.y + Math.sin(t * h.fy + h.py) * 11;
+        pos[i].x = wx + (MID.x - wx) * ph.g;
+        pos[i].y = wy + (MID.y - wy) * ph.g;
+        nodes[i].setAttribute("cx", pos[i].x.toFixed(2));
+        nodes[i].setAttribute("cy", pos[i].y.toFixed(2));
+      }
+
+      for (var e = 0; e < edges.length; e++) {
+        var a = +edges[e].getAttribute("data-a");
+        var b = +edges[e].getAttribute("data-b");
+        var p = pos[a];
+        var q = pos[b];
+        edges[e].setAttribute("d", "M" + p.x.toFixed(2) + " " + p.y.toFixed(2) +
+                                   "L" + q.x.toFixed(2) + " " + q.y.toFixed(2));
+
+        // The pulse rides the same edge, at the tempo of the moment.
+        var pu = pulses[e];
+        pu.at += dt * ph.speed * 0.72;
+        if (pu.at > 1) pu.at -= 1;
+        var k = pu.at;
+        pu.el = pu.el || flow.children[e];
+        pu.el.setAttribute("cx", (p.x + (q.x - p.x) * k).toFixed(2));
+        pu.el.setAttribute("cy", (p.y + (q.y - p.y) * k).toFixed(2));
+        // Fades in and out rather than appearing at an end and vanishing.
+        pu.el.setAttribute("opacity", Math.sin(k * Math.PI).toFixed(3));
+      }
+
+      requestAnimationFrame(frame);
+    }
+    requestAnimationFrame(frame);
+
+    // Nothing to compute while it is off screen.
+    if ("IntersectionObserver" in window) {
+      new IntersectionObserver(function (entries) {
+        running = entries[0].isIntersecting;
+      }, { threshold: 0.05 }).observe(svg);
+    }
+  })();
+
   // --- Download meta + platform picker (home page only) ---------------------
   // CI publishes latest.json next to the installer:
   //   { version, size, sha256, platforms: { "linux-x64": { version, size,

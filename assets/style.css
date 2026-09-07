@@ -1623,23 +1623,26 @@ a.menu-row:hover { background: var(--control-hover); }
   to { stroke-dashoffset: -100; }
 }
 
-/* The whole graph moves, and it moves toward the far node: the three groups
-   share one transform with its origin ON that node, so the drawing draws
-   itself in and lets back out on a slow count.
+/* Two versions of this drawing live here.
 
-   All three groups have to carry the same animation. Moving the nodes alone
-   would slide them off the edges, because the edges are fixed paths and do not
-   follow whatever the circles are doing. */
-.net-base,
-.net-flow,
-.net-nodes {
-  transform-origin: 286px 106px;
-  animation: net-gather-all calc(var(--net-cycle) * 2) ease-in-out infinite;
+   Without JavaScript the graph is still, and the pulses above cross fixed
+   edges on a CSS loop. That is the whole of it, and it is complete.
+
+   With JavaScript, main.js sets .net--live and takes over: the nodes wander,
+   the edges are redrawn between them every frame, everything is pulled onto
+   the far node and let go again, and the tempo changes across the cycle. The
+   rules below hand the geometry to the script rather than fight it, because a
+   keyframe here would be setting the same attributes from the other side. */
+.net--live .net-node { animation: none; }
+
+.net-pulse {
+  fill: var(--accent);
+  filter: drop-shadow(0 0 4px rgba(var(--accent-rgb), 0.9));
 }
 
-@keyframes net-gather-all {
-  0%, 100% { transform: scale(1)     translate(0, 0); }
-  50%      { transform: scale(0.935) translate(2px, -1px); }
+.net--live .net-node {
+  stroke: var(--accent);
+  fill: var(--accent-soft);
 }
 
 .net-node {
@@ -1653,39 +1656,6 @@ a.menu-row:hover { background: var(--control-hover); }
 @keyframes net-node {
   0%, 62%, 100% { stroke: var(--border); fill: var(--surface); }
   16%, 40%      { stroke: var(--accent); fill: var(--accent-soft); }
-}
-
-/* The far node is where it all ends up. No glyph in it any more: a download
-   arrow made it a button, and this is not one. What says "arriving" is the
-   size, which steps up as each wave lands and settles back between them. */
-.net-out-core {
-  fill: var(--accent);
-  transform-box: fill-box;
-  transform-origin: center;
-  animation: net-gather var(--net-cycle) cubic-bezier(0.22, 1, 0.36, 1) infinite;
-}
-
-@keyframes net-gather {
-  0%, 40%   { transform: scale(0.9); }
-  56%       { transform: scale(1.12); }
-  74%, 100% { transform: scale(0.9); }
-}
-
-/* Two rings out of one element and one delay, so the arrival reads as a pulse
-   spreading rather than a single ring blinking. */
-.net-out-ring {
-  fill: none;
-  stroke: var(--accent);
-  stroke-width: 1.5;
-  transform-box: fill-box;
-  transform-origin: center;
-  animation: net-ring var(--net-cycle) ease-out infinite;
-}
-
-@keyframes net-ring {
-  0%, 40%   { opacity: 0;    transform: scale(0.8); }
-  52%       { opacity: 0.6;  transform: scale(0.9); }
-  100%      { opacity: 0;    transform: scale(1.7); }
 }
 
 .dl-net-note {
@@ -2399,10 +2369,8 @@ a.menu-row:hover { background: var(--control-hover); }
   .net-flow,
   .net-nodes,
   .net-node,
-  .net-out-core,
-  .net-out-ring { animation: none; }
+  .net-node { animation: none; }
   .net-flow path { stroke-dashoffset: -46; }
-  .net-out-ring { opacity: 0.35; }
   .ss-btn--run {
     border-color: var(--accent);
     background: var(--accent-soft);
