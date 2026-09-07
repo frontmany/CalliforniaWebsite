@@ -99,21 +99,17 @@
     // arrived. These sit about seventeen apart against a gathered node roughly
     // sixteen across, which closes the line without overlapping it.
     var ARROW = [
-      // The shaft, nine of them, 16.5 apart. A gathered node is 16 across, so
+      // The shaft, seven of them, 16.5 apart. A gathered node is 16 across, so
       // neighbours meet and stop: half a pixel of daylight, no overlap.
-      { x: 160, y: 40 }, { x: 160, y: 56.5 }, { x: 160, y: 73 }, { x: 160, y: 89.5 },
-      { x: 160, y: 106 }, { x: 160, y: 122.5 }, { x: 160, y: 139 }, { x: 160, y: 155.5 },
-      { x: 160, y: 172 },
-      // Three to a wing, not four. Four made the head as long as the stem and
-      // the shape stopped reading as an arrow and started reading as a Y.
-      //
-      // They leave the point at 32 degrees, at the same spacing. The angle is
-      // a constraint rather than a look: steeper, and the first wing node
-      // comes within a diameter of the shaft node above the point, which is
-      // the one place in this shape where two runs pass close to each other.
-      // Measured across all 105 pairs, the tightest is 16.03 against 16.
-      { x: 146, y: 163.3 }, { x: 132, y: 154.5 }, { x: 118, y: 145.8 },
-      { x: 174, y: 163.3 }, { x: 188, y: 154.5 }, { x: 202, y: 145.8 }
+      { x: 160, y: 56.5 }, { x: 160, y: 73 }, { x: 160, y: 89.5 }, { x: 160, y: 106 },
+      { x: 160, y: 122.5 }, { x: 160, y: 139 }, { x: 160, y: 155.5 },
+      // Three to a wing, leaving the point at 32 degrees at the same spacing.
+      // The angle is a constraint rather than a look: steeper, and the first
+      // wing node comes within a diameter of the shaft node above the point,
+      // which is the one place in this shape where two runs pass close to each
+      // other. Measured across all 78 pairs, the tightest is 16.03 against 16.
+      { x: 146, y: 146.8 }, { x: 132, y: 138 }, { x: 118, y: 129.3 },
+      { x: 174, y: 146.8 }, { x: 188, y: 138 }, { x: 202, y: 129.3 }
     ];
 
     // Which node goes to which point. Every pair is measured, the shortest are
