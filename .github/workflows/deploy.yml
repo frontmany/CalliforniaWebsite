@@ -32,6 +32,15 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
+      # Both of these existed and were run by hand, which is to say seldom.
+      # check-css catches the orphaned comment that has silently eaten a rule
+      # twice; changelog catches an entry that is missing, half translated or
+      # out of order. Neither needs a toolchain beyond the Node already here,
+      # and a page that fails them is not a page worth publishing.
+      - name: Check the stylesheet and the changelog
+        run: |
+          node tools/check-css.js
+          node tools/changelog.mjs check
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:

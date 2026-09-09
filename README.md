@@ -252,11 +252,29 @@ the folder locally, e.g.:
 npx serve .
 ```
 
+## The changelog
+
+An entry is prose in two languages: English in `changelog.html`, Russian in
+`assets/i18n.js` under `cl.<version without dots>.*`. Nothing generates that
+text and nothing should try. What is mechanised is everything around it:
+
+```bash
+node tools/changelog.mjs new 0.2.8 --date "10 September 2026"   # skeleton in both files
+node tools/changelog.mjs check                                  # both languages, order, no leftovers
+```
+
+`check` runs on every deploy, and CalliforniaApp's release workflow runs
+`check --version <tag>` against a checkout of this repo before it builds
+anything. So a version with no entry cannot ship. That gate exists because
+`privacy.html` promises that a change to what is held is announced here before
+it takes effect, and the one time nothing was watching, it was not.
+
 ## Deploy
 
 Push to `main`. GitHub Actions (`deploy.yml`) publishes the repo root to
-GitHub Pages. First-time setup: in the repo's **Settings → Pages**, set
-**Source** to **GitHub Actions**.
+GitHub Pages, after `tools/check-css.js` and `tools/changelog.mjs check` pass.
+First-time setup: in the repo's **Settings → Pages**, set **Source** to
+**GitHub Actions**.
 
 ## Custom domain
 
