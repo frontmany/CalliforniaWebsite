@@ -123,13 +123,13 @@
         <li data-i18n-html="privacy.knows.graph"><strong>Who you are connected to.</strong> Your friends. Who you talk to is a plain query against the database, even though what you say is not.</li>
         <li data-i18n-html="privacy.knows.calls"><strong>Who was in which call, and for how long.</strong> Recorded for every room, including rooms joined by link. This is also why your call history is kept here at all, since the timing is already in this database and your own sealed copy of it adds nothing the service did not have.</li>
         <li data-i18n-html="privacy.knows.volume"><strong>How much you say.</strong> The number of messages, their size, and the minutes of video. Ciphertext still has a length and a timestamp, and so does a file sent in a chat. The service knows that a message carries a file and how many bytes it is, and nothing about what it is.</li>
-        <li data-i18n-html="privacy.knows.presence"><strong>Who is online.</strong> Presence is live state rather than history, but while you are online the service knows it.</li>
+        <li data-i18n-html="privacy.knows.presence"><strong>Who is online, and when you last were.</strong> Presence itself is live state, and while you are online the service knows it. The moment you were last reachable is not live state: it is written down, and your friends see it beside your name. One value, replaced every time you connect or disconnect, so what exists is the most recent moment and never the ones before it. There is a switch for it in Settings; turned off, nobody sees the time and you simply read as away.</li>
         <li data-i18n-html="privacy.knows.ip"><strong>Your IP addresses.</strong> In the web server's logs and in the media server's connections.</li>
         <li data-i18n-html="privacy.knows.version"><strong>Which version you are running.</strong> The app asks the update server whether a newer one exists, and that request carries the version and the platform, which is what answering it needs and all it carries.</li>
         <li data-i18n-html="privacy.knows.devices"><strong>Which computers you have added,</strong> when they connect and how many of them are signed in. A computer this account has not used before gets a session that opens nothing until the computer you already use approves it, and is then remembered by an eight character name it made up for itself.</li>
       </ul>
       <p data-i18n-html="privacy.knows.nothing"><strong>And nothing else off your machine.</strong> Callifornia does not read your address book, your files, or anything outside its own settings and the camera and microphone you switch on yourself.</p>
-      <p data-i18n="privacy.knows.meta">Taken together this is metadata, and metadata is not the residue left over once the important part is protected. Who, with whom, and when is frequently enough on its own. Some of it can be reduced, with shorter log retention, no addresses in logs and no presence history. The social graph cannot be hidden inside a relational database without a different architecture, and we are not going to claim otherwise.</p>
+      <p data-i18n="privacy.knows.meta">Taken together this is metadata, and metadata is not the residue left over once the important part is protected. Who, with whom, and when is frequently enough on its own. Some of it can be reduced, with shorter log retention, no addresses in logs, and a last seen time that is one value overwritten in place rather than a record of when you come and go. The social graph cannot be hidden inside a relational database without a different architecture, and we are not going to claim otherwise.</p>
 
       <h2 id="basis" data-i18n="privacy.basis.h">Why we are allowed to hold it</h2>
       <p data-i18n="privacy.basis.p">Two grounds, and nothing is held on a third.</p>
@@ -152,6 +152,10 @@
             <tr>
               <td data-i18n="privacy.retention.r1a">Account, profile, friends, the computers you added</td>
               <td data-i18n="privacy.retention.r1b">While the account exists, and gone when it is deleted</td>
+            </tr>
+            <tr>
+              <td data-i18n="privacy.retention.r8a">When you were last online</td>
+              <td data-i18n="privacy.retention.r8b">One value, replaced by the next one. Nothing earlier is kept, and it goes with the account</td>
             </tr>
             <tr>
               <td data-i18n="privacy.retention.r2a">An account that never confirms its address</td>
