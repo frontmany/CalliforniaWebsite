@@ -71,7 +71,7 @@
   <main>
     <div class="page container container--narrow prose">
       <h1 class="page-title" data-i18n="privacy.title">Privacy</h1>
-      <p class="doc-meta" data-i18n="privacy.meta">In force from 9 September 2026</p>
+      <p class="doc-meta" data-i18n="privacy.meta">In force from 12 September 2026</p>
       <p class="page-sub" data-i18n="privacy.sub">Most privacy policies are written to be defensible. This one is written to be read, because the promise underneath it, end to end encrypted, is one people reasonably hear as "the server knows nothing", and that is not true of this service or of any other. What follows is what the service holds, what it cannot hold, and what we do about the difference.</p>
 
       <nav class="toc" data-i18n-aria-label="aria.toc" aria-label="On this page">
@@ -108,10 +108,11 @@
       <p data-i18n="privacy.sealed.p">Everything you say and everything you look like inside a conversation is sealed on your computer before it leaves, with keys the server never receives.</p>
       <ul>
         <li data-i18n-html="privacy.sealed.messages"><strong>Messages.</strong> Stored as ciphertext. There is no copy in the clear, no search over them on the server, and no way for us to produce their contents on request, not for you and not for anybody else.</li>
-        <li data-i18n-html="privacy.sealed.files"><strong>Pictures and files sent in a chat.</strong> Sealed on your computer under a key made for that one file, and stored as bytes the service cannot open. The key, the file's name and what kind of file it is travel inside the message that carries it, sealed like the message. What the service keeps beside that is which call the file belongs to, who sent it, and how big it is.</li>
+        <li data-i18n-html="privacy.sealed.files"><strong>Pictures and files sent in a chat.</strong> Sealed on your computer under a key made for that one file, and stored as bytes the service cannot open. The key, the file's name and what kind of file it is travel inside the message that carries it, sealed like the message. What the service keeps beside that is which call or chat the file belongs to, who sent it, and how big it is.</li>
         <li data-i18n-html="privacy.sealed.calls"><strong>Calls.</strong> Audio and video are encrypted on top of the transport, so the media server routes packets it cannot open.</li>
         <li data-i18n-html="privacy.sealed.key"><strong>The key of a call.</strong> It travels in the part of a link a browser never sends to any server, or sealed inside an invitation that only the invited friend can open, or sealed to your own account inside your call history so that another computer of yours can open a call this one took. The service relays and stores what it cannot read.</li>
         <li data-i18n-html="privacy.sealed.history"><strong>Your call history.</strong> Who you called, how long it lasted, how it ended and the key of the room are sealed to your account before they leave your computer, so that all of your computers show the same list. The service keeps those envelopes in order and cannot open one. What it does see beside each of them is when the call was, which it records anyway. See the next section.</li>
+        <li data-i18n-html="privacy.sealed.settings"><strong>Who you pinned and who you muted.</strong> The friends you keep on your home screen and the ones whose messages arrive without a card are sealed to your account before they leave your computer, so that every computer of yours shows the same. The service stores the envelope and a number that goes up each time it changes, and tells your other computers when it does.</li>
       </ul>
       <p data-i18n-html="privacy.sealed.cost">Encryption is only as good as the keys, and the keys live on your computers. We cannot recover them, which is the honest cost of the arrangement and is spelled out under <a href="#keys">if you lose your key</a>.</p>
 
@@ -121,6 +122,7 @@
         <li data-i18n-html="privacy.knows.email"><strong>Your email address.</strong> Needed to confirm the account when it is created, to send a reset code, and to let a new computer in when you have no other computer to approve it. Stored in the clear.</li>
         <li data-i18n-html="privacy.knows.profile"><strong>Your username, display name and picture.</strong> The username is public by design, because it is how people find each other, and search runs over the display name too. The name and the picture are also what the people in a call see beside you.</li>
         <li data-i18n-html="privacy.knows.graph"><strong>Who you are connected to.</strong> Your friends. Who you talk to is a plain query against the database, even though what you say is not.</li>
+        <li data-i18n-html="privacy.knows.chats"><strong>Which friends keep a chat, and when it was written in.</strong> A chat with a friend is a room the service knows belongs to the two of you, and every message in it carries the time it was sent, like any other. While you are typing to a friend the service passes that on to them and keeps none of it. A switch in Settings stops it being sent at all.</li>
         <li data-i18n-html="privacy.knows.calls"><strong>Who was in which call, and for how long.</strong> Recorded for every room, including rooms joined by link. This is also why your call history is kept here at all, since the timing is already in this database and your own sealed copy of it adds nothing the service did not have.</li>
         <li data-i18n-html="privacy.knows.volume"><strong>How much you say.</strong> The number of messages, their size, and the minutes of video. Ciphertext still has a length and a timestamp, and so does a file sent in a chat. The service knows that a message carries a file and how many bytes it is, and nothing about what it is.</li>
         <li data-i18n-html="privacy.knows.presence"><strong>Who is online, and when you last were.</strong> Presence itself is live state, and while you are online the service knows it. The moment you were last reachable is not live state: it is written down, and your friends see it beside your name. One value, replaced every time you connect or disconnect, so what exists is the most recent moment and never the ones before it. There is a switch for it in Settings; turned off, nobody sees the time and you simply read as away.</li>
@@ -166,8 +168,12 @@
               <td data-i18n="privacy.retention.r3b">A month after the last sign of life in the room, or the moment whoever started it ends the link</td>
             </tr>
             <tr>
+              <td data-i18n="privacy.retention.r9a">A chat with a friend, its messages and its files</td>
+              <td data-i18n="privacy.retention.r9b">As long as you are friends, and gone for both of you the moment either removes the other</td>
+            </tr>
+            <tr>
               <td data-i18n="privacy.retention.r4a">Your sealed call history</td>
-              <td data-i18n="privacy.retention.r4b">Thirty days per call, and sooner if you clear it or switch it off</td>
+              <td data-i18n="privacy.retention.r4b">Thirty days per call, and sooner if you remove one or switch it off</td>
             </tr>
             <tr>
               <td data-i18n="privacy.retention.r5a">Web server logs, which carry addresses</td>
