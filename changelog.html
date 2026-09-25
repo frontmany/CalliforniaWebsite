@@ -75,6 +75,24 @@
 
       <article class="release">
         <div class="release-meta">
+          <p class="release-version">v0.3.1</p>
+          <p class="release-date" data-i18n="cl.031.date">26 September 2026</p>
+        </div>
+        <div class="release-body">
+          <h3 data-i18n="cl.031.title">A steadier picture, and Linux packages that say what they need</h3>
+          <ul>
+            <li data-i18n="cl.031.li1">Fixed a memory corruption when the app repaired a lost video packet. It broke the picture into blocks and could close the app a few seconds into somebody's video, most often on Linux</li>
+            <li data-i18n="cl.031.li2">The window opens at its own size on a screen with scaling, where it used to open at about half of it and remember that. A window saved too small comes back to a usable size on the next start</li>
+            <li data-i18n="cl.031.li3">On Linux the preview of a shared screen keeps up with the screen and no longer stops on the picture before the last change</li>
+            <li data-i18n="cl.031.li4">An empty chat shows its greeting in the frame it opens in</li>
+            <li data-i18n="cl.031.li5">The unread mark on the tray icon is smaller and no longer covers the icon</li>
+            <li data-i18n="cl.031.li6">The Linux packages now say which system libraries they need, so a system that is too old stops the installation with a clear message instead of leaving an app that does not start. Ubuntu 24.04 and newer, and current Fedora, are supported</li>
+          </ul>
+        </div>
+      </article>
+
+      <article class="release">
+        <div class="release-meta">
           <p class="release-version">v0.3.0</p>
           <p class="release-date" data-i18n="cl.030.date">25 September 2026</p>
         </div>
