@@ -222,7 +222,6 @@
     // languages, which is rarer than it sounds.
     "page.thanks.title": "Callifornia загружается",
     "page.thanks.desc": "Загрузка началась. Что делать с файлом, когда он доедет.",
-    "thanks.eyebrow": "Загрузка пошла",
     "thanks.title": "Апорт",
     "thanks.note": "Спасибо. Хорошего вам звонка.",
     "thanks.back": "На главную",
