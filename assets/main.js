@@ -369,7 +369,7 @@
   //
   // Stored as the version rather than a flag, so raising POLICY_VERSION asks
   // everybody again instead of carrying them silently into a new document.
-  var POLICY_VERSION = "2026-10-07";
+  var POLICY_VERSION = "2026-10-10";
   var ACCEPT_KEY = "callifornia-accepted";
   var panel = document.querySelector("[data-accept-panel]");
   var box = document.querySelector("[data-accept]");
