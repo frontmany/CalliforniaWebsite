@@ -158,9 +158,11 @@ hero, 460px for the smaller spots) and save it as WebP at quality ~88. The
 renders are ~1 MB each and 3 to 4 times larger than they are ever displayed, so
 shipping them untouched is the one thing worth not doing.
 
-`assets/logo-mark.webp` is the same idea for the app mark: `logo.png` is 46 KB
-and every page draws it at 28px, so the pages load the small copy and the full
-PNG stays for `og:image`, which wants the large one.
+`assets/logo-mark.webp` is the same idea for the app mark: `logo.png` is 97 KB
+and every page draws it at 28px, so the pages load the small copy (96px, and
+`logo-mark@2x.webp` at 192px for a dense screen) and the full PNG stays for
+`og:image`, which wants the large one, and for the Auth letters, which load
+it by that address and draw it at 28px.
 
 ## How the download button works
 
