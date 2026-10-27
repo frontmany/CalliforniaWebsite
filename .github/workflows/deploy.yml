@@ -42,8 +42,14 @@ jobs:
           node tools/check-css.js
           node tools/changelog.mjs check
       - uses: actions/configure-pages@v5
+      # The pages and what they load, nothing else: docs/, tools/ and the
+      # README describe the site and are not part of it.
+      - name: Gather the published files
+        run: |
+          mkdir _site
+          cp -r CNAME *.html assets join _site/
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: .
+          path: _site
       - id: deployment
         uses: actions/deploy-pages@v4

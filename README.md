@@ -25,8 +25,8 @@ node tools/changelog.mjs check
 
 ## Выкатка
 
-Каждый push в `main` публикует корень репозитория на GitHub Pages
-(`.github/workflows/deploy.yml`) после этих двух проверок. Поэтому в `main` попадает
+Каждый push в `main` публикует страницы (`CNAME`, `*.html`, `assets/`, `join/`) на GitHub
+Pages (`.github/workflows/deploy.yml`) после этих двух проверок. Поэтому в `main` попадает
 только то, что готово показать людям.
 
 ## Документация

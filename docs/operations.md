@@ -21,7 +21,9 @@ node tools/changelog.mjs check --version 0.2.8                  # и запис�
 ## Выкатка
 
 Push в `main` запускает `.github/workflows/deploy.yml`: `tools/check-css.js`,
-`tools/changelog.mjs check`, затем корень репозитория целиком уходит на GitHub Pages.
+`tools/changelog.mjs check`, затем на GitHub Pages уходят только страницы и то, что они
+грузят: `CNAME`, `*.html`, `assets/`, `join/`. `docs/`, `tools/` и `README.md` не публикуются;
+новый каталог со страницами надо добавить в шаг «Gather the published files».
 Первичная настройка: Settings, Pages, Source = GitHub Actions. Окружение `github-pages`
 может требовать подтверждения ревьюера.
 
