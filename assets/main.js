@@ -26,7 +26,7 @@
   var WIN_HREF = "https://callifornia-download.storage.yandexcloud.net/stable/CalliforniaSetup.exe";
   // Fallback while latest.json hasn't loaded (or failed): always has both
   // packages attached, unlike the bucket paths which have no versionless alias.
-  var GITHUB_RELEASES_URL = "https://github.com/frontmany/CalliforniaApp/releases/latest";
+  var GITHUB_RELEASES_URL = "https://github.com/frontmany/CalliforniaDesktop/releases/latest";
   // NOTE: must match the bucket (or CDN domain) the release workflow uploads to.
   var META_URL = "https://callifornia-download.storage.yandexcloud.net/stable/latest.json";
 

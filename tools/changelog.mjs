@@ -17,7 +17,7 @@
 //   node tools/changelog.mjs check --version 0.2.8 ...and 0.2.8 in particular has one
 //   node tools/changelog.mjs new 0.2.8 --date "10 September 2026"
 //
-// `check --version` is what CalliforniaApp's release workflow runs against a
+// `check --version` is what CalliforniaDesktop's release workflow runs against a
 // checkout of this repo, so a tag with no entry fails the release rather than
 // being noticed a week later.
 //
