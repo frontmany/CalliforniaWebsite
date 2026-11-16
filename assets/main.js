@@ -1,6 +1,5 @@
 // Shared script for all pages: scroll-reveal, and (on the download page) the
-// platform picker, its version line, and the box that has to be ticked before
-// any of it is a live link. The theme is not here: it is
+// platform picker and its version line. The theme is not here: it is
 // whatever the operating system asks for, which the stylesheet answers on its
 // own (see the top of style.css).
 //
@@ -11,6 +10,9 @@
 
 (function () {
   "use strict";
+
+  // Retire the former browser-only acknowledgement record.
+  try { localStorage.removeItem("callifornia-accepted"); } catch (_e) {}
 
   // `html.js` is set by the inline head script on every page, early enough
   // that the language control is never absent from a painted frame.
@@ -360,108 +362,23 @@
     return;
   }
 
-  // --- Accepting the terms before a download --------------------------------
-  // A record, not a lock. The installer is a public URL on object storage and
-  // anybody who wants it around this box can have it, so the honest thing is
-  // to say that in the README rather than pretend otherwise here. What the box
-  // does buy is the thing a record is for: the person saw the two documents,
-  // said so, and the date of the version they said it about is kept.
-  //
-  // Stored as the version rather than a flag, so raising POLICY_VERSION asks
-  // everybody again instead of carrying them silently into a new document.
-  var POLICY_VERSION = "2026-10-10";
-  var ACCEPT_KEY = "callifornia-accepted";
-  var panel = document.querySelector("[data-accept-panel]");
-  var box = document.querySelector("[data-accept]");
-  var accepted = false;
-  try {
-    accepted = localStorage.getItem(ACCEPT_KEY) === POLICY_VERSION;
-  } catch (_e) {}
-
-  // Every download control keeps its real destination in `data-href` and only
-  // wears an `href` once the box is ticked. One place decides, so nothing that
-  // redraws a button later can hand the link back by accident.
-  function gatedControls() {
-    return document.querySelectorAll("[data-href]");
-  }
+  // Downloads remain ordinary links. Policy acknowledgement happens in the
+  // Windows installer, including for files downloaded directly from storage.
   function setHref(el, url) {
     if (!el) return;
     el.setAttribute("data-href", url);
-    if (accepted) {
-      el.setAttribute("href", url);
-    } else {
-      el.removeAttribute("href");
-    }
+    el.setAttribute("href", url);
   }
-  function applyGate() {
-    Array.prototype.forEach.call(gatedControls(), function (el) {
-      if (accepted) {
-        el.setAttribute("href", el.getAttribute("data-href"));
-        el.removeAttribute("aria-disabled");
-      } else {
-        el.removeAttribute("href");
-        el.setAttribute("aria-disabled", "true");
-      }
-    });
-    if (panel) panel.classList.toggle("accept--on", accepted);
-    if (box) box.checked = accepted;
-  }
-
-  // A click on a control with no href does nothing at all, which reads as a
-  // broken page. Say what is missing instead, and put the cursor on it.
-  function nudge() {
-    if (panel) {
-      panel.classList.remove("accept--nudge");
-      void panel.offsetWidth;             // restart the animation
-      panel.classList.add("accept--nudge");
-    }
-    if (box) box.focus();
-  }
-
-  // The markup ships working hrefs so the page is useful before this file
-  // runs, and every one of them has to come under the gate now, including the
-  // two package rows that keep pointing at the releases page until
-  // latest.json answers and render() gives them a real one.
   Array.prototype.forEach.call(
     document.querySelectorAll("#download-btn, .menu-row[data-target]"),
     function (el) {
       var href = el.getAttribute("href");
-      if (href) el.setAttribute("data-href", href);
+      if (href) setHref(el, href);
     });
-  applyGate();
-
-  if (box) {
-    box.addEventListener("change", function () {
-      accepted = box.checked;
-      try {
-        if (accepted) {
-          localStorage.setItem(ACCEPT_KEY, POLICY_VERSION);
-        } else {
-          localStorage.removeItem(ACCEPT_KEY);
-        }
-      } catch (_e) {}
-      applyGate();
-    });
-  }
-
-  // The panel is the hit target, not only the 20px box inside it, so a click
-  // anywhere that is not already a link or the label toggles the checkbox.
-  if (panel && box) {
-    panel.addEventListener("click", function (event) {
-      if (event.target.closest("a, label, input")) return;
-      box.checked = !box.checked;
-      box.dispatchEvent(new Event("change", { bubbles: true }));
-    });
-  }
 
   document.addEventListener("click", function (event) {
     var el = event.target.closest && event.target.closest("[data-href]");
     if (!el) return;
-    if (!accepted) {
-      event.preventDefault();
-      nudge();
-      return;
-    }
     // The releases page is a page, not a file: following it navigates away, and
     // a thank you screen nobody arrives at is worse than saying nothing. Every
     // other destination is a type the browser saves, so the click has committed
@@ -662,9 +579,6 @@
   }
 
   render();
-  // render() has now given every control a data-href; the gate decides whether
-  // any of them wears it.
-  applyGate();
 
   fetch(META_URL, { cache: "no-cache" })
     .then(function (res) {

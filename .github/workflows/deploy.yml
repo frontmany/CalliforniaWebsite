@@ -41,6 +41,7 @@ jobs:
         run: |
           node tools/check-css.js
           node tools/changelog.mjs check
+          node tools/download-test.mjs
       - uses: actions/configure-pages@v5
       # The pages and what they load, nothing else: docs/, tools/ and the
       # README describe the site and are not part of it.

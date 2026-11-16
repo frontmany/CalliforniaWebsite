@@ -532,9 +532,7 @@ main { position: relative; z-index: 1; flex: 1; }
   margin-bottom: 22px;
 }
 
-/* Had no rule at all, so in the bottom card the button and the acceptance row
-   touched. The hero's copy of this wraps a .download-block that already spaces
-   itself, so the gap here only ever shows where it was missing. */
+/* Keep the download controls and their metadata together. */
 .cta-desktop {
   display: flex;
   flex-direction: column;
@@ -573,90 +571,6 @@ main { position: relative; z-index: 1; flex: 1; }
   color: var(--muted);
   min-height: 18px;
 }
-
-/* ---------- Accepting the terms ----------
-   This was a 17px box and a line of grey type hanging off the bottom of the
-   button, which read as small print because it was shaped like it. It is a
-   step now, above the button rather than under it, at reading size, with a
-   second line saying why bothering is not a waste of two minutes.
-
-   The whole panel is the hit target and it lights as one thing, so the words
-   are as clickable as the box. A link inside the label still follows the link
-   rather than ticking the box: a label does not forward a click that landed on
-   interactive content, which is the browser's own rule and not a workaround. */
-.accept {
-  align-self: stretch;
-  display: flex;
-  align-items: flex-start;
-  gap: 14px;
-  padding: 18px 20px;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-xl);
-  cursor: pointer;
-  transition: background 0.18s ease, border-color 0.18s ease;
-}
-.accept:hover { border-color: rgba(var(--accent-rgb), 0.45); }
-.accept--on {
-  background: var(--elevated);
-  border-color: rgba(var(--accent-rgb), 0.5);
-}
-
-.accept-box {
-  appearance: none;
-  -webkit-appearance: none;
-  flex: 0 0 20px;
-  width: 20px;
-  height: 20px;
-  /* Optically on the first line of the label, (15px * 1.5 - 20px) / 2. */
-  margin: 1px 0 0;
-  display: grid;
-  place-content: center;
-  border: 1.5px solid rgba(var(--muted-rgb), 0.5);
-  border-radius: 6px;
-  background: var(--canvas);
-  cursor: pointer;
-  transition: background 0.15s ease, border-color 0.15s ease;
-}
-.accept:hover .accept-box { border-color: var(--accent-text); }
-.accept-box:checked,
-.accept:hover .accept-box:checked { background: var(--accent); border-color: var(--accent-text); }
-
-/* The tick is Icons.qml's, masked rather than drawn, so it keeps the round
-   caps the rest of the set has. */
-.accept-box::before {
-  content: "";
-  width: 13px;
-  height: 13px;
-  background: #fff;
-  transform: scale(0);
-  transition: transform 0.13s cubic-bezier(0.33, 0, 0.2, 1);
-  -webkit-mask: var(--tick) center / contain no-repeat;
-  mask: var(--tick) center / contain no-repeat;
-}
-.accept-box:checked::before { transform: scale(1); }
-
-.accept-label {
-  flex: 1;
-  min-width: 0;
-  display: block;
-  font-size: 15px;
-  font-weight: 500;
-  line-height: 1.5;
-  color: var(--text);
-  cursor: inherit;
-}
-.accept-label a { color: var(--accent-text); text-decoration: none; }
-.accept-label a:hover { text-decoration: underline; }
-/* Nothing happened when the button was pressed, which reads as a broken page
-   unless the reason moves. */
-@keyframes accept-nudge {
-  0%, 100% { transform: translateX(0); }
-  16%, 48%, 80% { transform: translateX(-5px); }
-  32%, 64%, 96% { transform: translateX(5px); }
-}
-.accept--nudge { animation: accept-nudge 0.42s ease; }
-.accept--nudge .accept-box { border-color: var(--accent-text); }
 
 /* A download that is not available yet says so, rather than being a live
    button that silently declines. */
@@ -749,9 +663,6 @@ a.menu-row:hover { background: var(--control-hover); }
 .dl-head { margin-bottom: 38px; }
 .dl-head .page-sub { margin-bottom: 0; }
 
-/* The acceptance and the button are one step after another, so the gap between
-   them is larger than the one inside either. */
-.page .cta-desktop { gap: 26px; }
 
 /* Linux is real and downloadable, just newer than the Windows build. macOS
    needs no badge of its own: its row says "Soon" where the others say a size,
@@ -2415,8 +2326,6 @@ a.menu-row:hover { background: var(--control-hover); }
 
   /* The thumb still moves, it just stops sliding there. */
   .seg::before { transition: background 0.25s ease, border-color 0.25s ease; }
-  /* The nudge has nothing to fall back on, so it becomes a still highlight. */
-  .accept--nudge { animation: none; }
   /* The thank you page still arrives, it just stops arriving with a flourish. */
   .thanks-pack { animation: none; }
 }
@@ -2529,7 +2438,6 @@ a.menu-row:hover { background: var(--control-hover); }
   .tiles { grid-template-columns: 1fr; }
   .tile:nth-child(n) { grid-column: span 1; }
   .dl-head { margin-bottom: 30px; }
-  .accept { padding: 16px; }
   /* With the nav gone the control is the whole right side of the bar, and it
      tightens rather than push the wordmark off the left of it. */
   .header-right { gap: 14px; }
