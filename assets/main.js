@@ -332,7 +332,7 @@
     }
   })();
 
-  // --- Download meta + platform picker (home page only) ---------------------
+  // --- Download meta + platform picker (download page only) ---------------------
   // CI publishes latest.json next to the installer:
   //   { version, size, sha256, platforms: { "linux-x64": { version, size,
   //     sha256, deb, rpm } } }
@@ -395,9 +395,7 @@
   var meta = document.getElementById("download-meta");
   if (!meta) return;
 
-  // One button, on this page. The home page's two calls to action are plain
-  // links here and carry no platform in their label, because they hand over no
-  // file and the detection they would have quoted is a guess.
+  // The main action follows the detected or previously selected platform.
   var downloadBtns = [document.getElementById("download-btn")];
   var downloadLabels = [document.getElementById("download-label")];
   // The split button's menu. Its rows ship with working hrefs (Windows on the

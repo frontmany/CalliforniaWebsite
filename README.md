@@ -9,9 +9,13 @@
 index.html, download.html, changelog.html, privacy.html, terms.html, thanks.html
 join/index.html     куда приходит ссылка на звонок
 assets/             стили, шрифты, картинки, main.js (загрузка), i18n.js (русский текст)
-tools/              changelog.mjs (история версий), check-css.js
+tools/              changelog.mjs (история версий), check-css.js, download-test.mjs
 CNAME               домен для GitHub Pages, должен оставаться в git
 ```
+
+Главная рассказывает о звонках, встречах и чатах. Загрузка находится на отдельной
+странице и ведёт прямо к установщику или пакету. Согласие с документами запрашивает
+установщик Windows; сайт не сохраняет согласие в браузере.
 
 ## Запуск локально
 
@@ -21,12 +25,13 @@ CNAME               домен для GitHub Pages, должен остават�
 ```bash
 node tools/check-css.js
 node tools/changelog.mjs check
+node tools/download-test.mjs
 ```
 
 ## Выкатка
 
 Каждый push в `main` публикует страницы (`CNAME`, `*.html`, `assets/`, `join/`) на GitHub
-Pages (`.github/workflows/deploy.yml`) после этих двух проверок. Поэтому в `main` попадает
+Pages (`.github/workflows/deploy.yml`) после этих трёх проверок. Поэтому в `main` попадает
 только то, что готово показать людям.
 
 ## Документация

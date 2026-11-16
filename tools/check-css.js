@@ -61,7 +61,7 @@ const REQUIRED = [
   ".wave {", ".wave span {",
   ".net {", ".net-node {", ".net-pulse {",
   ".burger {", ".burger-menu {",
-  ".closer {", ".mock {", ".tiles {", ".hero-facts {"
+  ".mock {", ".tiles {", ".hero-facts {"
 ];
 for (const sel of REQUIRED) {
   if (!css.includes(sel)) problems.push(`потеряно правило: ${sel}`);

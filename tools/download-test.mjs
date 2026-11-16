@@ -4,7 +4,7 @@ import vm from "node:vm";
 
 const source = await readFile(new URL("../assets/main.js", import.meta.url), "utf8");
 const windowsUrl = "https://callifornia-download.storage.yandexcloud.net/stable/CalliforniaSetup.exe";
-const releasesUrl = "https://github.com/frontmany/CalliforniaApp/releases/latest";
+const releasesUrl = "https://github.com/frontmany/CalliforniaDesktop/releases/latest";
 
 function element(attributes = {}) {
   return {
