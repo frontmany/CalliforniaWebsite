@@ -40,4 +40,5 @@ Pages (`.github/workflows/deploy.yml`) после этих трёх провер
 |---|---|
 | [docs/design.md](docs/design.md) | язык оформления приложения на сайте, глифы, шрифты, персонаж и знак |
 | [docs/pages.md](docs/pages.md) | загрузка (latest.json, платформы, согласие), страница входа по ссылке, политика и соглашение |
+| [docs/google-sign-in.md](docs/google-sign-in.md) | Google-вход, документы от 18 ноября 2026 и версия согласия установщика |
 | [docs/operations.md](docs/operations.md) | история версий и её ворота для релиза клиента, выкатка, домен и DNS |

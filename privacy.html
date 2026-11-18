@@ -3,6 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="callifornia-policy-version" content="2026-11-18" />
   <title data-i18n="page.privacy.title">Privacy, Callifornia</title>
   <meta name="description" data-i18n-content="page.privacy.desc" content="Who holds your data, what it is for, how long it stays, what the service cannot read at all, and what you can ask for." />
   <link rel="icon" href="assets/favicon.ico?v=heart" />
@@ -81,6 +82,7 @@
           <li><a href="#age" data-i18n="privacy.age.h">Who may use Callifornia</a></li>
           <li><a href="#sealed" data-i18n="privacy.sealed.h">What the service cannot read</a></li>
           <li><a href="#knows" data-i18n="privacy.knows.h">What the service does know</a></li>
+          <li><a href="#google" data-i18n="privacy.google.h">Optional Google sign-in</a></li>
           <li><a href="#basis" data-i18n="privacy.basis.h">Why we are allowed to hold it</a></li>
           <li><a href="#retention" data-i18n="privacy.retention.h">How long it stays</a></li>
           <li><a href="#website" data-i18n="privacy.website.h">What this website does</a></li>
@@ -142,13 +144,20 @@
       <p data-i18n-html="privacy.knows.nothing"><strong>And nothing else off your machine.</strong> Callifornia does not read your address book, your files, or anything outside its own settings and the camera and microphone you switch on yourself.</p>
       <p data-i18n="privacy.knows.meta">Taken together this is metadata, and metadata is not the residue left over once the important part is protected. Who, with whom, and when is frequently enough on its own. Some of it can be reduced, with shorter log retention, no addresses in logs, and a last seen time that is one value overwritten in place rather than a record of when you come and go. The social graph cannot be hidden inside a relational database without a different architecture, and we are not going to claim otherwise.</p>
 
+      <h2 id="google" data-i18n="privacy.google.h">Optional Google sign-in</h2>
+      <p data-i18n-html="privacy.google.choice">When the option is available and you choose it, Callifornia opens Google in your system browser. Google confirms which account you control. It handles that request under its own <a href="https://policies.google.com/privacy" rel="noopener">privacy policy</a>; Callifornia then creates its own session. Email and password sign-in remains a separate option.</p>
+      <p data-i18n="privacy.google.data">Callifornia receives the verified Google account identifier, email and its verification status, and the name and photo address Google supplies. On registration, an available photo may be copied to Callifornia avatar storage. Later Google sign-ins do not replace the email, name, photo or encryption keys of an existing account.</p>
+      <p data-i18n="privacy.google.link">An existing account is connected to Google only after an explicit request and confirmation using its current password and a separate email code. Matching email addresses alone never merge accounts. The service stores the Google identifier, its association with the Callifornia account and the connection date.</p>
+      <p data-i18n="privacy.google.limits">The app requests identity, email and profile information, not Drive, Contacts or Calendar access. Google ID, access and refresh tokens are not stored as persistent account credentials. Google sign-in does not give Google your conversation keys, messages, files or call media. Encryption and new-computer confirmation remain Callifornia operations.</p>
+      <p data-i18n="privacy.google.disconnect">Disconnecting Google requires the current Callifornia password and an email code and ends all Callifornia sessions. An account created without a password must first set one through email recovery. Signing in with Google alone does not recover lost conversation keys.</p>
+
       <h2 id="basis" data-i18n="privacy.basis.h">Why we are allowed to hold it</h2>
       <p data-i18n="privacy.basis.p">Two grounds, and nothing is held on a third.</p>
       <ul>
         <li data-i18n-html="privacy.basis.contract"><strong>Because you asked for the service.</strong> An account, its friends, its rooms and the timing of its calls exist so that the thing you signed up for can work at all. Take any of it away and there is no call to place. Accepting the <a href="terms.html">terms of use</a> in the Windows installer confirms that arrangement.</li>
-        <li data-i18n-html="privacy.basis.consent"><strong>Because you said yes.</strong> Crash reports, and nothing else on this page. They are off until you turn them on, off again the moment you turn them off, and refusing costs you nothing.</li>
+        <li data-i18n-html="privacy.basis.consent"><strong>Because you choose an optional feature.</strong> Crash reports are off until you enable them. Google sign-in is used only when you choose it and complete the browser step. You can register and sign in with email and a password instead. Refusing crash reports does not restrict the service.</li>
       </ul>
-      <p data-i18n="privacy.basis.note">There is no advertising, no profiling and no scoring of you, so there is no third ground quietly doing the work those usually need.</p>
+      <p data-i18n="privacy.basis.note">Callifornia does not use account data for advertising, profiling or scoring. Google handles its own sign-in service under the policy linked below.</p>
 
       <h2 id="retention" data-i18n="privacy.retention.h">How long it stays</h2>
       <div class="table-scroll">
@@ -163,6 +172,14 @@
             <tr>
               <td data-i18n="privacy.retention.r1a">Account, profile, friends, the computers you added</td>
               <td data-i18n="privacy.retention.r1b">While the account exists, and gone when it is deleted</td>
+            </tr>
+            <tr>
+              <td data-i18n="privacy.retention.google.link.a">Google account connection</td>
+              <td data-i18n="privacy.retention.google.link.b">The Google identifier, linked Callifornia account and connection date are kept until Google is disconnected or the account is deleted</td>
+            </tr>
+            <tr>
+              <td data-i18n="privacy.retention.google.attempt.a">One-time Google sign-in attempts</td>
+              <td data-i18n="privacy.retention.google.attempt.b">Valid for five minutes; consumed attempts are removed and expired attempts are cleaned up</td>
             </tr>
             <tr>
               <td data-i18n="privacy.retention.r8a">When you were last online</td>
@@ -218,21 +235,17 @@
       </ul>
 
       <h2 id="processors" data-i18n="privacy.processors.h">Who else touches this data</h2>
-      <p data-i18n="privacy.processors.p">The service uses Yandex Cloud for infrastructure and GitHub for the website and release files. Optional Google sign-in is described separately below.</p>
+      <p data-i18n="privacy.processors.p">The service and website use the infrastructure providers below. Optional Google sign-in is a separate interaction with Google, described in its own section.</p>
       <ul>
         <li data-i18n-html="privacy.processors.yandex"><strong>Yandex Cloud.</strong> The machines the service runs on, the database, the file storage and the mail that carries confirmation and reset codes.</li>
         <li data-i18n-html="privacy.processors.github"><strong>GitHub.</strong> This website and the release files, and nothing about your account, which never reaches it.</li>
+        <li data-i18n-html="privacy.processors.google"><strong>Google.</strong> Only if you choose Google sign-in, its own services process the identity request under Google's policy. This is separate from the infrastructure providers above and is not a transfer of your conversations to Google.</li>
       </ul>
-      <p data-i18n="privacy.processors.lawful">There is no advertising network, no analytics vendor and nobody buying anything. Lawful requests are answered with what we hold, which is the list further up and nothing more. Message contents cannot be handed over, because they are not ours to hand over.</p>
-
-      <h2 id="google" data-i18n="privacy.google.h">Optional Google sign-in</h2>
-      <p data-i18n-html="privacy.google.provider">If you choose Google sign-in, Callifornia opens Google in your browser. Google handles the sign-in request under its own <a href="https://policies.google.com/privacy">privacy policy</a>. You can also sign in with an email address and password.</p>
-      <p data-i18n="privacy.google.profile">We receive your Google account identifier, email address and verification status, and the name and profile photo address Google provides. When you register, we use the name and may copy the photo into Callifornia's avatar storage. Signing in again leaves your existing profile unchanged. Linking an existing Callifornia account requires a separate confirmation.</p>
-      <p data-i18n="privacy.google.retention">We keep the Google account identifier, its link to your Callifornia account and the link date until you disconnect Google or delete your account. Sign-in attempts expire after five minutes. We use Google's identity token to check the sign-in and issue a Callifornia session. We do not keep Google tokens as credentials or send your messages, call media or encryption keys to Google.</p>
+      <p data-i18n="privacy.processors.lawful">Callifornia does not integrate an advertising network or analytics vendor and does not sell account data. Lawful requests are answered with what the service holds. Message contents cannot be handed over, because the service cannot open them.</p>
 
       <h2 id="location" data-i18n="privacy.location.h">Where it is kept</h2>
-      <p data-i18n="privacy.location.p">On servers in Russia. Recording, systematising, accumulating, storing, changing and retrieving the personal data of users in Russia all happen in databases located in Russia, which is what the law requires and how it is actually set up rather than a sentence added to satisfy it.</p>
-      <p data-i18n="privacy.location.cross">If you use Google sign-in, your browser and the service contact Google to complete the sign-in. Google may process the request on servers outside Russia under its privacy policy. Reading this website does not load any Google resources.</p>
+      <p data-i18n="privacy.location.p">Callifornia's account database and encrypted message and file storage are located on servers in Russia. This describes Callifornia's own storage, not Google's separate processing when you choose Google sign-in.</p>
+      <p data-i18n-html="privacy.location.cross">If you choose Google sign-in, your browser and the app contact Google. Google processes that sign-in request under its <a href="https://policies.google.com/privacy" rel="noopener">privacy policy</a>, including on servers outside Russia. Browsing this static website does not load Google sign-in, fonts or analytics.</p>
 
       <h2 id="keys" data-i18n="privacy.lost.h">If you lose your key</h2>
       <p data-i18n="privacy.lost.p">The key that opens your conversations exists only on your own computers. This follows directly from the service not having it.</p>
@@ -283,7 +296,7 @@
       <p data-i18n="privacy.security.p">What is actually in place, rather than a sentence about taking security seriously.</p>
       <ul>
         <li data-i18n="privacy.security.1">Messages, call media and room keys are sealed on your computer, so the most valuable thing here is not ours to lose</li>
-        <li data-i18n="privacy.security.2">Passwords are stored as Argon2id hashes with a secret that lives outside the database, so the database on its own is not enough to attack them</li>
+        <li data-i18n="privacy.security.2">When an account has a password, it is stored as an Argon2id hash with a secret outside the database. A Google-created account can initially have no Callifornia password; the Google password is never sent to Callifornia.</li>
         <li data-i18n="privacy.security.3">Everything between you and the service travels over TLS. A profile picture, the round crop and the whole photo alike, is served through an address that asks for a session first, though the storage behind that address still answers anyone who knows an object's exact key, which makes a picture the one item on this list that is not yet closed all the way</li>
         <li data-i18n="privacy.security.4">A computer this account has not used before opens nothing until an existing one approves it</li>
         <li data-i18n="privacy.security.5">Sign in and registration are rate limited, so guessing at passwords is slow rather than free</li>
